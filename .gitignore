@@ -1,0 +1,38 @@
+# Angular
+/.angular
+/dist
+/tmp
+
+# Node
+node_modules/
+npm-debug.log
+yarn-error.log
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Environment files
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# System
+.DS_Store
+Thumbs.db
+
+# Build
+/out-tsc
+/coverage
+
+# Logs
+logs
+*.log
+
+# Misc
+.cache/
+.sass-cache/
