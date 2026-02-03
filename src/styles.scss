@@ -1,1 +1,45 @@
 /* You can add global styles to this file, and also import other style files */
+
+/* CSS Custom Properties - Color Scheme */
+:root {
+  /* Primary Colors */
+  --primary: #3B82F6;
+  --primary-dark: #2563EB;
+  --primary-light: #60A5FA;
+
+  /* Background Colors */
+  --background: #F8FAFC;
+  --surface: #FFFFFF;
+
+  /* Text Colors */
+  --text-primary: #1E293B;
+  --text-secondary: #64748B;
+  --text-muted: #94A3B8;
+
+  /* Status Colors */
+  --error: #DC2626;
+  --success: #16A34A;
+  --warning: #D97706;
+
+  /* Border Colors */
+  --border: #E2E8F0;
+  --border-focus: #3B82F6;
+}
+
+/* Global Reset */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: var(--background);
+  color: var(--text-primary);
+  line-height: 1.6;
+}
+
+html, body {
+  height: 100%;
+}
