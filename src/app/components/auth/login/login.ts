@@ -31,10 +31,8 @@ export class LoginComponent implements OnInit {
   });
 
   ngOnInit(): void {
-    // If user is already logged in, redirect to boards
-    if (this.authService.isLoggedIn()) {
-      this.router.navigate(['/boards']);
-    }
+    // If user is already logged in, show the welcome screen (don't auto-redirect)
+    // The user can click "Sign Out" to log in with a different account
   }
 
   async onSubmit() {

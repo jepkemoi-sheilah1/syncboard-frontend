@@ -1,1 +1,193 @@
-<p>register works!</p>
+<div class="register-container">
+  <div class="register-card">
+    
+    <!-- Step 1: Registration Form -->
+    @if (currentStep() === 'register') {
+      <h2>Create Account</h2>
+      <p>Sign up for SyncBoard</p>
+
+      @if (error()) {
+        <div class="error-message">{{ error() }}</div>
+      }
+
+      <form [formGroup]="registerForm" (ngSubmit)="onRegisterSubmit()">
+        
+        <!-- Name Fields Row -->
+        <div class="name-row">
+          <div class="form-group">
+            <label for="sirName">Sir Name</label>
+            <input 
+              id="sirName" 
+              type="text" 
+              formControlName="sirName"
+              placeholder="Sir name">
+            
+            @if (sirName?.invalid && sirName?.touched) {
+              <small>Sir name is required (min 2 characters)</small>
+            }
+          </div>
+
+          <div class="form-group">
+            <label for="firstName">First Name</label>
+            <input 
+              id="firstName" 
+              type="text" 
+              formControlName="firstName"
+              placeholder="First name">
+            
+            @if (firstName?.invalid && firstName?.touched) {
+              <small>First name is required (min 2 characters)</small>
+            }
+          </div>
+        </div>
+
+        <!-- Email Field -->
+        <div class="form-group">
+          <label for="email">Email</label>
+          <input 
+            id="email" 
+            type="email" 
+            formControlName="email"
+            placeholder="you@example.com">
+          
+          @if (email?.invalid && email?.touched) {
+            <small>Please enter a valid email address</small>
+          }
+        </div>
+
+        <!-- Password Field -->
+        <div class="form-group">
+          <label for="password">Password</label>
+          <input 
+            id="password" 
+            type="password" 
+            formControlName="password"
+            placeholder="••••••••">
+          
+          @if (password?.invalid && password?.touched) {
+            <small>Password must be at least 8 characters with uppercase, lowercase, and number</small>
+          }
+        </div>
+
+        <!-- Confirm Password Field -->
+        <div class="form-group">
+          <label for="confirmPassword">Confirm Password</label>
+          <input 
+            id="confirmPassword" 
+            type="password" 
+            formControlName="confirmPassword"
+            placeholder="••••••••">
+          
+          @if (confirmPassword?.invalid && confirmPassword?.touched) {
+            <small>Please confirm your password</small>
+          }
+          @if (confirmPassword?.errors?.['passwordMismatch'] && confirmPassword?.touched) {
+            <small>Passwords do not match</small>
+          }
+        </div>
+
+        <!-- Submit Button -->
+        <button 
+          type="submit" 
+          [disabled]="registerForm.invalid || loading()"
+          [class.loading]="loading()"
+        >
+          {{ loading() ? 'Creating Account...' : 'Create Account' }}
+        </button>
+      </form>
+
+      <p class="login-link">
+        Already have an account? <a routerLink="/login">Sign in</a>
+      </p>
+    }
+
+    <!-- Step 2: OTP Verification -->
+    @if (currentStep() === 'otp') {
+      <div class="otp-container">
+        <h2>Verify Email</h2>
+        <p>Enter the 6-digit code sent to</p>
+        <p class="email-address">{{ registeredEmail() }}</p>
+
+        @if (successMessage()) {
+          <div class="success-message">{{ successMessage() }}</div>
+        }
+
+        @if (otpError()) {
+          <div class="error-message">{{ otpError() }}</div>
+        }
+
+        <form (ngSubmit)="onOtpSubmit()">
+          <div class="otp-input-wrapper">
+            <input 
+              type="text" 
+              maxlength="6"
+              (input)="onOtpInput($event)"
+              [value]="otpCode()"
+              placeholder="000000"
+              class="otp-input">
+          </div>
+
+          <button 
+            type="submit" 
+            [disabled]="otpCode().length !== 6 || loading()"
+            [class.loading]="loading()"
+          >
+            {{ loading() ? 'Verifying...' : 'Verify OTP' }}
+          </button>
+        </form>
+
+        <!-- Resend OTP Section -->
+        <div class="resend-section">
+          @if (canResendOTP()) {
+            <button 
+              type="button" 
+              class="btn-link" 
+              (click)="onResendOTP()"
+              [disabled]="loading()"
+            >
+              Didn't receive OTP? Resend
+            </button>
+          } @else {
+            <p class="resend-timer">
+              Resend OTP in {{ resendTimer() }} seconds
+            </p>
+          }
+        </div>
+
+        <button 
+          type="button" 
+          class="btn-secondary go-back"
+          (click)="goBackToForm()"
+        >
+          ← Go Back
+        </button>
+      </div>
+    }
+
+    <!-- Step 3: Success -->
+    @if (currentStep() === 'success') {
+      <div class="success-container">
+        <div class="success-icon">✅</div>
+        <h2>Account Created!</h2>
+        <p>{{ successMessage() }}</p>
+        <p class="redirect-message">Redirecting to login page...</p>
+        
+        <div class="loading-dots">
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
+        
+        <button 
+          type="button" 
+          class="btn-primary"
+          (click)="goToLogin()"
+        >
+          Go to Login Page Now
+        </button>
+      </div>
+    }
+
+  </div>
+</div>
+
