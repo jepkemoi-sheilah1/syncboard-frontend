@@ -36,6 +36,10 @@
         <div class="error-message">{{ error() }}</div>
       }
 
+      @if (successMessage()) {
+        <div class="success-message">{{ successMessage() }}</div>
+      }
+
       <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
         <div class="form-group">
           <label for="email">Email</label>
@@ -66,7 +70,12 @@
           [disabled]="loginForm.invalid || loading()"
           [class.loading]="loading()"
         >
-          {{ loading() ? 'Signing in...' : 'Sign In' }}
+          @if (loading()) {
+            <span class="btn-spinner"></span>
+            Signing in...
+          } @else {
+            Sign In
+          }
         </button>
       </form>
 

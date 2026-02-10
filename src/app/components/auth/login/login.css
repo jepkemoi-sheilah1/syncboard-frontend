@@ -115,6 +115,16 @@ button:disabled {
   border: 1px solid #FECACA;
 }
 
+.success-message {
+  background: #DCFCE7;
+  color: var(--success, #16A34A);
+  padding: 0.75rem 1rem;
+  border-radius: 8px;
+  margin-bottom: 1rem;
+  font-size: 0.9rem;
+  border: 1px solid #86EFAC;
+}
+
 .register-link {
   text-align: center;
   margin-top: 1.5rem;
@@ -156,6 +166,16 @@ button.loading::after {
   to {
     transform: rotate(360deg);
   }
+}
+
+.btn-spinner {
+  width: 18px;
+  height: 18px;
+  border: 2px solid rgba(255,255,255,0.3);
+  border-top-color: white;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+  margin-right: 8px;
 }
 
 /* Responsive adjustments */
