@@ -1,0 +1,122 @@
+<div class="delete-account-container">
+  <div class="delete-card">
+    
+    @if (success()) {
+      <!-- Success State -->
+      <div class="success-state">
+        <div class="success-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+            <polyline points="22 4 12 14.01 9 11.01"></polyline>
+          </svg>
+        </div>
+        <h2>Account Deleted</h2>
+        <p>Your account and all associated data have been permanently deleted.</p>
+        <p class="farewell">Thank you for using SyncBoard!</p>
+        <a routerLink="/login" class="btn-primary">Return to Login</a>
+      </div>
+    } @else {
+      <!-- Delete Form -->
+      <div class="warning-header">
+        <div class="warning-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
+            <line x1="12" y1="9" x2="12" y2="13"></line>
+            <line x1="12" y1="17" x2="12.01" y2="17"></line>
+          </svg>
+        </div>
+        <h1>Delete Account</h1>
+        <p class="subtitle">This action is permanent and cannot be undone</p>
+      </div>
+
+      <div class="danger-zone">
+        <div class="user-info-card">
+          <div class="user-avatar">
+            {{ userName.charAt(0).toUpperCase() }}
+          </div>
+          <div class="user-details">
+            <span class="user-name">{{ userName }}</span>
+            <span class="user-email">{{ userEmail }}</span>
+          </div>
+        </div>
+
+        <div class="warning-list">
+          <h3>What will be deleted:</h3>
+          <ul>
+            <li>Your SyncBoard account</li>
+            <li>All your boards</li>
+            <li>All lists and cards</li>
+            <li>All shared content</li>
+          </ul>
+        </div>
+
+        <div class="warning-list warning">
+          <h3>What will NOT be deleted:</h3>
+          <ul>
+            <li>Content you've shared with others (they will still have access)</li>
+          </ul>
+        </div>
+
+        @if (error()) {
+          <div class="error-message">{{ error() }}</div>
+        }
+
+        <form [formGroup]="deleteForm" (ngSubmit)="onSubmit()">
+          <div class="form-group">
+            <label for="password">Confirm your password</label>
+            <div class="password-input-wrapper">
+              <input 
+                id="password" 
+                [type]="showPassword() ? 'text' : 'password'" 
+                formControlName="password"
+                placeholder="Enter your password">
+              <button type="button" class="toggle-password" (click)="togglePasswordVisibility()">
+                @if (showPassword()) {
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path>
+                    <line x1="1" y1="1" x2="23" y2="23"></line>
+                  </svg>
+                } @else {
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                    <circle cx="12" cy="12" r="3"></circle>
+                  </svg>
+                }
+              </button>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="confirmDelete">
+              Type <strong>DELETE</strong> to confirm
+            </label>
+            <input 
+              id="confirmDelete" 
+              type="text" 
+              formControlName="confirmDelete"
+              placeholder="Type DELETE">
+          </div>
+
+          <div class="form-actions">
+            <button type="button" class="btn-cancel" (click)="cancel()">
+              Cancel
+            </button>
+            <button 
+              type="submit" 
+              [disabled]="deleteForm.invalid || loading()"
+              [class.loading]="loading()"
+              class="btn-delete">
+              @if (loading()) {
+                <span class="spinner"></span>
+                Deleting...
+              } @else {
+                Delete My Account
+              }
+            </button>
+          </div>
+        </form>
+      </div>
+    }
+  </div>
+</div>
+

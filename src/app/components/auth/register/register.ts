@@ -1,7 +1,7 @@
 // src/app/components/auth/register/register.ts
 // Simple registration component
 
-import { Component, inject, signal, OnInit } from '@angular/core';
+import { Component, inject, signal, computed, OnInit } from '@angular/core';
 import { ReactiveFormsModule, FormBuilder, Validators, FormGroup, AbstractControl, ValidationErrors } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
@@ -22,6 +22,8 @@ export class RegisterComponent implements OnInit {
     loading = signal(false);
     error = signal('');
     successMessage = signal('');
+    showPassword = signal(false);
+    showConfirmPassword = signal(false);
 
     registerForm!: FormGroup;
 
@@ -60,6 +62,34 @@ export class RegisterComponent implements OnInit {
     get password() { return this.registerForm.get('password'); }
     get confirmPassword() { return this.registerForm.get('confirmPassword'); }
 
+    passwordStrength = computed(() => {
+        const password = this.registerForm?.get('password')?.value || '';
+        const requirements = {
+            minLength: password.length >= 8,
+            hasLowercase: /[a-z]/.test(password),
+            hasUppercase: /[A-Z]/.test(password),
+            hasNumber: /\d/.test(password),
+            hasSpecial: /[@$!%*?&]/.test(password)
+        };
+        
+        const metCount = Object.values(requirements).filter(Boolean).length;
+        const strength = (metCount / 5) * 100;
+        
+        let level = 'weak';
+        if (strength >= 100) level = 'strong';
+        else if (strength >= 60) level = 'medium';
+        
+        return { strength, level, requirements, metCount };
+    });
+
+    togglePasswordVisibility(): void {
+        this.showPassword.update(v => !v);
+    }
+
+    toggleConfirmPasswordVisibility(): void {
+        this.showConfirmPassword.update(v => !v);
+    }
+
     async onSubmit(): Promise<void> {
         if (this.registerForm.invalid) {
             Object.values(this.registerForm.controls).forEach(control => control.markAsTouched());
@@ -72,9 +102,15 @@ export class RegisterComponent implements OnInit {
 
         try {
             const { sirName, firstName, email, password } = this.registerForm.value;
-            await this.authService.register({ sirName: sirName!, firstName: firstName!, email: email!, password: password!, confirmPassword: password! });
-            this.successMessage.set('Account created successfully! Redirecting to login...');
-            setTimeout(() => window.location.href = '/login', 1500);
+            await this.authService.register({ 
+                sirName: sirName!, 
+                firstName: firstName!, 
+                email: email!, 
+                password: password!, 
+                confirmPassword: password! 
+            });
+            this.successMessage.set('Account created! Please check your email and click the confirmation link to activate your account.');
+            setTimeout(() => window.location.href = '/login', 5000);
         } catch (err: unknown) {
             this.error.set(err instanceof Error ? err.message : 'Registration failed');
         } finally {

@@ -36,9 +36,18 @@ export class LoginComponent implements OnInit {
 
     ngOnInit(): void {
         const registrationComplete = localStorage.getItem('registration_complete');
+        const emailVerified = this.authService.isEmailVerified();
+        const verificationError = this.authService.getVerificationError();
+        
         if (registrationComplete) {
             localStorage.removeItem('registration_complete');
             this.successMessage.set('Account created successfully! Please sign in.');
+        } else if (emailVerified) {
+            this.authService.clearVerificationStatus();
+            this.successMessage.set('Email verified successfully! Please sign in.');
+        } else if (verificationError) {
+            this.error.set(verificationError);
+            this.authService.clearVerificationStatus();
         }
     }
 

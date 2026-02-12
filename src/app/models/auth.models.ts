@@ -27,3 +27,23 @@ export interface RegisterCredentials {
     confirmPassword: string;
 }
 
+export interface ForgotPassword {
+    email: string;
+}
+
+export interface ResetPassword {
+    token: string;
+    newPassword: string;
+    confirmPassword: string;
+}
+
+export interface ForgotPasswordResponse {
+    message: string;
+}
+
+export interface DeleteAccountResponse {
+    success: boolean;
+    message: string;
+}
+
+

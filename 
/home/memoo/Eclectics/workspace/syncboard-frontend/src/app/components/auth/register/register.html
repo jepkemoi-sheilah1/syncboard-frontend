@@ -40,26 +40,14 @@
 
       <div class="form-group">
         <label for="password">Password</label>
-        <div class="password-input-container">
-          <input 
-            id="password" 
-            [type]="showPassword() ? 'text' : 'password'" 
-            formControlName="password" 
-            placeholder="********"
-          >
-          <button 
-            type="button" 
-            class="password-toggle" 
-            (click)="togglePasswordVisibility()"
-          >
-            @if (showPassword()) {
-              👁️
-            } @else {
-              👁️‍🗨️
-            }
-          </button>
-        </div>
+        <input 
+          id="password" 
+          type="password" 
+          formControlName="password" 
+          placeholder="********"
+        >
         
+        <!-- Password Strength Indicator -->
         @if (password?.value?.length > 0) {
           <div class="password-strength">
             <div class="strength-bar">
@@ -90,25 +78,7 @@
 
       <div class="form-group">
         <label for="confirmPassword">Confirm Password</label>
-        <div class="password-input-container">
-          <input 
-            id="confirmPassword" 
-            [type]="showConfirmPassword() ? 'text' : 'password'" 
-            formControlName="confirmPassword" 
-            placeholder="********"
-          >
-          <button 
-            type="button" 
-            class="password-toggle" 
-            (click)="toggleConfirmPasswordVisibility()"
-          >
-            @if (showConfirmPassword()) {
-              👁️
-            } @else {
-              👁️‍🗨️
-            }
-          </button>
-        </div>
+        <input id="confirmPassword" type="password" formControlName="confirmPassword" placeholder="********">
         @if (confirmPassword?.invalid && confirmPassword?.touched) {
           <small>Please confirm your password</small>
         }
