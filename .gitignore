@@ -36,3 +36,7 @@ logs
 # Misc
 .cache/
 .sass-cache/
+
+# Documentation (local only - do not commit)
+RENDER_DEPLOYMENT_GUIDE.md
+FIX_DEPLOYMENT.md
