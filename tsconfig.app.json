@@ -8,10 +8,15 @@
       "node"
     ]
   },
-  "include": [
+"include": [
     "src/**/*.ts"
   ],
-  "exclude": [
-    "src/**/*.spec.ts"
+"exclude": [
+    "src/**/*.spec.ts",
+    "src/main.server.ts",
+    "src/server.ts",
+    "src/app/app.config.server.ts",
+    "src/app/app.routes.server.ts",
+    "src/environments/environment.development.ts"
   ]
 }
