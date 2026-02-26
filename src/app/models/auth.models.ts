@@ -1,49 +1,104 @@
-// src/app/models/auth.models.ts
-// Simple authentication models
-
+// User Models
 export interface User {
-    id: string;
-    email: string;
-    name: string;
-    createdAt: Date;
+  id?: string;
+  firstName: string;
+  sirName: string;
+  email: string;
+  avatarUrl?: string;
+  password?: string;
 }
 
-export interface AuthResponse {
-    user: User;
-    token: string;
-    message?: string;
+export interface UserRegistrationRequest {
+  firstName: string;
+  sirName: string;
+  email: string;
+  password: string;
 }
 
-export interface LoginCredentials {
-    email: string;
-    password: string;
+export interface UserLoginRequest {
+  email: string;
+  password: string;
 }
 
-export interface RegisterCredentials {
-    sirName: string;
-    firstName: string;
-    email: string;
-    password: string;
-    confirmPassword: string;
+export interface UserEmailDTO {
+  email: string;
 }
 
-export interface ForgotPassword {
-    email: string;
+// Board Models
+export interface Board {
+  id: string;
+  name: string;
+  workspaceId: string;
 }
 
-export interface ResetPassword {
-    token: string;
-    newPassword: string;
-    confirmPassword: string;
+export interface BoardsRequest {
+  name: string;
 }
 
-export interface ForgotPasswordResponse {
-    message: string;
+// Workspace Models
+export interface Workspace {
+  id: string;
+  name: string;
 }
 
-export interface DeleteAccountResponse {
-    success: boolean;
-    message: string;
+export interface WorkSpaceRequest {
+  name: string;
 }
 
+export interface InviteRequest {
+  email: string;
+  workspaceId: string;
+}
 
+// List Models
+export interface BoardList {
+  id: string;
+  name: string;
+  boardId: string;
+}
+
+export interface ListRequest {
+  name: string;
+  boardId: string;
+}
+
+// Board Member Models
+export interface BoardMember {
+  userId: string;
+  role: 'ADMIN' | 'MEMBER' | 'VIEWER';
+}
+
+export interface AddBoardMemberRequest {
+  email: string;
+  role: string;
+}
+
+// Comment Models
+export interface Comment {
+  id: string;
+  content: string;
+  cardId: string;
+  userId: string;
+  createdAt: string;
+}
+
+export interface CreateCommentRequest {
+  content: string;
+}
+
+// Notification Models
+export interface Notification {
+  id: string;
+  message: string;
+  read: boolean;
+  createdAt: string;
+}
+
+// Activity Log Models
+export interface ActivityLog {
+  id: string;
+  action: string;
+  boardId: string;
+  userId: string;
+  createdAt: string;
+}
