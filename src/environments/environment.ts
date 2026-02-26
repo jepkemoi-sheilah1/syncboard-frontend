@@ -7,5 +7,6 @@ export const environment = {
     basePath: 'api/v2.0',
     endpoints: endpoints
   }
+  
 };
 
