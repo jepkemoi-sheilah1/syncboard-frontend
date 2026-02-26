@@ -31,10 +31,15 @@ export class AuthService {
     }
 
     private saveAuth(response: AuthResponse): void {
+        // Compute name from firstName and sirName
+        const userWithName = {
+            ...response.user,
+            name: `${response.user.firstName} ${response.user.sirName}`.trim()
+        };
         localStorage.setItem('syncboard_token', response.token);
-        localStorage.setItem('syncboard_user', JSON.stringify(response.user));
+        localStorage.setItem('syncboard_user', JSON.stringify(userWithName));
         this.tokenSignal.set(response.token);
-        this.currentUserSignal.set(response.user);
+        this.currentUserSignal.set(userWithName);
     }
 
     async login(credentials: LoginCredentials): Promise<void> {

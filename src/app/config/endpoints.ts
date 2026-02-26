@@ -4,11 +4,14 @@ export const endpoints = {
     login: '/user/login',
     register:'/user/register',
     confirm: '/user/confirm',
+    verifyEmail: '/user/confirm',
     update: '/user/update', 
     resetPassword: '/user/reset-password',
     resetPasswordRequest: '/user/reset-password-request',
+    forgotPassword: '/user/reset-password-request',
     logout: '/user/logout',
-    delete: '/user/delete'
+    delete: '/user/delete',
+    deleteAccount: '/user/delete'
   },
 
   // board endpoints

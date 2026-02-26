@@ -6,6 +6,7 @@ export interface User {
   email: string;
   avatarUrl?: string;
   password?: string;
+  name?: string; // Computed property for display
 }
 
 export interface UserRegistrationRequest {
@@ -13,11 +14,36 @@ export interface UserRegistrationRequest {
   sirName: string;
   email: string;
   password: string;
+  confirmPassword?: string;
 }
 
 export interface UserLoginRequest {
   email: string;
   password: string;
+}
+
+// Auth Service Types (used by auth.service.ts)
+export interface LoginCredentials {
+  email: string;
+  password: string;
+}
+
+export interface RegisterCredentials {
+  firstName: string;
+  sirName: string;
+  email: string;
+  password: string;
+  confirmPassword?: string;
+}
+
+export interface AuthResponse {
+  user: User;
+  token: string;
+}
+
+export interface DeleteAccountResponse {
+  success: boolean;
+  message?: string;
 }
 
 export interface UserEmailDTO {
