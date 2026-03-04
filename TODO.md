@@ -1,41 +1,34 @@
-# TODO: Logout and Delete Account Components
+# Task: Implement Trello-like Board Dashboard
 
-## Status: ✅ ALL COMPLETED
+## Objective
+After logging in, users should see a workspace/dashboard where they can create and manage boards (projects). This should be similar to Trello.
 
-### Phase 1: Auth Service Updates ✅
-- [x] Add `deleteAccount()` method to AuthService
-- [x] Add `clearAllAuthData()` helper method
-- [x] Add `DeleteAccountResponse` model
-- [x] Update all environment files with new endpoints
+## Steps to Complete
 
-### Phase 2: Create User Menu Component (Logout) ✅
-- [x] Create `src/app/components/auth/user-menu/user-menu.component.ts`
-- [x] Create `src/app/components/auth/user-menu/user-menu.component.html`
-- [x] Create `src/app/components/auth/user-menu/user-menu.component.css`
-- [x] Integrate into BoardsComponent header
+### Step 1: Update Routing (DONE ✓)
+- [x] Update `app.routes.ts` - Change default route from `/login` to `/boards`
 
-### Phase 3: Create Delete Account Component ✅
-- [x] Create `src/app/components/auth/delete-account/delete-account.component.ts`
-- [x] Create `src/app/components/auth/delete-account/delete-account.component.html`
-- [x] Create `src/app/components/auth/delete-account/delete-account.component.css`
+### Step 2: Update Login Redirect (DONE ✓)
+- [x] Update `login.ts` - Change redirect after login from `/boards` to `/` (the dashboard)
 
-### Phase 4: Routes ✅
-- [x] Add `/delete-account` route with auth guard
+### Step 3: Redesign BoardsComponent (DONE ✓)
+- [x] Update `boards.ts` to include:
+  - [x] Search bar to filter boards
+  - [x] Remove hardcoded sample boards
+  - [x] Fetch actual boards from BoardService
+  - [x] "Create new board" button with modal/form
+  - [x] Display member avatars on each board card
+  - [x] Empty state when no boards exist
+  - [x] Clickable board cards to open board detail
 
-## Files Created:
-1. `src/app/components/auth/user-menu/user-menu.component.ts`
-2. `src/app/components/auth/user-menu/user-menu.component.html`
-3. `src/app/components/auth/user-menu/user-menu.component.css`
-4. `src/app/components/auth/delete-account/delete-account.component.ts`
-5. `src/app/components/auth/delete-account/delete-account.component.html`
-6. `src/app/components/auth/delete-account/delete-account.component.css`
+### Step 4: Test the Flow (IN PROGRESS)
+- [ ] Run the application
+- [ ] Login and verify redirect to dashboard
+- [ ] Test create board functionality
+- [ ] Test search functionality
 
-## Files Modified:
-1. `src/app/services/auth.service.ts` - Added deleteAccount() method
-2. `src/app/models/auth.models.ts` - Added DeleteAccountResponse
-3. `src/app/environments/environment.ts` - Added endpoints
-4. `src/app/environments/environment.development.ts` - Added endpoints
-5. `src/app/environments/environment.production.ts` - Added endpoints
-6. `src/app/app.routes.ts` - Added delete-account route
-7. `src/app/components/boards/boards.ts` - Integrated UserMenuComponent
+## Files Modified
+1. `src/app/app.routes.ts` - DONE
+2. `src/app/components/auth/login/login.ts` - DONE
+3. `src/app/components/boards/boards.ts` - DONE
 

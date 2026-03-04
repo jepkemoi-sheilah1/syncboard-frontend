@@ -64,7 +64,7 @@ export class LoginComponent implements OnInit {
         try {
             const { email, password } = this.loginForm.value;
             await this.authService.login({ email: email!, password: password! });
-            this.router.navigate(['/boards']);
+            this.router.navigate(['/']);
         } catch (err) {
             this.error.set(err instanceof Error ? err.message : 'Login failed');
         } finally {

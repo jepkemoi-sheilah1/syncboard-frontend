@@ -18,5 +18,5 @@ export const routes: Routes = [
     {path: 'delete-account', component: DeleteAccountComponent, canActivate: [authGuard]},
     {path: 'boards', component: BoardsComponent, canActivate: [authGuard]},
     {path: 'board/:id', component: BoardDetailComponent, canActivate: [authGuard]},
-    {path: '', redirectTo: 'login', pathMatch: 'full'}
+    {path: '', redirectTo: 'boards', pathMatch: 'full'}
 ];
