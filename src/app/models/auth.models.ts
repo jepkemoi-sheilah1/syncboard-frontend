@@ -81,11 +81,23 @@ export interface BoardList {
   id: string;
   name: string;
   boardId: string;
+  cards?: Card[];
 }
 
 export interface ListRequest {
   name: string;
   boardId: string;
+}
+
+// Card Models
+export interface Card {
+  id: string;
+  title: string;
+  listId: string;
+  assignee?: string;
+  description?: string;
+  dueDate?: string;
+  labels?: string[];
 }
 
 // Board Member Models

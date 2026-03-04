@@ -1,0 +1,100 @@
+<!-- Card Modal Overlay -->
+<div class="modal-overlay" (click)="onOverlayClick($event)">
+  
+  <!-- Modal Content -->
+  <div class="modal-content" *ngIf="card">
+    
+    <!-- Header -->
+    <div class="modal-header">
+      <span class="modal-icon">📝</span>
+      <h2>Card Details</h2>
+      <button class="btn-close" (click)="onClose()">✕</button>
+    </div>
+
+    <!-- Card Title -->
+    <div class="section title-section">
+      <label>Title</label>
+      <input 
+        type="text" 
+        [(ngModel)]="editTitle" 
+        class="title-input"
+        placeholder="Card title"
+      >
+    </div>
+
+    <!-- Description -->
+    <div class="section description-section">
+      <div class="section-header">
+        <label>Description</label>
+        <button class="btn-edit" *ngIf="!isEditing()" (click)="startEditing()">Edit</button>
+        <button class="btn-edit" *ngIf="isEditing()" (click)="cancelEditing()">Cancel</button>
+      </div>
+      
+      <textarea 
+        *ngIf="isEditing()"
+        [(ngModel)]="editDescription" 
+        class="description-input"
+        placeholder="Add a more detailed description..."
+        rows="5"
+      ></textarea>
+      
+      <div *ngIf="!isEditing()" class="description-display">
+        <p *ngIf="card.description">{{ card.description }}</p>
+        <p *ngIf="!card.description" class="placeholder">Add a description...</p>
+      </div>
+
+    <!-- Labels -->
+    <div class="section labels-section">
+      <label>Labels</label>
+      <div class="labels-container">
+        <span 
+          *ngFor="let label of card.labels" 
+          class="label"
+          [style.background-color]="label.color"
+        >
+          {{ label.name }}
+          <button class="btn-remove-label" (click)="removeLabel(label.id)">✕</button>
+        </span>
+        <button class="btn-add-label" (click)="toggleLabelPicker()">+ Add</button>
+      </div>
+      
+      <!-- Label Picker -->
+      <div class="label-picker" *ngIf="showLabelPicker()">
+        <div class="label-grid">
+          <button 
+            *ngFor="let label of availableLabels"
+            class="label-option"
+            [class.selected]="hasLabel(label.id)"
+            [style.background-color]="label.color"
+            (click)="toggleLabel(label)"
+            [title]="label.name"
+          >
+            {{ label.name }}
+          </button>
+        </div>
+    </div>
+
+    <!-- Assignee -->
+    <div class="section assignee-section">
+      <label>Assigned To</label>
+      <div class="assignee-display">
+        <span *ngIf="card.assignee" class="assignee-badge">
+          👤 {{ card.assignee }}
+        </span>
+        <span *ngIf="!card.assignee" class="placeholder">Unassigned</span>
+      </div>
+
+    <!-- Due Date -->
+    <div class="section due-date-section">
+      <label>Due Date</label>
+      <div class="due-date-display">
+        <span *ngIf="card.dueDate">📅 {{ card.dueDate | date:'mediumDate' }}</span>
+        <span *ngIf="!card.dueDate" class="placeholder">No due date</span>
+      </div>
+
+    <!-- Actions -->
+    <div class="modal-actions">
+      <button class="btn-save" (click)="onSave()">Save Changes</button>
+      <button class="btn-delete" (click)="onDelete()">Delete Card</button>
+    </div>
+</div>

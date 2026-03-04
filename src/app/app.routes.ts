@@ -2,6 +2,7 @@ import { Routes } from '@angular/router';
 import { LoginComponent } from './components/auth/login/login';
 import { RegisterComponent } from './components/auth/register/register';
 import { BoardsComponent } from './components/boards/boards';
+import { BoardDetailComponent } from './components/board-detail/board-detail.component';
 import { EmailConfirmComponent } from './components/auth/email-confirm/email-confirm';
 import { ForgotPasswordComponent } from './components/auth/forgot-password/forgot-password';
 import { ResetPasswordComponent } from './components/auth/reset-password/reset-password';
@@ -16,5 +17,6 @@ export const routes: Routes = [
     {path: 'reset-password/:token', component: ResetPasswordComponent},
     {path: 'delete-account', component: DeleteAccountComponent, canActivate: [authGuard]},
     {path: 'boards', component: BoardsComponent, canActivate: [authGuard]},
+    {path: 'board/:id', component: BoardDetailComponent, canActivate: [authGuard]},
     {path: '', redirectTo: 'login', pathMatch: 'full'}
 ];

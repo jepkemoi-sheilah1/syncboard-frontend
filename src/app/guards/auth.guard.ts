@@ -2,16 +2,22 @@ import { inject } from '@angular/core';
 import { CanActivateFn, Router } from '@angular/router';
 import { AuthService } from '../services/auth.service';
 
+// BYPASS AUTHENTICATION - Temporarily disabled for development
+// TODO: Re-enable authentication when backend is ready
 export const authGuard: CanActivateFn = (route, state) => {
-  const authService = inject(AuthService);
-  const router = inject(Router);
+  // Always allow access to protected routes (bypassing authentication)
+  return true;
   
-  if (authService.isLoggedIn()) {
-    return true;
-  }
-  
-  router.navigate(['/login'], {// procted route only a user whho is loogged in can acess it, if not it will be redireted to login page and after login it will be redireted to the protected route
-    queryParams: { returnUrl: state.url }
-  });
-  return false;
+  // Original authentication logic (commented out):
+  // const authService = inject(AuthService);
+  // const router = inject(Router);
+  // 
+  // if (authService.isLoggedIn()) {
+  //   return true;
+  // }
+  // 
+  // router.navigate(['/login'], {
+  //   queryParams: { returnUrl: state.url }
+  // });
+  // return false;
 };

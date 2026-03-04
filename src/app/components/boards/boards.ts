@@ -1,5 +1,6 @@
 import { Component, inject, computed, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Router } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 import { UserMenuComponent } from '../auth/user-menu/user-menu.component';
 
@@ -28,19 +29,22 @@ import { UserMenuComponent } from '../auth/user-menu/user-menu.component';
         </div>
         
         <div class="board-list">
-          <div class="board-card">
+          <!-- Sample Board Card - Clickable -->
+          <div class="board-card" (click)="openBoard('board-1')">
             <div class="board-color" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);"></div>
             <h3>Sample Board</h3>
             <p>Click to open</p>
           </div>
           
-          <div class="board-card">
+          <!-- Personal Tasks Board -->
+          <div class="board-card" (click)="openBoard('board-2')">
             <div class="board-color" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);"></div>
             <h3>Personal Tasks</h3>
             <p>2 lists • 5 cards</p>
           </div>
           
-          <div class="board-card">
+          <!-- Work Projects Board -->
+          <div class="board-card" (click)="openBoard('board-3')">
             <div class="board-color" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);"></div>
             <h3>Work Projects</h3>
             <p>5 lists • 12 cards</p>
@@ -149,12 +153,17 @@ import { UserMenuComponent } from '../auth/user-menu/user-menu.component';
 })
 export class BoardsComponent {
   private authService = inject(AuthService);
+  private router = inject(Router);
   
   user = computed(() => this.authService.user());
   userName = computed(() => {
     const user = this.authService.user();
     return user?.name || user?.email?.split('@')[0] || 'User';
   });
+  
+  openBoard(boardId: string): void {
+    this.router.navigate(['/board', boardId]);
+  }
   
   getUserInitials(): string {
     const user = this.authService.user();

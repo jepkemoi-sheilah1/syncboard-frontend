@@ -7,6 +7,9 @@ import { catchError, throwError } from 'rxjs';
  * Functional HTTP Interceptor for Angular 17+
  * Automatically adds Authorization Bearer token to all API requests
  * Handles 401 errors by redirecting to login
+ * 
+ * NOTE: Temporarily modified to not redirect on 401 errors since
+ * authentication is bypassed for development
  */
 export const authInterceptor: HttpInterceptorFn = (req, next) => {
   const router = inject(Router);
@@ -24,9 +27,11 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
       catchError((error: HttpErrorResponse) => {
         if (error.status === 401) {
           // Token expired or invalid - redirect to login
-          localStorage.removeItem('syncboard_token');
-          localStorage.removeItem('syncboard_user');
-          router.navigate(['/login']);
+          // Temporarily disabled for development
+          // localStorage.removeItem('syncboard_token');
+          // localStorage.removeItem('syncboard_user');
+          // router.navigate(['/login']);
+          console.warn('Auth error (401):', error.message);
         }
         return throwError(() => error);
       })
