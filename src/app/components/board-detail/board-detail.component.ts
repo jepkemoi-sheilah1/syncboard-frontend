@@ -27,9 +27,9 @@ export class BoardDetailComponent implements OnInit {
   lists = signal<BoardList[]>([]);
   showNewListInput = signal(false);
   newListName = '';
-  showAddCardModal = signal(false);
+  // Track which list is showing card input (for inline card creation)
+  activeCardListId = signal<string | null>(null);
   newCardTitle = '';
-  selectedListId = '';
   selectedCard = signal<Card | null>(null);
 
   ngOnInit(): void {
@@ -90,23 +90,53 @@ export class BoardDetailComponent implements OnInit {
   }
 
   goBack(): void { this.router.navigate(['/boards']); }
-  toggleNewListInput(): void { this.showNewListInput.set(!this.showNewListInput()); this.newListName = ''; }
+  
+  toggleNewListInput(): void { 
+    this.showNewListInput.set(!this.showNewListInput()); 
+    this.newListName = ''; 
+  }
 
   createList(): void {
     if (this.newListName.trim()) {
-      this.listService.createList({ name: this.newListName.trim(), boardId: this.board()?.id || '' }).subscribe(() => {
-        this.newListName = ''; this.showNewListInput.set(false);
+      this.listService.createList({ name: this.newListName.trim(), boardId: this.board()?.id || '' }).subscribe((newList) => {
+        this.newListName = ''; 
+        this.showNewListInput.set(false);
+        // After creating a list, immediately show card input for that list
+        if (newList && newList.id) {
+          this.activeCardListId.set(newList.id);
+          this.newCardTitle = '';
+        }
       });
     }
   }
 
-  openAddCard(listId: string, event: Event): void { event.stopPropagation(); this.selectedListId = listId; this.newCardTitle = ''; this.showAddCardModal.set(true); }
-  closeAddCardModal(): void { this.showAddCardModal.set(false); this.selectedListId = ''; this.newCardTitle = ''; }
-
-  createCard(): void {
-    if (this.newCardTitle.trim() && this.selectedListId) {
-      this.cardService.createCard({ title: this.newCardTitle.trim(), listId: this.selectedListId }).subscribe(() => this.closeAddCardModal());
+  // Toggle inline card input for a list
+  toggleCardInput(listId: string, event?: Event): void {
+    if (event) event.stopPropagation();
+    if (this.activeCardListId() === listId) {
+      this.activeCardListId.set(null);
+      this.newCardTitle = '';
+    } else {
+      this.activeCardListId.set(listId);
+      this.newCardTitle = '';
     }
+  }
+
+  // Create card inline
+  createCardInline(listId: string): void {
+    if (this.newCardTitle.trim()) {
+      this.cardService.createCard({ title: this.newCardTitle.trim(), listId }).subscribe(() => {
+        this.newCardTitle = '';
+        // Keep the input open for adding more cards
+        this.activeCardListId.set(listId);
+      });
+    }
+  }
+
+  // Close card input
+  closeCardInput(): void {
+    this.activeCardListId.set(null);
+    this.newCardTitle = '';
   }
 }
 

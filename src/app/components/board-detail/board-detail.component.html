@@ -42,38 +42,53 @@
           </div>
         </div>
         
-        <!-- Add Card Button -->
-        <button class="btn-add-card" (click)="openAddCard(list.id, $event)">+ Add Card</button>
+        <!-- Inline Card Input (Trello-style) -->
+        <div class="inline-card-form" *ngIf="activeCardListId() === list.id">
+          <textarea 
+            [(ngModel)]="newCardTitle" 
+            placeholder="Enter card title..."
+            class="card-input"
+            (keyup.enter)="createCardInline(list.id)"
+            (keyup.escape)="closeCardInput()"
+            rows="2"></textarea>
+          <div class="inline-form-actions">
+            <button class="btn-create" (click)="createCardInline(list.id)">Add Card</button>
+            <button class="btn-cancel-inline" (click)="closeCardInput()">✕</button>
+          </div>
+        </div>
+        
+        <!-- Add Card Button (shown when no card input is active) -->
+        <button class="btn-add-card" *ngIf="activeCardListId() !== list.id" (click)="toggleCardInput(list.id, $event)">
+          + Add Card
+        </button>
       </div>
     </div>
 
     <!-- Add New List -->
     <div class="list-column add-list-column">
+      <!-- Show "Add a list" when no lists exist, "Add another list" when lists exist -->
       <div *ngIf="!showNewListInput(); else newListForm">
-        <button class="btn-add-list" (click)="toggleNewListInput()">+ Add Another List</button>
+        <button class="btn-add-list" (click)="toggleNewListInput()">
+          + {{ lists().length === 0 ? 'Add a list' : 'Add another list' }}
+        </button>
       </div>
       
       <ng-template #newListForm>
         <div class="new-list-form">
-          <input type="text" [(ngModel)]="newListName" placeholder="Enter list name..." class="list-name-input" (keyup.enter)="createList()" #listInput>
+          <input 
+            type="text" 
+            [(ngModel)]="newListName" 
+            placeholder="Enter list name..." 
+            class="list-name-input" 
+            (keyup.enter)="createList()" 
+            #listInput
+            autofocus>
           <div class="form-actions">
             <button class="btn-create" (click)="createList()">Add List</button>
             <button class="btn-cancel" (click)="toggleNewListInput()">✕</button>
           </div>
         </div>
       </ng-template>
-    </div>
-  </div>
-
-  <!-- Add Card Modal -->
-  <div class="modal-overlay" *ngIf="showAddCardModal()" (click)="closeAddCardModal()">
-    <div class="modal-content" (click)="$event.stopPropagation()">
-      <h3>Add New Card</h3>
-      <input type="text" [(ngModel)]="newCardTitle" placeholder="Enter card title..." class="card-title-input" (keyup.enter)="createCard()">
-      <div class="form-actions">
-        <button class="btn-create" (click)="createCard()">Add Card</button>
-        <button class="btn-cancel" (click)="closeAddCardModal()">Cancel</button>
-      </div>
     </div>
   </div>
 

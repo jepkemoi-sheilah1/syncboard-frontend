@@ -1,34 +1,16 @@
-# Task: Implement Trello-like Board Dashboard
+# Trello-style UI Adjustments - TODO
 
-## Objective
-After logging in, users should see a workspace/dashboard where they can create and manage boards (projects). This should be similar to Trello.
+## Task: Implement Trello-like board UI flow
 
-## Steps to Complete
+### Steps:
+1. [x] Update board-detail.component.ts - Add signals for tracking new list/card states
+2. [x] Update board-detail.component.html - Modify button text and add inline card creation
+3. [x] Update board-detail.component.css - Add styles for inline card input
+4. [x] Test the implementation
 
-### Step 1: Update Routing (DONE ✓)
-- [x] Update `app.routes.ts` - Change default route from `/login` to `/boards`
-
-### Step 2: Update Login Redirect (DONE ✓)
-- [x] Update `login.ts` - Change redirect after login from `/boards` to `/` (the dashboard)
-
-### Step 3: Redesign BoardsComponent (DONE ✓)
-- [x] Update `boards.ts` to include:
-  - [x] Search bar to filter boards
-  - [x] Remove hardcoded sample boards
-  - [x] Fetch actual boards from BoardService
-  - [x] "Create new board" button with modal/form
-  - [x] Display member avatars on each board card
-  - [x] Empty state when no boards exist
-  - [x] Clickable board cards to open board detail
-
-### Step 4: Test the Flow (IN PROGRESS)
-- [ ] Run the application
-- [ ] Login and verify redirect to dashboard
-- [ ] Test create board functionality
-- [ ] Test search functionality
-
-## Files Modified
-1. `src/app/app.routes.ts` - DONE
-2. `src/app/components/auth/login/login.ts` - DONE
-3. `src/app/components/boards/boards.ts` - DONE
+### Details:
+- Initial state: Show "Add a list" button (not "Add another list")
+- After creating a list: Show "Add another list" + "Create a card" button
+- After creating a card: Show "Add card" button for the same list
+- Inline card creation instead of modal (Trello-style)
 

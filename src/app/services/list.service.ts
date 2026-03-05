@@ -19,10 +19,12 @@ export class ListService {
   private listsSubject = new BehaviorSubject<BoardList[]>([]);
   lists$ = this.listsSubject.asObservable();
 
-  constructor(private http: HttpClient) {
-    // Initialize with mock data
+constructor(private http: HttpClient) {
+    // Initialize with empty lists - user creates their own lists
+    // Set useMockData to true only if you want pre-filled demo data
     if (this.useMockData) {
-      this.listsSubject.next([...MOCK_LISTS]);
+      // Start with empty lists - user will create their own
+      this.listsSubject.next([]);
     }
   }
 
@@ -33,9 +35,10 @@ export class ListService {
   /**
    * Get all lists for a board
    */
-  getLists(boardId: string): Observable<BoardList[]> {
+getLists(boardId: string): Observable<BoardList[]> {
     if (this.useMockData) {
-      return of([...MOCK_LISTS]).pipe(delay(300));
+      // Return empty lists - user creates their own
+      return of([]).pipe(delay(300));
     }
 
     return this.http.get<BoardList[]>(
