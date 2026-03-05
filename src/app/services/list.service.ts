@@ -12,8 +12,8 @@ import { BoardList, CreateListRequest, UpdateListRequest, MOCK_LISTS } from '../
   providedIn: 'root'
 })
 export class ListService {
-  // Use mock data for now (backend not ready)
-  private useMockData = true;
+  // Use real API - backend is ready
+  private useMockData = false;
 
   // Lists signal for real-time updates
   private listsSubject = new BehaviorSubject<BoardList[]>([]);

@@ -8,8 +8,8 @@ import { AuthService } from '../../../services/auth.service';
     selector: 'app-reset-password',
     standalone: true,
     imports: [CommonModule, ReactiveFormsModule, RouterLink],
-    templateUrl: './reset-password.html',
-    styleUrl: './reset-password.css'
+    templateUrl: './reset-password.component.html',
+    styleUrl: './reset-password.component.css'
 })
 export class ResetPasswordComponent implements OnInit {
     private fb = inject(FormBuilder);

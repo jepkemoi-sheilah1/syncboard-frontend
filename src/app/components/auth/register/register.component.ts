@@ -1,4 +1,4 @@
-// src/app/components/auth/register/register.ts
+// src/app/components/auth/register/register.component.ts
 // Simple registration component
 
 import { Component, inject, signal, computed, OnInit } from '@angular/core';
@@ -11,8 +11,8 @@ import { AuthService } from '../../../services/auth.service';
     selector: 'app-register',
     standalone: true,
     imports: [CommonModule, ReactiveFormsModule, RouterLink],
-    templateUrl: './register.html',
-    styleUrl: './register.css'
+    templateUrl: './register.component.html',
+    styleUrl: './register.component.css'
 })
 export class RegisterComponent implements OnInit {
     private fb = inject(FormBuilder);

@@ -14,3 +14,19 @@
 - After creating a card: Show "Add card" button for the same list
 - Inline card creation instead of modal (Trello-style)
 
+## Phase 2 - Invite Member Feature
+
+### Completed:
+1. [x] Added "Invite Member" button in navigation bar (right side, next to Create Board)
+2. [x] Added invite modal with form fields:
+   - Email address input
+   - Board selection dropdown
+   - Role selection (Member/Admin/Observer)
+3. [x] Added success message after invitation sent
+4. [x] Added error handling
+5. [x] Integrated with InvitationService
+
+### Files Modified:
+- `src/app/components/boards/boards.ts` - Added invite button, modal, and methods
+- `src/app/services/invitation.service.ts` - Updated to use real API (useMockData = false)
+

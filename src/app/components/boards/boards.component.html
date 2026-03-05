@@ -1,0 +1,249 @@
+<div class="boards-container">
+  <!-- Top Navigation Bar (Trello-style) -->
+  <nav class="trello-nav">
+    <div class="nav-left">
+      <div class="logo" (click)="goHome()">
+        <span class="logo-icon">📋</span>
+        <span class="logo-text">SyncBoard</span>
+      </div>
+      <div class="nav-links">
+        <a href="#" class="nav-link active">Workspaces</a>
+        <a href="#" class="nav-link">Recent</a>
+        <a href="#" class="nav-link">Starred</a>
+      </div>
+    </div>
+    
+    <div class="nav-center">
+      <!-- Search Bar -->
+      <div class="search-container">
+        <span class="search-icon">🔍</span>
+        <input 
+          type="text" 
+          class="search-input" 
+          placeholder="Search boards..."
+          [(ngModel)]="searchQuery"
+          (input)="filterBoards()"
+        >
+      </div>
+    </div>
+    
+    <div class="nav-right">
+      <button class="btn-invite" (click)="showInviteModal.set(true)">
+        + Invite Member
+      </button>
+      <button class="btn-create-board" (click)="showCreateModal.set(true)">
+        + Create Board
+      </button>
+      <app-user-menu></app-user-menu>
+    </div>
+  </nav>
+
+  <!-- Main Content -->
+  <main class="boards-main">
+    <!-- Workspace Header -->
+    <div class="workspace-header">
+      <div class="workspace-info">
+        <div class="workspace-avatar">
+          {{ userName().charAt(0).toUpperCase() }}
+        </div>
+        <div class="workspace-details">
+          <h1>{{ userName() }}'s Workspace</h1>
+          <p class="workspace-subtitle">Private workspace</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Boards Section -->
+    <section class="boards-section">
+      <div class="section-header">
+        <h2>
+          <span class="section-icon">📊</span>
+          Your Boards
+          <span class="board-count">({{ filteredBoards().length }})</span>
+        </h2>
+      </div>
+      
+      <!-- Board Grid -->
+      <div class="board-grid" *ngIf="boards().length > 0">
+        <!-- Create New Board Card -->
+        <div class="board-card create-card" (click)="showCreateModal.set(true)">
+          <div class="create-card-content">
+            <span class="plus-icon">+</span>
+            <span>Create new board</span>
+          </div>
+        </div>
+        
+        <!-- Existing Boards -->
+        <div 
+          class="board-card" 
+          *ngFor="let board of filteredBoards()"
+          (click)="openBoard(board.id)"
+        >
+          <div class="board-cover" [style.background]="getBoardColor(board.id)"></div>
+          <div class="board-info">
+            <h3>{{ board.name }}</h3>
+            <div class="board-meta">
+              <span class="board-members">
+                <!-- Member Avatars -->
+                <div class="member-avatars">
+                  <span 
+                    class="member-avatar" 
+                    *ngFor="let member of board.members.slice(0, 3)"
+                    [title]="member.name"
+                  >
+                    {{ getInitials(member.name) }}
+                  </span>
+                  <span class="more-members" *ngIf="board.members.length > 3">
+                    +{{ board.members.length - 3 }}
+                  </span>
+                </div>
+              </span>
+            </div>
+          </div>
+          <button class="btn-star" (click)="toggleStar(board, $event)" [class.starred]="board.isStarred">
+            {{ board.isStarred ? '⭐' : '☆' }}
+          </button>
+        </div>
+      </div>
+
+      <!-- Empty State -->
+      <div class="empty-state" *ngIf="boards().length === 0 && !loading()">
+        <div class="empty-icon">📋</div>
+        <h3>No boards yet</h3>
+        <p>Create your first board to get started!</p>
+        <button class="btn-create-first" (click)="showCreateModal.set(true)">
+          + Create Board
+        </button>
+      </div>
+
+      <!-- Loading State -->
+      <div class="loading-state" *ngIf="loading()">
+        <div class="spinner"></div>
+        <p>Loading boards...</p>
+      </div>
+
+      <!-- No Search Results -->
+      <div class="no-results" *ngIf="boards().length > 0 && filteredBoards().length === 0">
+        <p>No boards matching "{{ searchQuery }}"</p>
+      </div>
+    </section>
+  </main>
+
+  <!-- Create Board Modal -->
+  <div class="modal-overlay" *ngIf="showCreateModal()" (click)="showCreateModal.set(false)">
+    <div class="modal-content" (click)="$event.stopPropagation()">
+      <div class="modal-header">
+        <h2>Create new board</h2>
+        <button class="btn-close" (click)="showCreateModal.set(false)">×</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label for="boardName">Board Title</label>
+          <input 
+            type="text" 
+            id="boardName"
+            class="form-input" 
+            placeholder="e.g. Marketing Plan, Sprint 1"
+            [(ngModel)]="newBoardName"
+            (keyup.enter)="createBoard()"
+          >
+        </div>
+        <div class="form-group">
+          <label>Board Color</label>
+          <div class="color-options">
+            <button 
+              *ngFor="let color of boardColors"
+              class="color-btn"
+              [style.background]="color"
+              [class.selected]="selectedColor === color"
+              (click)="selectedColor = color"
+            ></button>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-cancel" (click)="showCreateModal.set(false)">Cancel</button>
+        <button 
+          class="btn-create" 
+          (click)="createBoard()"
+          [disabled]="!newBoardName.trim() || creating()"
+        >
+          {{ creating() ? 'Creating...' : 'Create Board' }}
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Invite Member Modal -->
+  <div class="modal-overlay" *ngIf="showInviteModal()" (click)="closeInviteModal()">
+    <div class="modal-content" (click)="$event.stopPropagation()">
+      <div class="modal-header">
+        <h2>Invite Member</h2>
+        <button class="btn-close" (click)="closeInviteModal()">×</button>
+      </div>
+      <div class="modal-body">
+        <!-- Success Message -->
+        <div class="invite-success" *ngIf="inviteSuccess()">
+          <div class="success-icon">✓</div>
+          <p>Invitation sent successfully!</p>
+        </div>
+        <!-- Invite Form -->
+        <div *ngIf="!inviteSuccess()">
+          <div class="form-group">
+            <label for="inviteEmail">Email Address</label>
+            <input 
+              type="email" 
+              id="inviteEmail"
+              class="form-input" 
+              placeholder="Enter email address"
+              [(ngModel)]="inviteEmail"
+              (keyup.enter)="sendInvite()"
+            >
+          </div>
+          <div class="form-group">
+            <label for="inviteBoard">Select Board</label>
+            <select 
+              id="inviteBoard" 
+              class="form-input"
+              [(ngModel)]="inviteBoardId"
+            >
+              <option value="">Choose a board...</option>
+              <option *ngFor="let board of boards()" [value]="board.id">
+                {{ board.name }}
+              </option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="inviteRole">Role</label>
+            <select 
+              id="inviteRole" 
+              class="form-input"
+              [(ngModel)]="inviteRole"
+            >
+              <option value="member">Member</option>
+              <option value="admin">Admin</option>
+              <option value="observer">Observer</option>
+            </select>
+          </div>
+          <div class="error-message" *ngIf="inviteError()">
+            {{ inviteError() }}
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-cancel" (click)="closeInviteModal()">
+          {{ inviteSuccess() ? 'Close' : 'Cancel' }}
+        </button>
+        <button 
+          *ngIf="!inviteSuccess()"
+          class="btn-create" 
+          (click)="sendInvite()"
+          [disabled]="!inviteEmail.trim() || !inviteBoardId || inviting()"
+        >
+          {{ inviting() ? 'Sending...' : 'Send Invite' }}
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+

@@ -1,11 +1,11 @@
 import { Routes } from '@angular/router';
-import { LoginComponent } from './components/auth/login/login';
-import { RegisterComponent } from './components/auth/register/register';
-import { BoardsComponent } from './components/boards/boards';
+import { LoginComponent } from './components/auth/login/login.component';
+import { RegisterComponent } from './components/auth/register/register.component';
+import { BoardsComponent } from './components/boards/boards.component';
 import { BoardDetailComponent } from './components/board-detail/board-detail.component';
-import { EmailConfirmComponent } from './components/auth/email-confirm/email-confirm';
-import { ForgotPasswordComponent } from './components/auth/forgot-password/forgot-password';
-import { ResetPasswordComponent } from './components/auth/reset-password/reset-password';
+import { EmailConfirmComponent } from './components/auth/email-confirm/email-confirm.component';
+import { ForgotPasswordComponent } from './components/auth/forgot-password/forgot-password.component';
+import { ResetPasswordComponent } from './components/auth/reset-password/reset-password.component';
 import { DeleteAccountComponent } from './components/auth/delete-account/delete-account.component';
 import { authGuard } from './guards/auth.guard';
 

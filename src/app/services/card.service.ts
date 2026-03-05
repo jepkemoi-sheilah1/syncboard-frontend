@@ -13,8 +13,8 @@ import { ListService } from './list.service';
   providedIn: 'root'
 })
 export class CardService {
-  // Use mock data for now (backend not ready)
-  private useMockData = true;
+  // Use real API - backend is ready
+  private useMockData = false;
 
   constructor(
     private http: HttpClient,

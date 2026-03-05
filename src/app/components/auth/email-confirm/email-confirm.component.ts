@@ -10,8 +10,8 @@ import { AuthService } from '../../../services/auth.service';
     selector: 'app-email-confirm',
     standalone: true,
     imports: [CommonModule, RouterLink],
-    templateUrl: './email-confirm.html',
-    styleUrl: './email-confirm.css'
+    templateUrl: './email-confirm.component.html',
+    styleUrl: './email-confirm.component.css'
 })
 export class EmailConfirmComponent implements OnInit {
     private route = inject(ActivatedRoute);

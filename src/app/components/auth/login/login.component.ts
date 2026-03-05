@@ -1,4 +1,4 @@
-// src/app/components/auth/login/login.ts
+// src/app/components/auth/login/login.component.ts
 // Simple login component
 
 import { Component, inject, signal, computed, OnInit } from '@angular/core';
@@ -11,8 +11,8 @@ import { AuthService } from '../../../services/auth.service';
     selector: 'app-login',
     standalone: true,
     imports: [CommonModule, ReactiveFormsModule, RouterLink],
-    templateUrl: './login.html',
-    styleUrl: './login.css'
+    templateUrl: './login.component.html',
+    styleUrl: './login.component.css'
 })
 export class LoginComponent implements OnInit {
     private fb = inject(FormBuilder);

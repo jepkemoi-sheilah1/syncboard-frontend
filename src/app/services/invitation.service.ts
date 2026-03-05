@@ -12,8 +12,8 @@ import { Invitation, SendInvitationRequest, InvitationResponse, BoardMember } fr
   providedIn: 'root'
 })
 export class InvitationService {
-  // Use mock data for now (backend not ready)
-  private useMockData = true;
+  // Use real API - backend is ready
+  private useMockData = false;
 
   // Pending invitations signal
   private pendingInvitationsSubject = new BehaviorSubject<Invitation[]>([]);
