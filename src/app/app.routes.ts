@@ -1,4 +1,6 @@
+
 import { Routes } from '@angular/router';
+import { LandingComponent } from './components/landing/landing.component';
 import { LoginComponent } from './components/auth/login/login.component';
 import { RegisterComponent } from './components/auth/register/register.component';
 import { BoardsComponent } from './components/boards/boards.component';
@@ -10,6 +12,7 @@ import { DeleteAccountComponent } from './components/auth/delete-account/delete-
 import { authGuard } from './guards/auth.guard';
 
 export const routes: Routes = [ 
+    {path: '', component: LandingComponent},
     {path: 'login', component: LoginComponent},
     {path: 'register', component: RegisterComponent},
     {path: 'confirm-account', component: EmailConfirmComponent},
@@ -18,5 +21,6 @@ export const routes: Routes = [
     {path: 'delete-account', component: DeleteAccountComponent, canActivate: [authGuard]},
     {path: 'boards', component: BoardsComponent, canActivate: [authGuard]},
     {path: 'board/:id', component: BoardDetailComponent, canActivate: [authGuard]},
-    {path: '', redirectTo: 'boards', pathMatch: 'full'}
+    {path: '**', redirectTo: ''}
 ];
+
