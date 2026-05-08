@@ -9,6 +9,21 @@ export interface User {
   name?: string; // Computed property for display
 }
 
+// ✅ Single unified AuthResponse matching backend structure
+export interface AuthResponse {
+  success: boolean;
+  message: string;
+  path?: string;
+  timestamp?: string;
+  data: {
+    id: number;
+    email: string;
+    token: string;
+    firstName: string;
+    sirName?: string;
+  }
+}
+
 export interface UserRegistrationRequest {
   firstName: string;
   sirName: string;
@@ -34,11 +49,6 @@ export interface RegisterCredentials {
   email: string;
   password: string;
   confirmPassword?: string;
-}
-
-export interface AuthResponse {
-  user: User;
-  token: string;
 }
 
 export interface DeleteAccountResponse {

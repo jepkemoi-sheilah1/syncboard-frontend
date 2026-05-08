@@ -31,14 +31,14 @@ export class AuthService {
     }
 
     private saveAuth(response: AuthResponse): void {
-        // Compute name from firstName and sirName
+        // ✅ Fixed: access through response.data instead of response.user
         const userWithName = {
-            ...response.user,
-            name: `${response.user.firstName} ${response.user.sirName}`.trim()
+            ...response.data,
+            name: `${response.data.firstName} ${response.data.sirName ?? ''}`.trim()
         };
-        localStorage.setItem('syncboard_token', response.token);
+        localStorage.setItem('syncboard_token', response.data.token);  // ✅ Fixed
         localStorage.setItem('syncboard_user', JSON.stringify(userWithName));
-        this.tokenSignal.set(response.token);
+        this.tokenSignal.set(response.data.token);  // ✅ Fixed
         this.currentUserSignal.set(userWithName);
     }
 
@@ -75,8 +75,6 @@ export class AuthService {
         }
     }
 
-   
-
     logout(): void {
         localStorage.removeItem('syncboard_token');
         localStorage.removeItem('syncboard_user');
@@ -107,7 +105,6 @@ export class AuthService {
             return false;
         });
     }
-
 
     isEmailVerified(): boolean {
         return localStorage.getItem('email_verified') === 'true';
@@ -163,7 +160,6 @@ export class AuthService {
             ).toPromise();
             
             if (response?.success) {
-                // Clear all stored auth data
                 this.clearAllAuthData();
                 this.router.navigate(['/login']);
             }
@@ -186,4 +182,3 @@ export class AuthService {
         this.currentUserSignal.set(null);
     }
 }
-
