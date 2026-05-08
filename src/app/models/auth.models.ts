@@ -1,15 +1,15 @@
 // User Models
 export interface User {
-  id?: string;
+  id?: number
   firstName: string;
-  sirName: string;
+  sirName?: string;
   email: string;
   avatarUrl?: string;
   password?: string;
-  name?: string; // Computed property for display
+  name?: string; 
 }
 
-// ✅ Single unified AuthResponse matching backend structure
+
 export interface AuthResponse {
   success: boolean;
   message: string;

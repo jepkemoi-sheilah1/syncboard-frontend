@@ -31,14 +31,13 @@ export class AuthService {
     }
 
     private saveAuth(response: AuthResponse): void {
-        // ✅ Fixed: access through response.data instead of response.user
         const userWithName = {
             ...response.data,
             name: `${response.data.firstName} ${response.data.sirName ?? ''}`.trim()
         };
-        localStorage.setItem('syncboard_token', response.data.token);  // ✅ Fixed
+        localStorage.setItem('syncboard_token', response.data.token);  // 
         localStorage.setItem('syncboard_user', JSON.stringify(userWithName));
-        this.tokenSignal.set(response.data.token);  // ✅ Fixed
+        this.tokenSignal.set(response.data.token);  
         this.currentUserSignal.set(userWithName);
     }
 
