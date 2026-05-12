@@ -30,7 +30,7 @@ export class RegisterComponent implements OnInit {
     ngOnInit(): void {
         this.initForm();
         if (this.authService.isLoggedIn()) {
-            this.router.navigate(['/boards']);
+            this.router.navigate(['/workspaces']);
         }
     }
 
