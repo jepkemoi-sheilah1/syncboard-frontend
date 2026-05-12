@@ -1,68 +1,83 @@
 export const endpoints = {
-    
+  // USER ENDPOINTS
   auth: {
-    login: '/user/login',
-    register:'/user/register',
-    confirm: '/user/confirm',
-    verifyEmail: '/user/confirm',
-    update: '/user/update', 
-    resetPassword: '/user/reset-password',
-    resetPasswordRequest: '/user/reset-password-request',
-    forgotPassword: '/user/reset-password-request',
-    logout: '/user/logout',
-    delete: '/user/delete',
-    deleteAccount: '/user/delete'
+    login: '/user/login',                    // ✅ POST - Login user
+    register: '/user/register',              // ✅ POST - Register new user
+    confirm: '/user/confirm',                // ✅ GET - Confirm email
+    verifyEmail: '/user/confirm',            // ✅ GET - Same as confirm
+    update: '/user/update',                  // ✅ PUT - Update user profile
+    resetPassword: '/user/reset-password',   // ✅ POST - Reset password with token
+    resetPasswordRequest: '/user/reset-password-request', // ✅ POST - Request password reset
+    forgotPassword: '/user/reset-password-request',       // ✅ Same as above
+    logout: '/user/logout',                  // ✅ PUT - Logout user
+    delete: '/user/delete',                  // ✅ DELETE - Delete account
+    deleteAccount: '/user/delete'            // ✅ Same as delete
   },
 
-  // board endpoints
-    boards: {
-    getByWorkspace:'/workspace/{workSpaceId}/boards',
-    create: '/workspace/{workSpaceId}/boards',
-    delete: '/workspace/boards/{boardId}',
+  // BOARD ENDPOINTS
+  boards: {
+    getAll: '/boards',                       // ✅ GET - Get all boards
+    getById: '/boards/{boardId}',            // ✅ GET - Get specific board
+    create: '/boards',                       // ✅ POST - Create new board
+    update: '/boards/{boardId}',             // ✅ PUT - Update board
+    delete: '/boards/{boardId}',             // ✅ DELETE - Delete board
   },
 
-      // Workspace
+  // WORKSPACE ENDPOINTS 
   workspace: {
-    create: '/workspace/create',
+    create: '/workspace/create',             
     invite: '/workspace/invite',
     acceptInvite: '/workspace/accept-invite',
     myWorkspaces: '/workspace/my-workspaces',
     delete: '/workspace/{id}',
   },
 
-  // Lists
+  // LIST ENDPOINTS
   lists: {
-    create: '/list/create',
-    getByBoard: '/list/boardLists',
+    create: '/boards/lists',                 // ✅ POST -it  Creates a list
+    getByBoard: '/boards/{boardId}/lists',   // ✅ GET - Get all lists for board
+    update: '/boards/lists/{listId}',        // ✅ PUT - Update list
+    delete: '/boards/lists/{listId}',        // ✅ DELETE - Delete list
+    reorder: '/boards/{boardId}/lists/reorder', // ✅ PUT - Reorder lists
   },
 
-  // Board Members
-  boardMembers: {
-    add: '/board/{boardId}/members',
-    updateRole: '/board/{boardId}/members/{userId}/role',
-    remove: '/board/{boardId}/members/{userId}',
+  // CARD ENDPOINTS
+  cards: {
+    create: '/cards',                        // ✅ POST - Create card
+    getById: '/cards/{cardId}',              // ✅ GET - Get specific card
+    getByList: '/cards/lists/{listId}/cards', // ✅ GET - Get cards in list
+    update: '/cards/{cardId}',               // ✅ PUT - Update card
+    delete: '/cards/{cardId}',               // ✅ DELETE - Delete card
+    move: '/cards/{cardId}/move',            // ✅ PUT - Move card to different list
   },
 
-  // Card Assignees
+  // CARD ASSIGNEE ENDPOINTS
   cardAssignees: {
-    reassign: '/api/cards/{cardId}/assignees/reassign',
-    remove: '/api/cards/{cardId}/assignees/{userId}',
+    reassign: '/cards/{cardId}/assignees/reassign',      // ✅ PUT
+    remove: '/cards/{cardId}/assignees/{userId}',        // ✅ DELETE
   },
 
-  // Comments
+  // BOARD MEMBER ENDPOINTS
+  boardMembers: {
+    add: '/board/{boardId}/members',                     // ✅ POST
+    updateRole: '/board/{boardId}/members/{userId}/role', // ✅ PATCH
+    remove: '/board/{boardId}/members/{userId}',         // ✅ DELETE
+  },
+
+  // COMMENT ENDPOINTS
   comments: {
-    getByCard: '/api/cards/{cardId}/comments',
-    create: '/api/cards/{cardId}/comments',
+    getByCard: '/cards/{cardId}/comments',   // ✅ GET
+    create: '/cards/{cardId}/comments',      // ✅ POST
   },
 
-  // Notifications
+  // NOTIFICATION ENDPOINTS
   notifications: {
-    getAll: '/notifications',
-    markRead: '/notifications/{id}/read',
+    getAll: '/notifications',                // ✅ GET
+    markRead: '/notifications/{id}/read',    // ✅ PATCH
   },
 
-  // Activity Logs
+  // ACTIVITY LOG ENDPOINTS
   activityLogs: {
-    getByBoard: '/boards/{boardId}/activity-logs',
+    getByBoard: '/boards/{boardId}/activity-logs', 
   },
 };
