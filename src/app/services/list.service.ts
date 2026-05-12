@@ -1,12 +1,9 @@
-// ============================================
-// List Service - CRUD Operations for Lists
-// ============================================
 
 import { Injectable, signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, of, delay, BehaviorSubject } from 'rxjs';
 import { environment } from '../../environments/environment';
-import { BoardList, CreateListRequest, UpdateListRequest, MOCK_LISTS } from '../models/board.models';
+import { BoardList, CreateListRequest, UpdateListRequest } from '../models/board.models';
 
 @Injectable({
   providedIn: 'root'

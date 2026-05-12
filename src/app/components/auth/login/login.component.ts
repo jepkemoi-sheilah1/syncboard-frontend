@@ -1,5 +1,3 @@
-// src/app/components/auth/login/login.component.ts
-// Simple login component
 
 import { Component, inject, signal, computed, OnInit } from '@angular/core';
 import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
@@ -64,7 +62,7 @@ export class LoginComponent implements OnInit {
         try {
             const { email, password } = this.loginForm.value;
             await this.authService.login({ email: email!, password: password! });
-            this.router.navigate(['/']);
+            this.router.navigate(['/workspaces']);
         } catch (err) {
             this.error.set(err instanceof Error ? err.message : 'Login failed');
         } finally {

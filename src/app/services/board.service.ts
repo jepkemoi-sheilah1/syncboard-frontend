@@ -1,6 +1,4 @@
-// ============================================
-// Board Service - CRUD Operations for Boards
-// ============================================
+
 
 import { Injectable, signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
@@ -45,6 +43,11 @@ export class BoardService {
       `${environment.apiUrl}${environment.api.basePath}/boards/${boardId}`
     );
   }
+    getBoardsByWorkspace(workspaceId: string): Observable<Board[]> {
+  return this.http.get<Board[]>(
+    `${environment.apiUrl}${environment.api.basePath}/workspace/${workspaceId}/boards`
+  );
+}
 
   /**
    * Create a new board

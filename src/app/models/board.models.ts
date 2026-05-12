@@ -1,15 +1,36 @@
- // ============================================
-// SyncBoard Phase 2 - Board Models
-// ============================================
+// ─── Workspace ───────────────────────────────────────────────────────────────
 
-// Label for cards
+export interface Workspace {
+  id: string;
+  name: string;
+  description?: string;
+  ownerId: string;
+  createdAt: Date;
+  members?: WorkspaceMember[];
+}
+
+export interface WorkspaceMember {
+  userId: string;
+  email: string;
+  name: string;
+  role: 'owner' | 'admin' | 'member';
+}
+
+export interface CreateWorkspaceRequest {
+  name: string;
+  description?: string;
+}
+
+// ─── Label ───────────────────────────────────────────────────────────────────
+
 export interface Label {
   id: string;
   name: string;
-  color: string; // e.g., '#ff0000', 'green', '#3b82f6'
+  color: string;
 }
 
-// Board Member
+// ─── Board Member ─────────────────────────────────────────────────────────────
+
 export interface BoardMember {
   userId: string;
   email: string;
@@ -19,7 +40,8 @@ export interface BoardMember {
   joinedAt: Date;
 }
 
-// Card
+// ─── Card ─────────────────────────────────────────────────────────────────────
+
 export interface Card {
   id: string;
   title: string;
@@ -33,7 +55,8 @@ export interface Card {
   updatedAt: Date;
 }
 
-// List (Column)
+// ─── List (Column) ────────────────────────────────────────────────────────────
+
 export interface BoardList {
   id: string;
   name: string;
@@ -42,7 +65,8 @@ export interface BoardList {
   cards: Card[];
 }
 
-// Board
+// ─── Board ────────────────────────────────────────────────────────────────────
+
 export interface Board {
   id: string;
   name: string;
@@ -53,7 +77,8 @@ export interface Board {
   isStarred?: boolean;
 }
 
-// Invitation
+// ─── Invitation ───────────────────────────────────────────────────────────────
+
 export interface Invitation {
   id: string;
   boardId: string;
@@ -64,11 +89,8 @@ export interface Invitation {
   expiresAt: Date;
 }
 
-// ============================================
-// API Request/Response Types
-// ============================================
+// ─── Board Requests ───────────────────────────────────────────────────────────
 
-// Board Requests
 export interface CreateBoardRequest {
   name: string;
   workspaceId?: string;
@@ -79,7 +101,8 @@ export interface UpdateBoardRequest {
   isStarred?: boolean;
 }
 
-// List Requests
+// ─── List Requests ────────────────────────────────────────────────────────────
+
 export interface CreateListRequest {
   name: string;
   boardId: string;
@@ -91,7 +114,8 @@ export interface UpdateListRequest {
   order?: number;
 }
 
-// Card Requests
+// ─── Card Requests ────────────────────────────────────────────────────────────
+
 export interface CreateCardRequest {
   title: string;
   description?: string;
@@ -115,7 +139,8 @@ export interface MoveCardRequest {
   newIndex: number;
 }
 
-// Invitation Requests
+// ─── Invitation Requests ──────────────────────────────────────────────────────
+
 export interface SendInvitationRequest {
   boardId: string;
   email: string;
@@ -128,9 +153,7 @@ export interface InvitationResponse {
   message?: string;
 }
 
-// ============================================
-// WebSocket Event Types
-// ============================================
+// ─── WebSocket Events ─────────────────────────────────────────────────────────
 
 export interface CardMovedEvent {
   cardId: string;
@@ -168,9 +191,7 @@ export interface PresenceUpdateEvent {
   users: { userId: string; status: 'online' | 'offline' }[];
 }
 
-// ============================================
-// Mock Data for Development
-// ============================================
+// ─── Mock Data ────────────────────────────────────────────────────────────────
 
 export const MOCK_BOARD: Board = {
   id: 'board-1',
@@ -185,46 +206,4 @@ export const MOCK_BOARD: Board = {
     { userId: 'user-3', email: 'bob@example.com', name: 'Bob Wilson', role: 'member', joinedAt: new Date() }
   ]
 };
-
-export const MOCK_LISTS: BoardList[] = [
-  {
-    id: 'list-1',
-    name: 'To Do',
-    boardId: 'board-1',
-    order: 0,
-    cards: [
-      { id: 'card-1', title: 'Setup project structure', description: 'Initialize Angular project with required dependencies', listId: 'list-1', order: 0, labels: [{ id: 'l1', name: 'Urgent', color: '#ef4444' }], createdAt: new Date(), updatedAt: new Date() },
-      { id: 'card-2', title: 'Design database schema', description: 'Create ERD and define relationships', listId: 'list-1', order: 1, labels: [], createdAt: new Date(), updatedAt: new Date() },
-      { id: 'card-3', title: 'Create wireframes', description: 'Design UI mockups in Figma', listId: 'list-1', order: 2, labels: [{ id: 'l2', name: 'Design', color: '#8b5cf6' }], createdAt: new Date(), updatedAt: new Date() }
-    ]
-  },
-  {
-    id: 'list-2',
-    name: 'In Progress',
-    boardId: 'board-1',
-    order: 1,
-    cards: [
-      { id: 'card-4', title: 'Implement authentication', description: 'Add login and registration features', listId: 'list-2', order: 0, assignee: 'John', labels: [{ id: 'l1', name: 'Urgent', color: '#ef4444' }], createdAt: new Date(), updatedAt: new Date() },
-      { id: 'card-5', title: 'Setup WebSocket server', description: 'Configure Socket.io for real-time sync', listId: 'list-2', order: 1, assignee: 'Jane', labels: [], createdAt: new Date(), updatedAt: new Date() }
-    ]
-  },
-  {
-    id: 'list-3',
-    name: 'Review',
-    boardId: 'board-1',
-    order: 2,
-    cards: [
-      { id: 'card-6', title: 'Code review: API endpoints', description: 'Review REST endpoints implementation', listId: 'list-3', order: 0, assignee: 'Bob', labels: [], createdAt: new Date(), updatedAt: new Date() }
-    ]
-  },
-  {
-    id: 'list-4',
-    name: 'Done',
-    boardId: 'board-1',
-    order: 3,
-    cards: [
-      { id: 'card-7', title: 'Project kickoff meeting', description: 'Initial team meeting completed', listId: 'list-4', order: 0, labels: [{ id: 'l3', name: 'Done', color: '#22c55e' }], createdAt: new Date(), updatedAt: new Date() }
-    ]
-  }
-];
 

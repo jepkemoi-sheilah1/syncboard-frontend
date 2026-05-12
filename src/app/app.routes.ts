@@ -1,4 +1,3 @@
-
 import { Routes } from '@angular/router';
 import { LandingComponent } from './components/landing/landing.component';
 import { LoginComponent } from './components/auth/login/login.component';
@@ -9,18 +8,20 @@ import { EmailConfirmComponent } from './components/auth/email-confirm/email-con
 import { ForgotPasswordComponent } from './components/auth/forgot-password/forgot-password.component';
 import { ResetPasswordComponent } from './components/auth/reset-password/reset-password.component';
 import { DeleteAccountComponent } from './components/auth/delete-account/delete-account.component';
+import { WorkspacesComponent } from './components/workspaces/workspaces.component';
 import { authGuard } from './guards/auth.guard';
 
-export const routes: Routes = [ 
-    {path: '', component: LandingComponent},
-    {path: 'login', component: LoginComponent},
-    {path: 'register', component: RegisterComponent},
-    {path: 'confirm-account', component: EmailConfirmComponent},
-    {path: 'forgot-password', component: ForgotPasswordComponent},
-    {path: 'reset-password/:token', component: ResetPasswordComponent},
-    {path: 'delete-account', component: DeleteAccountComponent, canActivate: [authGuard]},
-    {path: 'boards', component: BoardsComponent, canActivate: [authGuard]},
-    {path: 'board/:id', component: BoardDetailComponent, canActivate: [authGuard]},
-    {path: '**', redirectTo: ''}
+export const routes: Routes = [
+  { path: '', component: LandingComponent },
+  { path: 'login', component: LoginComponent },
+  { path: 'register', component: RegisterComponent },
+  { path: 'confirm-account', component: EmailConfirmComponent },
+  { path: 'forgot-password', component: ForgotPasswordComponent },
+  { path: 'reset-password/:token', component: ResetPasswordComponent },
+  { path: 'delete-account', component: DeleteAccountComponent, canActivate: [authGuard] },
+  { path: 'workspaces', component: WorkspacesComponent, canActivate: [authGuard] },
+  { path: 'workspaces/:workspaceId/boards', component: BoardsComponent, canActivate: [authGuard] },
+  { path: 'board/:id', component: BoardDetailComponent, canActivate: [authGuard] },
+  { path: 'boards', redirectTo: 'workspaces' },
+  { path: '**', redirectTo: '' }
 ];
-

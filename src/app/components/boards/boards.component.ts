@@ -1,7 +1,7 @@
 import { Component, inject, computed, signal, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 import { BoardService } from '../../services/board.service';
 import { InvitationService } from '../../services/invitation.service';
@@ -20,6 +20,10 @@ export class BoardsComponent implements OnInit {
   private boardService = inject(BoardService);
   private invitationService = inject(InvitationService);
   private router = inject(Router);
+  private route = inject(ActivatedRoute);
+
+  // Workspace ID from route
+  workspaceId = signal('');
 
   // State
   boards = signal<Board[]>([]);
@@ -37,16 +41,15 @@ export class BoardsComponent implements OnInit {
   newBoardName = '';
   selectedColor = '#0079bf';
 
-  // Board colors for the gradient effect
   boardColors = [
-    '#0079bf', // Blue
-    '#61bd4f', // Green
-    '#f2d600', // Yellow
-    '#ff9f1a', // Orange
-    '#eb5a46', // Red
-    '#c377e0', // Purple
-    '#0079bf', // Blue
-    '#51e898', // Teal
+    '#0079bf',
+    '#61bd4f',
+    '#f2d600',
+    '#ff9f1a',
+    '#eb5a46',
+    '#c377e0',
+    '#0079bf',
+    '#51e898',
   ];
 
   userName = computed(() => {
@@ -57,19 +60,22 @@ export class BoardsComponent implements OnInit {
   filteredBoards = computed(() => {
     const query = this.searchQuery.toLowerCase().trim();
     if (!query) return this.boards();
-    return this.boards().filter(board => 
+    return this.boards().filter(board =>
       board.name.toLowerCase().includes(query)
     );
   });
 
   ngOnInit(): void {
+    // Get workspaceId from route params
+    const wsId = this.route.snapshot.paramMap.get('workspaceId') || '';
+    this.workspaceId.set(wsId);
     this.loadBoards();
   }
 
   loadBoards(): void {
     this.loading.set(true);
-    this.boardService.getBoards().subscribe({
-      next: (boards) => {
+    this.boardService.getBoardsByWorkspace(this.workspaceId()).subscribe({
+      next: (boards: Board[]) => {
         this.boards.set(boards);
         this.loading.set(false);
       },
@@ -80,19 +86,18 @@ export class BoardsComponent implements OnInit {
   }
 
   filterBoards(): void {
-    // The computed filteredBoards will automatically update
+    // computed filteredBoards updates automatically
   }
 
   openBoard(boardId: string): void {
     this.router.navigate(['/board', boardId]);
   }
 
-  goHome(): void {
-    // Already on boards page
+  goBack(): void {
+    this.router.navigate(['/workspaces']);
   }
 
   getBoardColor(boardId: string): string {
-    // Generate consistent color based on board ID
     const colors = [
       'linear-gradient(135deg, #0079bf 0%, #026aa7 100%)',
       'linear-gradient(135deg, #61bd4f 0%, #519839 100%)',
@@ -116,7 +121,6 @@ export class BoardsComponent implements OnInit {
 
   toggleStar(board: Board, event: Event): void {
     event.stopPropagation();
-    // Toggle star logic would go here
   }
 
   createBoard(): void {
@@ -124,7 +128,8 @@ export class BoardsComponent implements OnInit {
 
     this.creating.set(true);
     const request: CreateBoardRequest = {
-      name: this.newBoardName.trim()
+      name: this.newBoardName.trim(),
+      workspaceId: this.workspaceId()
     };
 
     this.boardService.createBoard(request).subscribe({
@@ -133,7 +138,6 @@ export class BoardsComponent implements OnInit {
         this.showCreateModal.set(false);
         this.newBoardName = '';
         this.creating.set(false);
-        // Navigate to the new board
         this.router.navigate(['/board', newBoard.id]);
       },
       error: () => {
@@ -142,7 +146,6 @@ export class BoardsComponent implements OnInit {
     });
   }
 
-  // Invite Member Methods
   closeInviteModal(): void {
     this.showInviteModal.set(false);
     this.inviteEmail = '';
@@ -181,4 +184,3 @@ export class BoardsComponent implements OnInit {
     });
   }
 }
-

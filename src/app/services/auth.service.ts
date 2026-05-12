@@ -1,6 +1,3 @@
-// src/app/services/auth.service.ts
-// Simple authentication service
-
 import { Injectable, signal, computed } from '@angular/core';
 import { Router } from '@angular/router';
 import { User, LoginCredentials, RegisterCredentials, AuthResponse, DeleteAccountResponse } from '../models/auth.models';
@@ -35,9 +32,9 @@ export class AuthService {
             ...response.data,
             name: `${response.data.firstName} ${response.data.sirName ?? ''}`.trim()
         };
-        localStorage.setItem('syncboard_token', response.data.token);  // 
+        localStorage.setItem('syncboard_token', response.data.token);
         localStorage.setItem('syncboard_user', JSON.stringify(userWithName));
-        this.tokenSignal.set(response.data.token);  
+        this.tokenSignal.set(response.data.token);
         this.currentUserSignal.set(userWithName);
     }
 
@@ -50,6 +47,8 @@ export class AuthService {
             ).toPromise();
             if (response) {
                 this.saveAuth(response);
+                // Redirect to workspaces after login
+                this.router.navigate(['/workspaces']);
             } else {
                 throw new Error('Login failed: No response from server');
             }
@@ -85,7 +84,6 @@ export class AuthService {
         this.router.navigate(['/login']);
     }
 
-    // Email Verification Methods
     verifyEmail(token: string): Promise<boolean> {
         return this.http.post<{ success: boolean }>(
             `${environment.apiUrl}${environment.api.basePath}${environment.api.endpoints.auth.verifyEmail}`,
@@ -157,12 +155,12 @@ export class AuthService {
                 `${environment.apiUrl}${environment.api.basePath}${environment.api.endpoints.auth.deleteAccount}`,
                 { password }
             ).toPromise();
-            
+
             if (response?.success) {
                 this.clearAllAuthData();
                 this.router.navigate(['/login']);
             }
-            
+
             return response || { success: false, message: 'Failed to delete account' };
         } catch (error) {
             throw error;
