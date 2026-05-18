@@ -1,12 +1,21 @@
 // ─── Workspace ───────────────────────────────────────────────────────────────
 
 export interface Workspace {
-  id: string;
-  name: string;
-  description?: string;
-  ownerId: string;
-  createdAt: Date;
-  members?: WorkspaceMember[];
+  id: number;
+  workSpaceName: string;
+  workSpaceDescription?: string;
+  workSpaceCreatedAt: string;
+  updatedAt: string;
+  owner: {
+    id: number;
+    firstName: string;
+    sirName: string;
+    email: string;
+    avatar?: string | null;
+
+  };
+members : any[];
+
 }
 
 export interface WorkspaceMember {
@@ -17,8 +26,8 @@ export interface WorkspaceMember {
 }
 
 export interface CreateWorkspaceRequest {
-  name: string;
-  description?: string;
+  workSpaceName: string;
+  workSpaceDescription?: string;
 }
 
 // ─── Label ───────────────────────────────────────────────────────────────────

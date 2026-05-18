@@ -58,8 +58,8 @@ export class WorkspacesComponent implements OnInit {
     this.creating.set(true);
 
     const request: CreateWorkspaceRequest = {
-      name: this.newWorkspaceName.trim(),
-      description: this.newWorkspaceDescription.trim()
+      workSpaceName: this.newWorkspaceName.trim(),
+      workSpaceDescription: this.newWorkspaceDescription.trim()
     };
 
     this.workspaceService.createWorkspace(request).subscribe({

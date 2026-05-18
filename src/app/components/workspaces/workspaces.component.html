@@ -22,29 +22,26 @@
       </button>
     </div>
 
-    <!-- Loading -->
     <div class="loading" *ngIf="loading()">
       <div class="spinner"></div>
       <p>Loading workspaces...</p>
     </div>
 
-    <!-- Workspace Grid -->
     <div class="workspace-grid" *ngIf="!loading()">
       <div
         class="workspace-card"
         *ngFor="let ws of workspaces()"
         (click)="openWorkspace(ws.id)"
       >
-        <div class="ws-avatar">{{ getInitial(ws.name) }}</div>
+        <div class="ws-avatar">{{ getInitial(ws.workSpaceName) }}</div>
         <div class="ws-info">
-          <h3>{{ ws.name }}</h3>
-          <p *ngIf="ws.description">{{ ws.description }}</p>
-          <p *ngIf="!ws.description" class="no-desc">No description</p>
+          <h3>{{ ws.workSpaceName }}</h3>
+          <p *ngIf="ws.workSpaceDescription">{{ ws.workSpaceDescription }}</p>
+          <p *ngIf="!ws.workSpaceDescription" class="no-desc">No description</p>
         </div>
         <span class="ws-arrow">→</span>
       </div>
 
-      <!-- Empty State -->
       <div class="empty-state" *ngIf="workspaces().length === 0">
         <div class="empty-icon">🗂️</div>
         <h3>No workspaces yet</h3>
@@ -56,7 +53,6 @@
     </div>
   </main>
 
-  <!-- Create Workspace Modal -->
   <div class="modal-overlay" *ngIf="showCreateModal()" (click)="closeModal()">
     <div class="modal" (click)="$event.stopPropagation()">
       <div class="modal-header">
