@@ -84,24 +84,23 @@ export class AuthService {
         this.router.navigate(['/login']);
     }
 
-    verifyEmail(token: string): Promise<boolean> {
-        return this.http.post<{ success: boolean }>(
-            `${environment.apiUrl}${environment.api.basePath}${environment.api.endpoints.auth.verifyEmail}`,
-            { token }
-        ).toPromise().then(response => {
-            if (response?.success) {
-                localStorage.setItem('email_verified', 'true');
-                localStorage.removeItem('verification_error');
-                return true;
-            } else {
-                localStorage.setItem('verification_error', 'Verification failed');
-                return false;
-            }
-        }).catch(() => {
-            localStorage.setItem('verification_error', 'Network error during verification');
+   verifyEmail(token: string): Promise<boolean> {
+    return this.http.get<{ success: boolean }>(
+        `${environment.apiUrl}${environment.api.basePath}${environment.api.endpoints.auth.verifyEmail}?token=${token}`
+    ).toPromise().then(response => {
+        if (response?.success) {
+            localStorage.setItem('email_verified', 'true');
+            localStorage.removeItem('verification_error');
+            return true;
+        } else {
+            localStorage.setItem('verification_error', 'Verification failed');
             return false;
-        });
-    }
+        }
+    }).catch(() => {
+        localStorage.setItem('verification_error', 'Network error during verification');
+        return false;
+    });
+}
 
     isEmailVerified(): boolean {
         return localStorage.getItem('email_verified') === 'true';
