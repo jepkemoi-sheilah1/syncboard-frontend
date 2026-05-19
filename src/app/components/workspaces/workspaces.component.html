@@ -31,7 +31,7 @@
       <div
         class="workspace-card"
         *ngFor="let ws of workspaces()"
-        (click)="openWorkspace(ws.id)"
+        (click)="openWorkspace(ws.id.toString())"
       >
         <div class="ws-avatar">{{ getInitial(ws.workSpaceName) }}</div>
         <div class="ws-info">

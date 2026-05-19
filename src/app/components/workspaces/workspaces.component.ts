@@ -69,7 +69,7 @@ export class WorkspacesComponent implements OnInit {
         this.newWorkspaceName = '';
         this.newWorkspaceDescription = '';
         this.creating.set(false);
-        this.openWorkspace(workspace.id);
+        this.openWorkspace(workspace.id.toString());
       },
       error: () => {
         this.creating.set(false);
