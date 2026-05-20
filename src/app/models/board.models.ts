@@ -12,10 +12,8 @@ export interface Workspace {
     sirName: string;
     email: string;
     avatar?: string | null;
-
   };
-members : any[];
-
+  members: WorkspaceMember[];
 }
 
 export interface WorkspaceMember {
@@ -23,11 +21,37 @@ export interface WorkspaceMember {
   email: string;
   name: string;
   role: 'owner' | 'admin' | 'member';
+  avatar?: string | null;
+  joinedAt?: string;
 }
 
 export interface CreateWorkspaceRequest {
   workSpaceName: string;
   workSpaceDescription?: string;
+}
+
+// ─── Workspace Invitation ─────────────────────────────────────────────────────
+
+export interface WorkspaceInvitation {
+  id: string;
+  workspaceId: string | number;
+  email: string;
+  role: 'admin' | 'member';
+  invitedBy: string;
+  status: 'pending' | 'accepted' | 'declined';
+  expiresAt: Date;
+}
+
+export interface SendWorkspaceInvitationRequest {
+  workspaceId: string | number;
+  email: string;
+  role: 'admin' | 'member';
+}
+
+export interface WorkspaceInvitationResponse {
+  success: boolean;
+  invitation?: WorkspaceInvitation;
+  message?: string;
 }
 
 // ─── Label ───────────────────────────────────────────────────────────────────
@@ -86,7 +110,7 @@ export interface Board {
   isStarred?: boolean;
 }
 
-// ─── Invitation ───────────────────────────────────────────────────────────────
+// ─── Board Invitation ─────────────────────────────────────────────────────────
 
 export interface Invitation {
   id: string;
@@ -148,7 +172,7 @@ export interface MoveCardRequest {
   newIndex: number;
 }
 
-// ─── Invitation Requests ──────────────────────────────────────────────────────
+// ─── Board Invitation Requests ────────────────────────────────────────────────
 
 export interface SendInvitationRequest {
   boardId: string;
@@ -215,4 +239,3 @@ export const MOCK_BOARD: Board = {
     { userId: 'user-3', email: 'bob@example.com', name: 'Bob Wilson', role: 'member', joinedAt: new Date() }
   ]
 };
-

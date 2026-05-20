@@ -1,0 +1,222 @@
+.members-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.panel-section {
+  padding: 20px;
+  border-bottom: 1px solid #f3f4f6;
+}
+
+.panel-section:last-child { border-bottom: none; }
+
+.section-title {
+  margin: 0 0 12px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: #6b7280;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.count {
+  background: #e5e7eb;
+  color: #374151;
+  border-radius: 10px;
+  padding: 1px 7px;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+/* ─── Invite Row ──────────────────────────────────────────────────────────── */
+.invite-row {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.form-input {
+  flex: 1;
+  min-width: 0;
+  border: 1.5px solid #e5e7eb;
+  border-radius: 7px;
+  padding: 8px 10px;
+  font-size: 0.85rem;
+  color: #1e1e2e;
+  outline: none;
+  transition: border-color 0.15s;
+  box-sizing: border-box;
+}
+
+.form-input:focus { border-color: #5b5ef6; }
+
+.form-select {
+  border: 1.5px solid #e5e7eb;
+  border-radius: 7px;
+  padding: 8px 10px;
+  font-size: 0.83rem;
+  color: #374151;
+  background: #fff;
+  outline: none;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.btn-invite {
+  background: #5b5ef6;
+  color: #fff;
+  border: none;
+  padding: 8px 14px;
+  border-radius: 7px;
+  font-size: 0.83rem;
+  font-weight: 600;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: background 0.15s;
+}
+
+.btn-invite:hover:not(:disabled) { background: #4748d4; }
+.btn-invite:disabled { opacity: 0.55; cursor: not-allowed; }
+
+/* ─── Feedback ────────────────────────────────────────────────────────────── */
+.feedback {
+  margin-top: 8px;
+  font-size: 0.82rem;
+  padding: 7px 10px;
+  border-radius: 6px;
+}
+
+.feedback.success {
+  color: #16a34a;
+  background: #f0fdf4;
+  border: 1px solid #bbf7d0;
+}
+
+.feedback.error {
+  color: #ef4444;
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+}
+
+/* ─── Member Row ──────────────────────────────────────────────────────────── */
+.member-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 0;
+  border-bottom: 1px solid #f9fafb;
+}
+
+.member-row:last-child { border-bottom: none; }
+.member-row.pending { opacity: 0.8; }
+
+.avatar {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  color: #fff;
+  font-size: 0.85rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.avatar.placeholder {
+  background: #e5e7eb;
+  color: #9ca3af;
+  font-size: 1rem;
+}
+
+.member-info {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.member-name {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #1e1e2e;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.member-email {
+  font-size: 0.82rem;
+  color: #6b7280;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.member-email.small { font-size: 0.78rem; }
+
+.badge {
+  display: inline-block;
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 2px 7px;
+  border-radius: 4px;
+  text-transform: capitalize;
+  width: fit-content;
+}
+
+.badge.owner  { background: #ede9fe; color: #7c3aed; }
+.badge.admin  { background: #dbeafe; color: #1d4ed8; }
+.badge.member { background: #f3f4f6; color: #374151; }
+.badge.pending{ background: #fffbeb; color: #d97706; }
+
+/* ─── Ghost Button ────────────────────────────────────────────────────────── */
+.btn-ghost {
+  background: none;
+  border: 1.5px solid #e5e7eb;
+  border-radius: 6px;
+  padding: 5px 10px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: all 0.15s;
+}
+
+.btn-ghost.danger { color: #ef4444; border-color: #fecaca; }
+.btn-ghost.danger:hover { background: #fef2f2; }
+
+/* ─── Loading / Empty ─────────────────────────────────────────────────────── */
+.loading-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.85rem;
+  color: #9ca3af;
+  padding: 8px 0;
+}
+
+.mini-spinner {
+  width: 16px;
+  height: 16px;
+  border: 2px solid #e5e7eb;
+  border-top-color: #5b5ef6;
+  border-radius: 50%;
+  animation: spin 0.6s linear infinite;
+}
+
+@keyframes spin { to { transform: rotate(360deg); } }
+
+.empty-members {
+  font-size: 0.85rem;
+  color: #9ca3af;
+  padding: 8px 0;
+  font-style: italic;
+}
+

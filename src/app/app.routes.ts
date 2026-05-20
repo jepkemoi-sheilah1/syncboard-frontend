@@ -12,16 +12,31 @@ import { WorkspacesComponent } from './components/workspaces/workspaces.componen
 import { authGuard } from './guards/auth.guard';
 
 export const routes: Routes = [
+  // ── Public ─────────────────────────────────────────────────────────────
   { path: '', component: LandingComponent },
   { path: 'login', component: LoginComponent },
   { path: 'register', component: RegisterComponent },
   { path: 'confirm-account', component: EmailConfirmComponent },
   { path: 'forgot-password', component: ForgotPasswordComponent },
   { path: 'reset-password/:token', component: ResetPasswordComponent },
+
+  
+  // (they log in / register first, then the accept endpoint links them)
+  { path: 'accept-invite/:token', component: EmailConfirmComponent },
+
+  // ── Protected ───────────────────────────────────────────────────────────
   { path: 'delete-account', component: DeleteAccountComponent, canActivate: [authGuard] },
+
+  // 1. Workspaces list (entry point after login)
   { path: 'workspaces', component: WorkspacesComponent, canActivate: [authGuard] },
+
+  // 2. Boards inside a workspace — members arrive here after accepting an invite
   { path: 'workspaces/:workspaceId/boards', component: BoardsComponent, canActivate: [authGuard] },
+
+  // 3. Board detail (collaborative Kanban view)
   { path: 'board/:id', component: BoardDetailComponent, canActivate: [authGuard] },
+
+  // ── Fallbacks ───────────────────────────────────────────────────────────
   { path: 'boards', redirectTo: 'workspaces' },
   { path: '**', redirectTo: '' }
 ];

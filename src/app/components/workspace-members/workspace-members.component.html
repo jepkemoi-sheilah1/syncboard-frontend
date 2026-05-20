@@ -1,0 +1,76 @@
+<div class="members-panel">
+
+  <div class="panel-section">
+    <h3 class="section-title">Invite to Workspace</h3>
+    <div class="invite-row">
+      <input
+        type="email"
+        class="form-input"
+        placeholder="colleague@company.com"
+        [(ngModel)]="inviteEmail"
+        (keyup.enter)="sendInvite()"
+      >
+      <select class="form-select" [(ngModel)]="inviteRole">
+        <option value="member">Member</option>
+        <option value="admin">Admin</option>
+      </select>
+      <button
+        class="btn-invite"
+        (click)="sendInvite()"
+        [disabled]="!inviteEmail.trim() || sending()"
+      >
+        {{ sending() ? '...' : 'Invite' }}
+      </button>
+    </div>
+    <div class="feedback success" *ngIf="inviteSuccess()">✓ {{ inviteSuccess() }}</div>
+    <div class="feedback error" *ngIf="inviteError()">{{ inviteError() }}</div>
+  </div>
+
+  <!-- Pending invitations -->
+  <div class="panel-section" *ngIf="pendingInvitations().length > 0">
+    <h3 class="section-title">Pending Invites</h3>
+    <div class="member-row pending" *ngFor="let inv of pendingInvitations()">
+      <div class="avatar placeholder">✉</div>
+      <div class="member-info">
+        <span class="member-email">{{ inv.email }}</span>
+        <span class="badge pending">Pending · {{ inv.role }}</span>
+      </div>
+      <button class="btn-ghost danger" (click)="cancelInvitation(inv)">Cancel</button>
+    </div>
+  </div>
+
+  <!-- Current members -->
+  <div class="panel-section">
+    <h3 class="section-title">
+      Members
+      <span class="count">{{ members().length }}</span>
+    </h3>
+
+    <div class="loading-row" *ngIf="loading()">
+      <div class="mini-spinner"></div> Loading…
+    </div>
+
+    <div class="member-row" *ngFor="let m of members()">
+      <div class="avatar" [style.background]="avatarColor(m.name || m.email)">
+        {{ getInitial(m.name || m.email) }}
+      </div>
+      <div class="member-info">
+        <span class="member-name">{{ m.name || m.email }}</span>
+        <span class="member-email small" *ngIf="m.name">{{ m.email }}</span>
+        <span class="badge" [class]="m.role">{{ m.role }}</span>
+      </div>
+      <button
+        class="btn-ghost danger"
+        *ngIf="m.role !== 'owner'"
+        (click)="removeMember(m)"
+      >
+        Remove
+      </button>
+    </div>
+
+    <div class="empty-members" *ngIf="!loading() && members().length === 0">
+      No members yet. Invite your team above.
+    </div>
+  </div>
+
+</div>
