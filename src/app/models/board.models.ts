@@ -101,13 +101,10 @@ export interface BoardList {
 // ─── Board ────────────────────────────────────────────────────────────────────
 
 export interface Board {
-  id: string;
-  name: string;
-  workspaceId: string;
-  createdAt: Date;
-  ownerId: string;
-  members: BoardMember[];
-  isStarred?: boolean;
+  boardName: string;
+  boardDescription?: string;
+  workspaceId: 0,
+  isStarred: true
 }
 
 // ─── Board Invitation ─────────────────────────────────────────────────────────
