@@ -1,5 +1,6 @@
 <div class="boards-container">
-  <!-- Top Navigation Bar (Trello-style) -->
+
+  <!-- ── Top Nav ───────────────────────────────────────────────────────── -->
   <nav class="trello-nav">
     <div class="nav-left">
       <div class="logo" (click)="goBack()">
@@ -12,23 +13,22 @@
         <a href="#" class="nav-link">Starred</a>
       </div>
     </div>
-    
+
     <div class="nav-center">
-      <!-- Search Bar -->
       <div class="search-container">
         <span class="search-icon">🔍</span>
-        <input 
-          type="text" 
-          class="search-input" 
+        <input
+          type="text"
+          class="search-input"
           placeholder="Search boards..."
           [(ngModel)]="searchQuery"
           (input)="filterBoards()"
         >
       </div>
     </div>
-    
+
     <div class="nav-right">
-      <button class="btn-invite" (click)="showInviteModal.set(true)">
+      <button class="btn-invite" (click)="openInviteModal()">
         + Invite Member
       </button>
       <button class="btn-create-board" (click)="showCreateModal.set(true)">
@@ -38,14 +38,12 @@
     </div>
   </nav>
 
-  <!-- Main Content -->
+  <!-- ── Main ──────────────────────────────────────────────────────────── -->
   <main class="boards-main">
-    <!-- Workspace Header -->
+
     <div class="workspace-header">
       <div class="workspace-info">
-        <div class="workspace-avatar">
-          {{ userName().charAt(0).toUpperCase() }}
-        </div>
+        <div class="workspace-avatar">{{ userName().charAt(0).toUpperCase() }}</div>
         <div class="workspace-details">
           <h1>{{ userName() }}'s Workspace</h1>
           <p class="workspace-subtitle">Private workspace</p>
@@ -53,7 +51,6 @@
       </div>
     </div>
 
-    <!-- Boards Section -->
     <section class="boards-section">
       <div class="section-header">
         <h2>
@@ -62,20 +59,18 @@
           <span class="board-count">({{ filteredBoards().length }})</span>
         </h2>
       </div>
-      
+
       <!-- Board Grid -->
       <div class="board-grid" *ngIf="boards().length > 0">
-        <!-- Create New Board Card -->
         <div class="board-card create-card" (click)="showCreateModal.set(true)">
           <div class="create-card-content">
             <span class="plus-icon">+</span>
             <span>Create new board</span>
           </div>
         </div>
-        
-        <!-- Existing Boards -->
-        <div 
-          class="board-card" 
+
+        <div
+          class="board-card"
           *ngFor="let board of filteredBoards()"
           (click)="openBoard(board.id)"
         >
@@ -83,21 +78,18 @@
           <div class="board-info">
             <h3>{{ board.name }}</h3>
             <div class="board-meta">
-              <span class="board-members">
-                <!-- Member Avatars -->
-                <div class="member-avatars">
-                  <span 
-                    class="member-avatar" 
-                    *ngFor="let member of board.members.slice(0, 3)"
-                    [title]="member.name"
-                  >
-                    {{ getInitials(member.name) }}
-                  </span>
-                  <span class="more-members" *ngIf="board.members.length > 3">
-                    +{{ board.members.length - 3 }}
-                  </span>
-                </div>
-              </span>
+              <div class="member-avatars">
+                <span
+                  class="member-avatar"
+                  *ngFor="let member of board.members.slice(0, 3)"
+                  [title]="member.name"
+                >
+                  {{ getInitials(member.name) }}
+                </span>
+                <span class="more-members" *ngIf="board.members.length > 3">
+                  +{{ board.members.length - 3 }}
+                </span>
+              </div>
             </div>
           </div>
           <button class="btn-star" (click)="toggleStar(board, $event)" [class.starred]="board.isStarred">
@@ -116,20 +108,21 @@
         </button>
       </div>
 
-      <!-- Loading State -->
+      <!-- Loading -->
       <div class="loading-state" *ngIf="loading()">
         <div class="spinner"></div>
         <p>Loading boards...</p>
       </div>
 
-      <!-- No Search Results -->
+      <!-- No Results -->
       <div class="no-results" *ngIf="boards().length > 0 && filteredBoards().length === 0">
         <p>No boards matching "{{ searchQuery }}"</p>
       </div>
+
     </section>
   </main>
 
-  <!-- Create Board Modal -->
+  <!-- ── Create Board Modal ─────────────────────────────────────────────── -->
   <div class="modal-overlay" *ngIf="showCreateModal()" (click)="showCreateModal.set(false)">
     <div class="modal-content" (click)="$event.stopPropagation()">
       <div class="modal-header">
@@ -139,10 +132,10 @@
       <div class="modal-body">
         <div class="form-group">
           <label for="boardName">Board Title</label>
-          <input 
-            type="text" 
+          <input
+            type="text"
             id="boardName"
-            class="form-input" 
+            class="form-input"
             placeholder="e.g. Marketing Plan, Sprint 1"
             [(ngModel)]="newBoardName"
             (keyup.enter)="createBoard()"
@@ -151,7 +144,7 @@
         <div class="form-group">
           <label>Board Color</label>
           <div class="color-options">
-            <button 
+            <button
               *ngFor="let color of boardColors"
               class="color-btn"
               [style.background]="color"
@@ -163,8 +156,8 @@
       </div>
       <div class="modal-footer">
         <button class="btn-cancel" (click)="showCreateModal.set(false)">Cancel</button>
-        <button 
-          class="btn-create" 
+        <button
+          class="btn-create"
           (click)="createBoard()"
           [disabled]="!newBoardName.trim() || creating()"
         >
@@ -174,76 +167,68 @@
     </div>
   </div>
 
-  <!-- Invite Member Modal -->
+  <!-- ── Invite Member Modal (Workspace-level, email only) ──────────────── -->
   <div class="modal-overlay" *ngIf="showInviteModal()" (click)="closeInviteModal()">
-    <div class="modal-content" (click)="$event.stopPropagation()">
+    <div class="modal-content invite-modal" (click)="$event.stopPropagation()">
+
       <div class="modal-header">
-        <h2>Invite Member</h2>
+        <h2>Invite a Colleague</h2>
         <button class="btn-close" (click)="closeInviteModal()">×</button>
       </div>
+
       <div class="modal-body">
-        <!-- Success Message -->
+
+        <!-- ✅ Success state -->
         <div class="invite-success" *ngIf="inviteSuccess()">
-          <div class="success-icon">✓</div>
-          <p>Invitation sent successfully!</p>
+          <div class="success-icon">✉️</div>
+          <h3>Invite sent!</h3>
+          <p>
+            An email invitation has been sent to <strong>{{ inviteEmail }}</strong>.
+            They'll be able to join this workspace and start collaborating.
+          </p>
         </div>
-        <!-- Invite Form -->
+
+        <!-- 📧 Invite form -->
         <div *ngIf="!inviteSuccess()">
+          <p class="invite-description">
+            Enter your colleague's email address and we'll send them an invite to join this workspace.
+          </p>
+
           <div class="form-group">
             <label for="inviteEmail">Email Address</label>
-            <input 
-              type="email" 
+            <input
+              type="email"
               id="inviteEmail"
-              class="form-input" 
-              placeholder="Enter email address"
+              class="form-input"
+              placeholder="colleague@company.com"
               [(ngModel)]="inviteEmail"
               (keyup.enter)="sendInvite()"
+              autofocus
             >
           </div>
-          <div class="form-group">
-            <label for="inviteBoard">Select Board</label>
-            <select 
-              id="inviteBoard" 
-              class="form-input"
-              [(ngModel)]="inviteBoardId"
-            >
-              <option value="">Choose a board...</option>
-              <option *ngFor="let board of boards()" [value]="board.id">
-                {{ board.name }}
-              </option>
-            </select>
-          </div>
-          <div class="form-group">
-            <label for="inviteRole">Role</label>
-            <select 
-              id="inviteRole" 
-              class="form-input"
-              [(ngModel)]="inviteRole"
-            >
-              <option value="member">Member</option>
-              <option value="admin">Admin</option>
-              <option value="observer">Observer</option>
-            </select>
-          </div>
+
           <div class="error-message" *ngIf="inviteError()">
             {{ inviteError() }}
           </div>
         </div>
+
       </div>
+
       <div class="modal-footer">
         <button class="btn-cancel" (click)="closeInviteModal()">
           {{ inviteSuccess() ? 'Close' : 'Cancel' }}
         </button>
-        <button 
+        <button
           *ngIf="!inviteSuccess()"
-          class="btn-create" 
+          class="btn-create"
           (click)="sendInvite()"
-          [disabled]="!inviteEmail.trim() || !inviteBoardId || inviting()"
+          [disabled]="!inviteEmail.trim() || inviting()"
         >
           {{ inviting() ? 'Sending...' : 'Send Invite' }}
         </button>
       </div>
+
     </div>
   </div>
-</div>
 
+</div>

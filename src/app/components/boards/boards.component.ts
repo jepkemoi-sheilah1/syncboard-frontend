@@ -4,7 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 import { BoardService } from '../../services/board.service';
-import { InvitationService } from '../../services/invitation.service';
+import { WorkspaceService } from '../../services/workspace.service';
 import { UserMenuComponent } from '../auth/user-menu/user-menu.component';
 import { Board, CreateBoardRequest } from '../../models/board.models';
 
@@ -18,38 +18,32 @@ import { Board, CreateBoardRequest } from '../../models/board.models';
 export class BoardsComponent implements OnInit {
   private authService = inject(AuthService);
   private boardService = inject(BoardService);
-  private invitationService = inject(InvitationService);
+  private workspaceService = inject(WorkspaceService);
   private router = inject(Router);
   private route = inject(ActivatedRoute);
 
-  // Workspace ID from route
   workspaceId = signal('');
 
-  // State
+  // Board state
   boards = signal<Board[]>([]);
   loading = signal(true);
   creating = signal(false);
   showCreateModal = signal(false);
+  newBoardName = '';
+  selectedColor = '#0079bf';
+  searchQuery = '';
+
+  // Invite state — workspace level, email only
   showInviteModal = signal(false);
   inviting = signal(false);
   inviteEmail = '';
-  inviteRole = 'member';
-  inviteBoardId = '';
   inviteError = signal('');
   inviteSuccess = signal(false);
-  searchQuery = '';
-  newBoardName = '';
-  selectedColor = '#0079bf';
 
   boardColors = [
-    '#0079bf',
-    '#61bd4f',
-    '#f2d600',
-    '#ff9f1a',
-    '#eb5a46',
-    '#c377e0',
-    '#0079bf',
-    '#51e898',
+    '#0079bf', '#61bd4f', '#f2d600',
+    '#ff9f1a', '#eb5a46', '#c377e0',
+    '#0079bf', '#51e898',
   ];
 
   userName = computed(() => {
@@ -60,13 +54,10 @@ export class BoardsComponent implements OnInit {
   filteredBoards = computed(() => {
     const query = this.searchQuery.toLowerCase().trim();
     if (!query) return this.boards();
-    return this.boards().filter(board =>
-      board.name.toLowerCase().includes(query)
-    );
+    return this.boards().filter(b => b.name.toLowerCase().includes(query));
   });
 
   ngOnInit(): void {
-    // Get workspaceId from route params
     const wsId = this.route.snapshot.paramMap.get('workspaceId') || '';
     this.workspaceId.set(wsId);
     this.loadBoards();
@@ -79,15 +70,11 @@ export class BoardsComponent implements OnInit {
         this.boards.set(boards);
         this.loading.set(false);
       },
-      error: () => {
-        this.loading.set(false);
-      }
+      error: () => this.loading.set(false)
     });
   }
 
-  filterBoards(): void {
-    // computed filteredBoards updates automatically
-  }
+  filterBoards(): void { /* filteredBoards signal updates automatically */ }
 
   openBoard(boardId: string): void {
     this.router.navigate(['/board', boardId]);
@@ -96,6 +83,71 @@ export class BoardsComponent implements OnInit {
   goBack(): void {
     this.router.navigate(['/workspaces']);
   }
+
+  createBoard(): void {
+    if (!this.newBoardName.trim()) return;
+    this.creating.set(true);
+
+    const request: CreateBoardRequest = {
+      name: this.newBoardName.trim(),
+      workspaceId: this.workspaceId()
+    };
+
+    this.boardService.createBoard(request).subscribe({
+      next: (newBoard) => {
+        this.boards.update(boards => [newBoard, ...boards]);
+        this.showCreateModal.set(false);
+        this.newBoardName = '';
+        this.creating.set(false);
+        this.router.navigate(['/board', newBoard.id]);
+      },
+      error: () => this.creating.set(false)
+    });
+  }
+
+  // ─── Workspace Invite ─────────────────────────────────────────────────────
+
+  openInviteModal(): void {
+    this.inviteEmail = '';
+    this.inviteError.set('');
+    this.inviteSuccess.set(false);
+    this.showInviteModal.set(true);
+  }
+
+  closeInviteModal(): void {
+    this.showInviteModal.set(false);
+    this.inviteEmail = '';
+    this.inviteError.set('');
+    this.inviteSuccess.set(false);
+  }
+
+  sendInvite(): void {
+    const email = this.inviteEmail.trim().toLowerCase();
+    if (!email || !this.isValidEmail(email)) {
+      this.inviteError.set('Please enter a valid email address.');
+      return;
+    }
+
+    this.inviting.set(true);
+    this.inviteError.set('');
+
+    this.workspaceService.inviteMember({
+      workspaceId: this.workspaceId(),
+      email,
+      role: 'member'          // always member — admins are set separately
+    }).subscribe({
+      next: () => {
+        this.inviting.set(false);
+        this.inviteSuccess.set(true);
+      },
+      error: (err: { error?: { message?: string } }) => {
+        this.inviting.set(false);
+        this.inviteError.set(err?.error?.message || 'Failed to send invite. Please try again.');
+      }
+    });
+  }
+
+  // ─── Helpers ──────────────────────────────────────────────────────────────
 
   getBoardColor(boardId: string): string {
     const colors = [
@@ -113,74 +165,16 @@ export class BoardsComponent implements OnInit {
 
   getInitials(name: string): string {
     const parts = name.split(' ');
-    if (parts.length > 1) {
-      return (parts[0][0] + parts[1][0]).toUpperCase();
-    }
-    return name.charAt(0).toUpperCase();
+    return parts.length > 1
+      ? (parts[0][0] + parts[1][0]).toUpperCase()
+      : name.charAt(0).toUpperCase();
   }
 
   toggleStar(board: Board, event: Event): void {
     event.stopPropagation();
   }
 
-  createBoard(): void {
-    if (!this.newBoardName.trim()) return;
-
-    this.creating.set(true);
-    const request: CreateBoardRequest = {
-      name: this.newBoardName.trim(),
-      workspaceId: this.workspaceId()
-    };
-
-    this.boardService.createBoard(request).subscribe({
-      next: (newBoard) => {
-        this.boards.update(boards => [newBoard, ...boards]);
-        this.showCreateModal.set(false);
-        this.newBoardName = '';
-        this.creating.set(false);
-        this.router.navigate(['/board', newBoard.id]);
-      },
-      error: () => {
-        this.creating.set(false);
-      }
-    });
-  }
-
-  closeInviteModal(): void {
-    this.showInviteModal.set(false);
-    this.inviteEmail = '';
-    this.inviteBoardId = '';
-    this.inviteRole = 'member';
-    this.inviteError.set('');
-    this.inviteSuccess.set(false);
-  }
-
-  sendInvite(): void {
-    if (!this.inviteEmail.trim() || !this.inviteBoardId) {
-      this.inviteError.set('Please fill in all fields');
-      return;
-    }
-
-    this.inviting.set(true);
-    this.inviteError.set('');
-
-    this.invitationService.sendInvitation({
-      boardId: this.inviteBoardId,
-      email: this.inviteEmail.trim(),
-      role: this.inviteRole as 'admin' | 'member' | 'observer'
-    }).subscribe({
-      next: (response) => {
-        this.inviting.set(false);
-        if (response.success) {
-          this.inviteSuccess.set(true);
-        } else {
-          this.inviteError.set(response.message || 'Failed to send invitation');
-        }
-      },
-      error: (err) => {
-        this.inviting.set(false);
-        this.inviteError.set(err.error?.message || 'Failed to send invitation');
-      }
-    });
+  private isValidEmail(email: string): boolean {
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
   }
 }
