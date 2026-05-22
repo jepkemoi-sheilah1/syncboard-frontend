@@ -84,12 +84,12 @@ export class WorkspaceService {
    * Invite a user to the workspace by email.
    * The backend should send them an email; they land on /accept-invite?token=...
    */
-  inviteMember(request: SendWorkspaceInvitationRequest): Observable<WorkspaceInvitationResponse> {
-    return this.http.post<WorkspaceInvitationResponse>(
-      `${this.base}/workspace/${request.workspaceId}/invite`,
-      { email: request.email, role: request.role }
-    );
-  }
+ inviteMember(request: SendWorkspaceInvitationRequest): Observable<WorkspaceInvitationResponse> {
+  return this.http.post<WorkspaceInvitationResponse>(
+    `${this.base}/workspace/${request.workSpaceId}/invite`,
+    { invitations: request.invitations }   // ← was: { email: request.email, role: request.role }
+  );
+}
 
   /**
    * Get pending invitations for a workspace

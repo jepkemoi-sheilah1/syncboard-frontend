@@ -6,7 +6,7 @@ import { CdkDragDrop, DragDropModule, moveItemInArray, transferArrayItem } from 
 import { BoardService } from '../../services/board.service';
 import { ListService } from '../../services/list.service';
 import { CardService } from '../../services/card.service';
-import { Board, BoardList, Card, MOCK_BOARD } from '../../models/board.models';
+import { Board, BoardList, Card } from '../../models/board.models';
 import { CardModalComponent } from '../card-modal/card-modal.component';
 
 @Component({
@@ -27,7 +27,6 @@ export class BoardDetailComponent implements OnInit {
   lists = signal<BoardList[]>([]);
   showNewListInput = signal(false);
   newListName = '';
-  // Track which list is showing card input (for inline card creation)
   activeCardListId = signal<string | null>(null);
   newCardTitle = '';
   selectedCard = signal<Card | null>(null);
@@ -39,7 +38,10 @@ export class BoardDetailComponent implements OnInit {
   }
 
   loadBoard(boardId: string): void {
-    this.board.set({ ...MOCK_BOARD, id: boardId });
+    this.boardService.getBoard(boardId).subscribe({
+      next: (board) => this.board.set(board),
+      error: () => {}
+    });
     this.listService.getLists(boardId).subscribe(lists => this.lists.set(lists));
   }
 
@@ -53,10 +55,10 @@ export class BoardDetailComponent implements OnInit {
   closeCardModal(): void { this.selectedCard.set(null); }
 
   onSaveCard(updatedCard: Card): void {
-    this.cardService.updateCard(updatedCard.id, { 
-      title: updatedCard.title, 
-      description: updatedCard.description, 
-      labels: updatedCard.labels 
+    this.cardService.updateCard(updatedCard.id, {
+      title: updatedCard.title,
+      description: updatedCard.description,
+      labels: updatedCard.labels
     }).subscribe(() => this.closeCardModal());
   }
 
@@ -64,14 +66,16 @@ export class BoardDetailComponent implements OnInit {
     this.cardService.deleteCard(cardId).subscribe(() => this.closeCardModal());
   }
 
-  drop(event: any, targetListId: string): void {
+  drop(event: CdkDragDrop<Card[]>, targetListId: string): void {
     const cards = event.container.data || [];
     const previousCards = event.previousContainer.data || [];
-    
+
     if (event.previousContainer === event.container) {
       const reorderedCards = [...cards];
       moveItemInArray(reorderedCards, event.previousIndex, event.currentIndex);
-      this.lists.update(lists => lists.map(list => list.id === targetListId ? { ...list, cards: reorderedCards } : list));
+      this.lists.update(lists => lists.map(list =>
+        list.id === targetListId ? { ...list, cards: reorderedCards } : list
+      ));
     } else {
       const previousListId = previousCards[event.previousIndex]?.listId || '';
       if (previousListId) {
@@ -84,24 +88,28 @@ export class BoardDetailComponent implements OnInit {
           if (list.id === targetListId) return { ...list, cards: destCards };
           return list;
         }));
-        this.cardService.moveCard({ cardId: destCards[event.currentIndex]?.id, targetListId, newIndex: event.currentIndex }).subscribe();
+        this.cardService.moveCard({
+          cardId: destCards[event.currentIndex]?.id,
+          targetListId,
+          newIndex: event.currentIndex
+        }).subscribe();
       }
     }
   }
 
   goBack(): void { this.router.navigate(['/boards']); }
-  
-  toggleNewListInput(): void { 
-    this.showNewListInput.set(!this.showNewListInput()); 
-    this.newListName = ''; 
+
+  toggleNewListInput(): void {
+    this.showNewListInput.set(!this.showNewListInput());
+    this.newListName = '';
   }
 
   createList(): void {
     if (this.newListName.trim()) {
-      this.listService.createList({ name: this.newListName.trim(), boardId: this.board()?.id || '' }).subscribe((newList) => {
-        this.newListName = ''; 
+      const boardId = this.board()?.id || '';
+      this.listService.createList({ name: this.newListName.trim(), boardId }).subscribe((newList) => {
+        this.newListName = '';
         this.showNewListInput.set(false);
-        // After creating a list, immediately show card input for that list
         if (newList && newList.id) {
           this.activeCardListId.set(newList.id);
           this.newCardTitle = '';
@@ -110,7 +118,6 @@ export class BoardDetailComponent implements OnInit {
     }
   }
 
-  // Toggle inline card input for a list
   toggleCardInput(listId: string, event?: Event): void {
     if (event) event.stopPropagation();
     if (this.activeCardListId() === listId) {
@@ -122,21 +129,17 @@ export class BoardDetailComponent implements OnInit {
     }
   }
 
-  // Create card inline
   createCardInline(listId: string): void {
     if (this.newCardTitle.trim()) {
       this.cardService.createCard({ title: this.newCardTitle.trim(), listId }).subscribe(() => {
         this.newCardTitle = '';
-        // Keep the input open for adding more cards
         this.activeCardListId.set(listId);
       });
     }
   }
 
-  // Close card input
   closeCardInput(): void {
     this.activeCardListId.set(null);
     this.newCardTitle = '';
   }
 }
-

@@ -1,4 +1,3 @@
-// User Models
 export interface User {
   id?: number
   firstName: string;
@@ -8,7 +7,6 @@ export interface User {
   password?: string;
   name?: string; 
 }
-
 
 export interface AuthResponse {
   success: boolean;
@@ -37,7 +35,6 @@ export interface UserLoginRequest {
   password: string;
 }
 
-// Auth Service Types (used by auth.service.ts)
 export interface LoginCredentials {
   email: string;
   password: string;
@@ -60,38 +57,9 @@ export interface UserEmailDTO {
   email: string;
 }
 
-// Board Models
-export interface Board {
-  id: string;
-  name: string;
-  workspaceId: string;
-}
-
-export interface BoardsRequest {
-  name: string;
-}
-
-// Workspace Models
-export interface Workspace {
-  id: string;
-  name: string;
-}
-
-export interface WorkSpaceRequest {
-  name: string;
-}
-
 export interface InviteRequest {
   email: string;
   workspaceId: string;
-}
-
-// List Models
-export interface BoardList {
-  id: string;
-  name: string;
-  boardId: string;
-  cards?: Card[];
 }
 
 export interface ListRequest {
@@ -99,29 +67,15 @@ export interface ListRequest {
   boardId: string;
 }
 
-// Card Models
-export interface Card {
-  id: string;
-  title: string;
-  listId: string;
-  assignee?: string;
-  description?: string;
-  dueDate?: string;
-  labels?: string[];
-}
-
-// Board Member Models
-export interface BoardMember {
-  userId: string;
-  role: 'ADMIN' | 'MEMBER' | 'VIEWER';
-}
-
 export interface AddBoardMemberRequest {
   email: string;
   role: string;
 }
 
-// Comment Models
+export interface CreateCommentRequest {
+  content: string;
+}
+
 export interface Comment {
   id: string;
   content: string;
@@ -130,11 +84,6 @@ export interface Comment {
   createdAt: string;
 }
 
-export interface CreateCommentRequest {
-  content: string;
-}
-
-// Notification Models
 export interface Notification {
   id: string;
   message: string;
@@ -142,7 +91,6 @@ export interface Notification {
   createdAt: string;
 }
 
-// Activity Log Models
 export interface ActivityLog {
   id: string;
   action: string;

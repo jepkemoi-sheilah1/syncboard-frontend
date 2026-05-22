@@ -76,7 +76,7 @@
         >
           <div class="board-cover" [style.background]="getBoardColor(board.id)"></div>
           <div class="board-info">
-            <h3>{{ board.name }}</h3>
+           <h3>{{ board.boardName }}</h3>
             <div class="board-meta">
               <div class="member-avatars">
                 <span
@@ -178,7 +178,7 @@
 
       <div class="modal-body">
 
-        <!-- ✅ Success state -->
+        <!--  Success state -->
         <div class="invite-success" *ngIf="inviteSuccess()">
           <div class="success-icon">✉️</div>
           <h3>Invite sent!</h3>
@@ -188,7 +188,7 @@
           </p>
         </div>
 
-        <!-- 📧 Invite form -->
+        <!--  Invite form -->
         <div *ngIf="!inviteSuccess()">
           <p class="invite-description">
             Enter your colleague's email address and we'll send them an invite to join this workspace.

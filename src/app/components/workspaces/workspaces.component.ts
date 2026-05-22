@@ -26,20 +26,17 @@ export class WorkspacesComponent implements OnInit {
   creating = signal(false);
   sending = signal(false);
 
-  // Modal state
   showModal = signal(false);
   modalStep = signal<ModalStep>('create');
   justCreatedWorkspace = signal<Workspace | null>(null);
 
-  // Create-workspace fields
   newWorkspaceName = '';
   newWorkspaceDescription = '';
 
-  // Invite fields
   inviteEmail = '';
   inviteRole: 'admin' | 'member' = 'member';
   pendingInvitations = signal<WorkspaceInvitation[]>([]);
-  invitedEmails = signal<string[]>([]);   // optimistic list shown in UI
+  invitedEmails = signal<string[]>([]);
 
   error = signal('');
   inviteError = signal('');
@@ -61,9 +58,7 @@ export class WorkspacesComponent implements OnInit {
         this.workspaces.set(workspaces);
         this.loading.set(false);
       },
-      error: () => {
-        this.loading.set(false);
-      }
+      error: () => this.loading.set(false)
     });
   }
 
@@ -93,7 +88,6 @@ export class WorkspacesComponent implements OnInit {
       next: (workspace) => {
         this.workspaces.update(ws => [workspace, ...ws]);
         this.creating.set(false);
-        // ✅ Move to invite step instead of navigating away
         this.justCreatedWorkspace.set(workspace);
         this.modalStep.set('invite');
       },
@@ -125,27 +119,25 @@ export class WorkspacesComponent implements OnInit {
     this.inviteSuccess.set('');
 
     this.workspaceService.inviteMember({
-      workspaceId: workspace.id,
-      email,
-      role: this.inviteRole
+      workSpaceId: workspace.id,
+      invitations: [{ email, role: this.inviteRole }]   // ← wrapped in array
     }).subscribe({
       next: () => {
         this.invitedEmails.update(list => [...list, email]);
         this.inviteSuccess.set(`Invite sent to ${email}`);
         this.inviteEmail = '';
         this.sending.set(false);
-        // Clear success message after 3s
         setTimeout(() => this.inviteSuccess.set(''), 3000);
       },
       error: (err: { error?: { message?: string } }) => {
         this.sending.set(false);
-        const msg = err?.error?.message || 'Failed to send invite. Please try again.';
-        this.inviteError.set(msg);
+        this.inviteError.set(err?.error?.message || 'Failed to send invite. Please try again.');
       }
     });
   }
 
-  /** Skip inviting and go straight to boards */
+  // ─── Modal Helpers ────────────────────────────────────────────────────────
+
   skipToBoards(): void {
     const workspace = this.justCreatedWorkspace();
     if (workspace) {
@@ -154,7 +146,6 @@ export class WorkspacesComponent implements OnInit {
     }
   }
 
-  /** Done inviting — go to boards */
   finishAndGoToBoards(): void {
     const workspace = this.justCreatedWorkspace();
     if (workspace) {
@@ -162,8 +153,6 @@ export class WorkspacesComponent implements OnInit {
       this.openWorkspace(workspace.id);
     }
   }
-
-  // ─── Modal Helpers ────────────────────────────────────────────────────────
 
   closeModal(): void {
     this.showModal.set(false);
@@ -188,11 +177,11 @@ export class WorkspacesComponent implements OnInit {
     return name.charAt(0).toUpperCase();
   }
 
-  private isValidEmail(email: string): boolean {
-    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
-  }
-
   removeInvitedEmail(email: string): void {
     this.invitedEmails.update(list => list.filter(e => e !== email));
+  }
+
+  private isValidEmail(email: string): boolean {
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
   }
 }

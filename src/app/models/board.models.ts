@@ -34,7 +34,7 @@ export interface CreateWorkspaceRequest {
 
 export interface WorkspaceInvitation {
   id: string;
-  workspaceId: string | number;
+  workSpaceId: string | number;
   email: string;
   role: 'admin' | 'member';
   invitedBy: string;
@@ -42,15 +42,23 @@ export interface WorkspaceInvitation {
   expiresAt: Date;
 }
 
+// Updated to support bulk invitations
 export interface SendWorkspaceInvitationRequest {
-  workspaceId: string | number;
-  email: string;
-  role: 'admin' | 'member';
+  workSpaceId: string | number;
+  invitations: {
+    email: string;
+    role: 'admin' | 'member';
+  }[];
 }
 
 export interface WorkspaceInvitationResponse {
   success: boolean;
-  invitation?: WorkspaceInvitation;
+  results: {
+    email: string;
+    status: 'sent' | 'failed' | 'already_member' | 'already_invited';
+    invitation?: WorkspaceInvitation;
+    error?: string;
+  }[];
   message?: string;
 }
 
@@ -101,10 +109,12 @@ export interface BoardList {
 // ─── Board ────────────────────────────────────────────────────────────────────
 
 export interface Board {
+  id: string;
   boardName: string;
   boardDescription?: string;
-  workspaceId: 0,
-  isStarred: true
+  workSpaceId: string | number;
+  isStarred?: boolean;
+  members: BoardMember[];
 }
 
 // ─── Board Invitation ─────────────────────────────────────────────────────────
@@ -122,12 +132,15 @@ export interface Invitation {
 // ─── Board Requests ───────────────────────────────────────────────────────────
 
 export interface CreateBoardRequest {
-  name: string;
-  workspaceId?: string;
+  boardName: string;
+  boardDescription?: string;
+  workSpaceId: string | number;
+  isStarred?: boolean;
 }
 
 export interface UpdateBoardRequest {
-  name?: string;
+  boardName?: string;
+  boardDescription?: string;
   isStarred?: boolean;
 }
 
@@ -225,14 +238,9 @@ export interface PresenceUpdateEvent {
 
 export const MOCK_BOARD: Board = {
   id: 'board-1',
-  name: 'Project Alpha',
-  workspaceId: 'ws-1',
-  createdAt: new Date(),
-  ownerId: 'user-1',
+  boardName: 'Sample Board',
+  boardDescription: 'A sample board for testing',
+  workSpaceId: 'ws-1',
   isStarred: false,
-  members: [
-    { userId: 'user-1', email: 'john@example.com', name: 'John Doe', role: 'owner', joinedAt: new Date() },
-    { userId: 'user-2', email: 'jane@example.com', name: 'Jane Smith', role: 'member', joinedAt: new Date() },
-    { userId: 'user-3', email: 'bob@example.com', name: 'Bob Wilson', role: 'member', joinedAt: new Date() }
-  ]
+  members: []
 };

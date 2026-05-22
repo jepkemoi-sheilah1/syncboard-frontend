@@ -64,13 +64,13 @@ export class WorkspaceMembersComponent implements OnInit {
     this.inviteSuccess.set('');
 
     this.workspaceService.inviteMember({
-      workspaceId: this.workspaceId,
-      email,
-      role: this.inviteRole
+      workSpaceId: this.workspaceId,
+      invitations: [{ email, role: this.inviteRole }]
     }).subscribe({
       next: (res: WorkspaceInvitationResponse) => {
-        if (res.invitation) {
-          this.pendingInvitations.update(list => [...list, res.invitation!]);
+        const sent = res.results?.find(r => r.email === email && r.invitation);
+        if (sent?.invitation) {
+          this.pendingInvitations.update(list => [...list, sent.invitation!]);
         }
         this.inviteSuccess.set(`Invite sent to ${email}`);
         this.inviteEmail = '';

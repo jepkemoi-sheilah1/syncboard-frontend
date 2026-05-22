@@ -1,36 +1,20 @@
 <div class="board-detail-container">
-  <!-- Board Header -->
   <header class="board-header">
     <div class="board-title-section">
       <button class="btn-back" (click)="goBack()">← Back</button>
-      <h1 *ngIf="board(); else loadingBoard">{{ board()?.name || 'Board' }}</h1>
+      <h1 *ngIf="board(); else loadingBoard">{{ board()?.boardName || 'Board' }}</h1>
       <ng-template #loadingBoard><h1>Loading...</h1></ng-template>
-    </div>
-    
-    <div class="board-actions">
-      <div class="members-section">
-        <span class="members-label">Members:</span>
-        <div class="member-avatars">
-          <div class="member-avatar" *ngFor="let member of board()?.members" [title]="member.name">
-            {{ getInitials(member.name) }}
-          </div>
-        </div>
-      </div>
     </div>
   </header>
 
-  <!-- Lists Container -->
   <div class="lists-container" cdkDropListGroup>
-    <!-- Existing Lists -->
     <div class="list-column" *ngFor="let list of lists()">
       <div class="list-header">
+        
         <h3>{{ list.name }}</h3>
         <span class="card-count">{{ list.cards?.length || 0 }}</span>
       </div>
-      
-      <!-- Cards Container -->
       <div class="cards-container" cdkDropList [cdkDropListData]="list.cards || []" (cdkDropListDropped)="drop($event, list.id)">
-        <!-- Cards -->
         <div class="card" *ngFor="let card of list.cards" cdkDrag [cdkDragData]="card" (click)="openCardModal(card)">
           <div class="card-labels" *ngIf="card.labels?.length">
             <span class="label-dot" *ngFor="let label of card.labels" [style.background-color]="label.color" [title]="label.name"></span>
@@ -41,48 +25,28 @@
             <span class="assignee" *ngIf="card.assignee">{{ getInitials(card.assignee) }}</span>
           </div>
         </div>
-        
-        <!-- Inline Card Input (Trello-style) -->
         <div class="inline-card-form" *ngIf="activeCardListId() === list.id">
-          <textarea 
-            [(ngModel)]="newCardTitle" 
-            placeholder="Enter card title..."
-            class="card-input"
-            (keyup.enter)="createCardInline(list.id)"
-            (keyup.escape)="closeCardInput()"
-            rows="2"></textarea>
+          <textarea [(ngModel)]="newCardTitle" placeholder="Enter card title..." class="card-input" (keyup.enter)="createCardInline(list.id)" (keyup.escape)="closeCardInput()" rows="2"></textarea>
           <div class="inline-form-actions">
             <button class="btn-create" (click)="createCardInline(list.id)">Add Card</button>
             <button class="btn-cancel-inline" (click)="closeCardInput()">✕</button>
           </div>
         </div>
-        
-        <!-- Add Card Button (shown when no card input is active) -->
         <button class="btn-add-card" *ngIf="activeCardListId() !== list.id" (click)="toggleCardInput(list.id, $event)">
           + Add Card
         </button>
       </div>
     </div>
 
-    <!-- Add New List -->
     <div class="list-column add-list-column">
-      <!-- Show "Add a list" when no lists exist, "Add another list" when lists exist -->
       <div *ngIf="!showNewListInput(); else newListForm">
         <button class="btn-add-list" (click)="toggleNewListInput()">
           + {{ lists().length === 0 ? 'Add a list' : 'Add another list' }}
         </button>
       </div>
-      
       <ng-template #newListForm>
         <div class="new-list-form">
-          <input 
-            type="text" 
-            [(ngModel)]="newListName" 
-            placeholder="Enter list name..." 
-            class="list-name-input" 
-            (keyup.enter)="createList()" 
-            #listInput
-            autofocus>
+          <input type="text" [(ngModel)]="newListName" placeholder="Enter list name..." class="list-name-input" (keyup.enter)="createList()" #listInput autofocus>
           <div class="form-actions">
             <button class="btn-create" (click)="createList()">Add List</button>
             <button class="btn-cancel" (click)="toggleNewListInput()">✕</button>
@@ -92,13 +56,5 @@
     </div>
   </div>
 
-  <!-- Card Detail Modal -->
-  <app-card-modal 
-    *ngIf="selectedCard()" 
-    [card]="selectedCard()!" 
-    (save)="onSaveCard($event)" 
-    (delete)="onDeleteCard($event)" 
-    (close)="closeCardModal()">
-  </app-card-modal>
+  <app-card-modal *ngIf="selectedCard()" [card]="selectedCard()!" (save)="onSaveCard($event)" (delete)="onDeleteCard($event)" (close)="closeCardModal()"></app-card-modal>
 </div>
-

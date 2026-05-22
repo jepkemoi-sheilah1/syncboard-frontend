@@ -33,7 +33,7 @@ export class BoardsComponent implements OnInit {
   selectedColor = '#0079bf';
   searchQuery = '';
 
-  // Invite state — workspace level, email only
+  // Invite state
   showInviteModal = signal(false);
   inviting = signal(false);
   inviteEmail = '';
@@ -54,7 +54,7 @@ export class BoardsComponent implements OnInit {
   filteredBoards = computed(() => {
     const query = this.searchQuery.toLowerCase().trim();
     if (!query) return this.boards();
-    return this.boards().filter(b => b.name.toLowerCase().includes(query));
+    return this.boards().filter(b => b.boardName.toLowerCase().includes(query));
   });
 
   ngOnInit(): void {
@@ -74,7 +74,7 @@ export class BoardsComponent implements OnInit {
     });
   }
 
-  filterBoards(): void { /* filteredBoards signal updates automatically */ }
+  filterBoards(): void {}
 
   openBoard(boardId: string): void {
     this.router.navigate(['/board', boardId]);
@@ -89,8 +89,8 @@ export class BoardsComponent implements OnInit {
     this.creating.set(true);
 
     const request: CreateBoardRequest = {
-      name: this.newBoardName.trim(),
-      workspaceId: this.workspaceId()
+      boardName: this.newBoardName.trim(),
+      workSpaceId: this.workspaceId()
     };
 
     this.boardService.createBoard(request).subscribe({
@@ -132,9 +132,8 @@ export class BoardsComponent implements OnInit {
     this.inviteError.set('');
 
     this.workspaceService.inviteMember({
-      workspaceId: this.workspaceId(),
-      email,
-      role: 'member'          // always member — admins are set separately
+      workSpaceId: this.workspaceId(),
+      invitations: [{ email, role: 'member' }]
     }).subscribe({
       next: () => {
         this.inviting.set(false);
