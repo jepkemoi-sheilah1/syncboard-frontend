@@ -92,12 +92,11 @@ export class BoardsComponent implements OnInit {
     };
 
     this.boardService.createBoard(request).subscribe({
-      next: (newBoard) => {
-        this.boards.update(boards => [newBoard, ...boards]);
+      next: () => {
         this.showCreateModal.set(false);
         this.newBoardName = '';
         this.creating.set(false);
-        this.router.navigate(['/board', newBoard.id]);
+        this.loadBoards();
       },
       error: () => this.creating.set(false)
     });
@@ -153,6 +152,7 @@ export class BoardsComponent implements OnInit {
   }
 
   getBoardColor(boardId: string): string {
+    if (!boardId) return 'linear-gradient(135deg, #0079bf 0%, #026aa7 100%)';
     const colors = [
       'linear-gradient(135deg, #0079bf 0%, #026aa7 100%)',
       'linear-gradient(135deg, #61bd4f 0%, #519839 100%)',
@@ -167,6 +167,7 @@ export class BoardsComponent implements OnInit {
   }
 
   getInitials(name: string): string {
+    if (!name) return '?';
     const parts = name.split(' ');
     return parts.length > 1
       ? (parts[0][0] + parts[1][0]).toUpperCase()
