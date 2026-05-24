@@ -65,12 +65,12 @@ export class WorkspaceService {
     ).pipe(map(response => response.data ?? response));
   }
 
-  inviteMember(request: SendWorkspaceInvitationRequest): Observable<WorkspaceInvitationResponse> {
-    return this.http.post<WorkspaceInvitationResponse>(
-      `${this.base}/workspace/${request.workSpaceId}/invite`,
-      { emails: request.invitations.map(i => i.email) }
-    );
-  }
+ inviteMember(request: SendWorkspaceInvitationRequest): Observable<WorkspaceInvitationResponse> {
+  return this.http.post<WorkspaceInvitationResponse>(
+    `${this.base}/workspace/${request.workSpaceId}/invite`,
+    request.invitations.map(i => ({ email: i.email }))
+  );
+}
 
   getPendingInvitations(workspaceId: string | number): Observable<WorkspaceInvitation[]> {
     return this.http.get<any>(
