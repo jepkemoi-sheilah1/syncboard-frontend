@@ -2,17 +2,40 @@
   <header class="board-header">
     <div class="board-title-section">
       <button class="btn-back" (click)="goBack()">← Back</button>
-      <h1 *ngIf="board(); else loadingBoard">{{ board()?.boardName || 'Board' }}</h1>
-      <ng-template #loadingBoard><h1>Loading...</h1></ng-template>
+
+      <ng-container *ngIf="!editingBoardName(); else editBoardName">
+        <h1>{{ board()?.boardName || 'Loading...' }}</h1>
+        <button class="btn-icon" (click)="startEditingBoardName()" title="Edit board name">✏️</button>
+        <button class="btn-icon btn-danger" (click)="deleteBoard()" title="Delete board">🗑️</button>
+      </ng-container>
+
+      <ng-template #editBoardName>
+        <input type="text" [(ngModel)]="boardNameEdit" class="board-name-input" (keyup.enter)="saveBoardName()" (keyup.escape)="cancelEditBoardName()" />
+        <button class="btn-create" (click)="saveBoardName()">Save</button>
+        <button class="btn-cancel" (click)="cancelEditBoardName()">✕</button>
+      </ng-template>
     </div>
   </header>
 
   <div class="lists-container" cdkDropListGroup>
     <div class="list-column" *ngFor="let list of lists()">
       <div class="list-header">
-        
-        <h3>{{ list.name }}</h3>
-        <span class="card-count">{{ list.cards?.length || 0 }}</span>
+
+        <ng-container *ngIf="editingListId() !== list.id; else editListName">
+          <h3>{{ list.name }}</h3>
+          <span class="card-count">{{ list.cards?.length || 0 }}</span>
+          <div class="list-actions">
+            <button class="btn-icon" (click)="startEditingList(list)" title="Edit list">✏️</button>
+            <button class="btn-icon btn-danger" (click)="deleteList(list.id)" title="Delete list">🗑️</button>
+          </div>
+        </ng-container>
+
+        <ng-template #editListName>
+          <input type="text" [(ngModel)]="listNameEdit" class="list-name-input" (keyup.enter)="saveListName(list.id)" (keyup.escape)="cancelEditList()" />
+          <button class="btn-create" (click)="saveListName(list.id)">Save</button>
+          <button class="btn-cancel" (click)="cancelEditList()">✕</button>
+        </ng-template>
+
       </div>
       <div class="cards-container" cdkDropList [cdkDropListData]="list.cards || []" (cdkDropListDropped)="drop($event, list.id)">
         <div class="card" *ngFor="let card of list.cards" cdkDrag [cdkDragData]="card" (click)="openCardModal(card)">
@@ -46,7 +69,7 @@
       </div>
       <ng-template #newListForm>
         <div class="new-list-form">
-          <input type="text" [(ngModel)]="newListName" placeholder="Enter list name..." class="list-name-input" (keyup.enter)="createList()" #listInput autofocus>
+          <input type="text" [(ngModel)]="newListName" placeholder="Enter list name..." class="list-name-input" (keyup.enter)="createList()" autofocus>
           <div class="form-actions">
             <button class="btn-create" (click)="createList()">Add List</button>
             <button class="btn-cancel" (click)="toggleNewListInput()">✕</button>

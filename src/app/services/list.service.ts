@@ -9,7 +9,7 @@ import { BoardList, CreateListRequest, UpdateListRequest } from '../models/board
   providedIn: 'root'
 })
 export class ListService {
-  // Use real API - backend is ready
+  
   private useMockData = false;
 
   // Lists signal for real-time updates
@@ -24,11 +24,6 @@ constructor(private http: HttpClient) {
       this.listsSubject.next([]);
     }
   }
-
-  // ============================================
-  // List CRUD Operations
-  // ============================================
-
   /**
    * Get all lists for a board
    */
