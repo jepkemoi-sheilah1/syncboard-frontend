@@ -508,7 +508,18 @@ body {
     flex-direction: column;
     text-align: center;
     padding: 7rem 1.5rem 3rem;
+    .form-row {
+    grid-template-columns: 1fr;
   }
+  }
+  .talk-form {
+    padding: 1.5rem;
+  }
+
+  .btn-submit {
+    width: 100%;
+  }
+  
 
   .hero-title {
     font-size: 2.5rem;
@@ -585,4 +596,190 @@ body {
   }
 }
 
+// FAQ Section
+.faqs {
+  padding: 5rem 2rem;
+  background: $white;
+}
 
+.faq-list {
+  max-width: 800px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.faq-item {
+  border: 1px solid #dfe1e6;
+  border-radius: 8px;
+  overflow: hidden;
+  @include transition;
+
+  &:hover {
+    border-color: $primary-color;
+  }
+}
+
+.faq-question {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.25rem 1.5rem;
+  background: $white;
+  border: none;
+  cursor: pointer;
+  text-align: left;
+  font-size: 1rem;
+  font-weight: 600;
+  color: $text-dark;
+  @include transition;
+
+  &:hover {
+    background: $secondary-color;
+  }
+}
+
+.faq-icon {
+  font-size: 1.5rem;
+  font-weight: 400;
+  color: $primary-color;
+  flex-shrink: 0;
+  margin-left: 1rem;
+}
+
+.faq-answer {
+  padding: 0 1.5rem 1.25rem;
+  background: $white;
+
+  p {
+    font-size: 0.98rem;
+    color: $text-light;
+    line-height: 1.7;
+  }
+}
+
+.faq-empty {
+  text-align: center;
+  color: $text-light;
+  padding: 2rem;
+}
+
+// Let's Talk Section
+.lets-talk {
+  padding: 5rem 2rem;
+  background: $secondary-color;
+}
+
+.talk-form-wrapper {
+  max-width: 700px;
+  margin: 0 auto;
+}
+
+.talk-success {
+  text-align: center;
+  padding: 3rem 2rem;
+  background: $white;
+  border-radius: 12px;
+  border: 1px solid #dfe1e6;
+
+  span {
+    font-size: 3rem;
+    display: block;
+    margin-bottom: 1rem;
+  }
+
+  p {
+    font-size: 1.1rem;
+    color: $text-light;
+  }
+}
+
+.talk-form {
+  background: $white;
+  border-radius: 12px;
+  padding: 2.5rem;
+  border: 1px solid #dfe1e6;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.25rem;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+
+  label {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: $text-dark;
+  }
+
+  input,
+  select,
+  textarea {
+    padding: 0.75rem 1rem;
+    border: 1px solid #dfe1e6;
+    border-radius: 6px;
+    font-size: 0.98rem;
+    color: $text-dark;
+    background: $white;
+    @include transition;
+    font-family: inherit;
+
+    &:focus {
+      outline: none;
+      border-color: $primary-color;
+      box-shadow: 0 0 0 3px rgba(2, 106, 167, 0.1);
+    }
+
+    &::placeholder {
+      color: #b3bac5;
+    }
+  }
+
+  textarea {
+    resize: vertical;
+    min-height: 130px;
+  }
+
+  select {
+    cursor: pointer;
+  }
+}
+
+.talk-error {
+  color: #eb5a46;
+  font-size: 0.9rem;
+}
+
+.btn-submit {
+  background: $primary-color;
+  color: $white;
+  border: none;
+  padding: 0.9rem 2rem;
+  border-radius: 6px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  @include transition;
+  align-self: flex-start;
+
+  &:hover:not(:disabled) {
+    background: $primary-dark;
+    transform: translateY(-2px);
+  }
+
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+}

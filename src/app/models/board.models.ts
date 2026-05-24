@@ -1,5 +1,3 @@
-// ─── Workspace ───────────────────────────────────────────────────────────────
-
 export interface Workspace {
   id: number;
   workSpaceName: string;
@@ -30,7 +28,7 @@ export interface CreateWorkspaceRequest {
   workSpaceDescription?: string;
 }
 
-// ─── Workspace Invitation ─────────────────────────────────────────────────────
+// Workspace Invitation 
 
 export interface WorkspaceInvitation {
   id: string;
@@ -62,7 +60,7 @@ export interface WorkspaceInvitationResponse {
   message?: string;
 }
 
-// ─── Label ───────────────────────────────────────────────────────────────────
+//  Label 
 
 export interface Label {
   id: string;
@@ -70,7 +68,7 @@ export interface Label {
   color: string;
 }
 
-// ─── Board Member ─────────────────────────────────────────────────────────────
+//  Board Member 
 
 export interface BoardMember {
   userId: string;
@@ -81,7 +79,7 @@ export interface BoardMember {
   joinedAt: Date;
 }
 
-// ─── Card ─────────────────────────────────────────────────────────────────────
+//  Card 
 
 export interface Card {
   id: string;
@@ -96,7 +94,7 @@ export interface Card {
   updatedAt: Date;
 }
 
-// ─── List (Column) ────────────────────────────────────────────────────────────
+//  List (Column) 
 
 export interface BoardList {
   id: string;
@@ -106,7 +104,7 @@ export interface BoardList {
   cards: Card[];
 }
 
-// ─── Board ────────────────────────────────────────────────────────────────────
+//  Board 
 
 export interface Board {
   id: string;
@@ -117,7 +115,7 @@ export interface Board {
   members: BoardMember[];
 }
 
-// ─── Board Invitation ─────────────────────────────────────────────────────────
+//  Board Invitation 
 
 export interface Invitation {
   id: string;
@@ -129,7 +127,7 @@ export interface Invitation {
   expiresAt: Date;
 }
 
-// ─── Board Requests ───────────────────────────────────────────────────────────
+// Board Requests 
 
 export interface CreateBoardRequest {
   boardName: string;
@@ -144,7 +142,7 @@ export interface UpdateBoardRequest {
   isStarred?: boolean;
 }
 
-// ─── List Requests ────────────────────────────────────────────────────────────
+//  List Requests 
 
 export interface CreateListRequest {
   name: string;
@@ -157,7 +155,7 @@ export interface UpdateListRequest {
   order?: number;
 }
 
-// ─── Card Requests ────────────────────────────────────────────────────────────
+//  Card Requests
 
 export interface CreateCardRequest {
   title: string;
@@ -182,7 +180,7 @@ export interface MoveCardRequest {
   newIndex: number;
 }
 
-// ─── Board Invitation Requests ────────────────────────────────────────────────
+//  Board Invitation Requests 
 
 export interface SendInvitationRequest {
   boardId: string;
@@ -196,7 +194,7 @@ export interface InvitationResponse {
   message?: string;
 }
 
-// ─── WebSocket Events ─────────────────────────────────────────────────────────
+//  WebSocket Event
 
 export interface CardMovedEvent {
   cardId: string;
@@ -234,7 +232,7 @@ export interface PresenceUpdateEvent {
   users: { userId: string; status: 'online' | 'offline' }[];
 }
 
-// ─── Mock Data ────────────────────────────────────────────────────────────────
+// Mock Data
 
 export const MOCK_BOARD: Board = {
   id: 'board-1',
@@ -244,3 +242,34 @@ export const MOCK_BOARD: Board = {
   isStarred: false,
   members: []
 };
+// FAQ 
+
+export interface FAQ {
+  id: number;
+  question: string;
+  answer: string;
+  active: boolean;
+}
+
+// Issue (Talk Categories) 
+
+export interface Issue {
+  id: number;
+  name: string;
+  description?: string;
+  active: boolean;
+}
+
+// Talk Request 
+
+export interface TalkRequest {
+  fullName: string;
+  email: string;
+  message: string;
+  issueId: number;
+}
+
+export interface TalkResponse {
+  success: boolean;
+  message?: string;
+}
