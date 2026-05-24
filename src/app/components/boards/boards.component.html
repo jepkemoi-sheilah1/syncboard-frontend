@@ -182,10 +182,7 @@
         <div class="invite-success" *ngIf="inviteSuccess()">
           <div class="success-icon">✉️</div>
           <h3>Invite sent!</h3>
-          <p>
-            An email invitation has been sent to <strong>{{ inviteEmail }}</strong>.
-            They'll be able to join this workspace and start collaborating.
-          </p>
+          <p>Invitations have been sent successfully to your colleagues. They'll be able to join this workspace and start collaborating.</p>
         </div>
 
         <!--  Invite form -->
@@ -200,7 +197,7 @@
               type="email"
               id="inviteEmail"
               class="form-input"
-              placeholder="colleague@company.com"
+              placeholder="email1@example.com, email2@example.com"
               [(ngModel)]="inviteEmail"
               (keyup.enter)="sendInvite()"
               autofocus

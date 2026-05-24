@@ -68,7 +68,7 @@ export class WorkspaceService {
 inviteMember(request: SendWorkspaceInvitationRequest): Observable<WorkspaceInvitationResponse> {
   return this.http.post<WorkspaceInvitationResponse>(
     `${this.base}/workspace/${request.workSpaceId}/invite`,
-    { emails: request.invitations.map(i => i.email) }
+    { email: request.invitations.map(i => i.email) }
   );
 }
 
