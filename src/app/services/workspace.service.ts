@@ -20,8 +20,6 @@ export class WorkspaceService {
 
   constructor(private http: HttpClient) {}
 
-  // ─── Workspace CRUD ───────────────────────────────────────────────────────
-
   getMyWorkspaces(): Observable<Workspace[]> {
     return this.http.get<any>(`${this.base}/workspace/my-workspaces`).pipe(
       map(response => response.data)
@@ -44,29 +42,18 @@ export class WorkspaceService {
     return this.http.delete<void>(`${this.base}/workspace/${id}`);
   }
 
-  // ─── Workspace Members ────────────────────────────────────────────────────
-
-  /**
-   * Get all members of a workspace
-   */
   getWorkspaceMembers(workspaceId: string | number): Observable<WorkspaceMember[]> {
     return this.http.get<any>(`${this.base}/workspace/${workspaceId}/members`).pipe(
       map(response => response.data ?? response)
     );
   }
 
-  /**
-   * Remove a member from the workspace
-   */
   removeWorkspaceMember(workspaceId: string | number, userId: string): Observable<void> {
     return this.http.delete<void>(
       `${this.base}/workspace/${workspaceId}/members/${userId}`
     );
   }
 
-  /**
-   * Update a member's role within the workspace
-   */
   updateWorkspaceMemberRole(
     workspaceId: string | number,
     userId: string,
@@ -78,40 +65,25 @@ export class WorkspaceService {
     ).pipe(map(response => response.data ?? response));
   }
 
-  // ─── Workspace Invitations ────────────────────────────────────────────────
+  inviteMember(request: SendWorkspaceInvitationRequest): Observable<WorkspaceInvitationResponse> {
+    return this.http.post<WorkspaceInvitationResponse>(
+      `${this.base}/workspace/${request.workSpaceId}/invite`,
+      { emails: request.invitations.map(i => i.email) }
+    );
+  }
 
-  /**
-   * Invite a user to the workspace by email.
-   * The backend should send them an email; they land on /accept-invite?token=...
-   */
- inviteMember(request: SendWorkspaceInvitationRequest): Observable<WorkspaceInvitationResponse> {
-  return this.http.post<WorkspaceInvitationResponse>(
-    `${this.base}/workspace/${request.workSpaceId}/invite`,
-    { invitations: request.invitations }   // ← was: { email: request.email, role: request.role }
-  );
-}
-
-  /**
-   * Get pending invitations for a workspace
-   */
   getPendingInvitations(workspaceId: string | number): Observable<WorkspaceInvitation[]> {
     return this.http.get<any>(
       `${this.base}/workspace/${workspaceId}/invites`
     ).pipe(map(response => response.data ?? response));
   }
 
-  /**
-   * Cancel / revoke a pending workspace invitation
-   */
   cancelInvitation(workspaceId: string | number, invitationId: string): Observable<void> {
     return this.http.delete<void>(
       `${this.base}/workspace/${workspaceId}/invites/${invitationId}`
     );
   }
 
-  /**
-   * Accept a workspace invitation via token (called from the invite-accept page)
-   */
   acceptInvitation(token: string): Observable<{ success: boolean }> {
     return this.http.post<{ success: boolean }>(
       `${this.base}/workspace/invitations/${token}/accept`,
@@ -119,9 +91,6 @@ export class WorkspaceService {
     );
   }
 
-  /**
-   * Decline a workspace invitation via token
-   */
   declineInvitation(token: string): Observable<{ success: boolean }> {
     return this.http.post<{ success: boolean }>(
       `${this.base}/workspace/invitations/${token}/decline`,

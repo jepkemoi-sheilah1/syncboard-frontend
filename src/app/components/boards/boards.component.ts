@@ -24,7 +24,6 @@ export class BoardsComponent implements OnInit {
 
   workspaceId = signal('');
 
-  // Board state
   boards = signal<Board[]>([]);
   loading = signal(true);
   creating = signal(false);
@@ -33,7 +32,6 @@ export class BoardsComponent implements OnInit {
   selectedColor = '#0079bf';
   searchQuery = '';
 
-  // Invite state
   showInviteModal = signal(false);
   inviting = signal(false);
   inviteEmail = '';
@@ -105,8 +103,6 @@ export class BoardsComponent implements OnInit {
     });
   }
 
-  // ─── Workspace Invite ─────────────────────────────────────────────────────
-
   openInviteModal(): void {
     this.inviteEmail = '';
     this.inviteError.set('');
@@ -122,9 +118,19 @@ export class BoardsComponent implements OnInit {
   }
 
   sendInvite(): void {
-    const email = this.inviteEmail.trim().toLowerCase();
-    if (!email || !this.isValidEmail(email)) {
-      this.inviteError.set('Please enter a valid email address.');
+    const emails = this.inviteEmail
+      .split(',')
+      .map(e => e.trim().toLowerCase())
+      .filter(e => e.length > 0);
+
+    const invalidEmails = emails.filter(e => !this.isValidEmail(e));
+
+    if (emails.length === 0 || invalidEmails.length > 0) {
+      this.inviteError.set(
+        invalidEmails.length > 0
+          ? `Invalid email(s): ${invalidEmails.join(', ')}`
+          : 'Please enter at least one email address.'
+      );
       return;
     }
 
@@ -133,7 +139,7 @@ export class BoardsComponent implements OnInit {
 
     this.workspaceService.inviteMember({
       workSpaceId: this.workspaceId(),
-      invitations: [{ email, role: 'member' }]
+      invitations: emails.map(email => ({ email, role: 'member' }))
     }).subscribe({
       next: () => {
         this.inviting.set(false);
@@ -145,8 +151,6 @@ export class BoardsComponent implements OnInit {
       }
     });
   }
-
-  // ─── Helpers ──────────────────────────────────────────────────────────────
 
   getBoardColor(boardId: string): string {
     const colors = [

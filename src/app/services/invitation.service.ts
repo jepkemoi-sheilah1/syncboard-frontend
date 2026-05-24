@@ -1,20 +1,16 @@
 import { Component, Inject } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { InvitationService } from '../services/invitation.service';
 import { forkJoin, of } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 
-@Component({
-  selector: 'app-invite-dialog',
-  templateUrl: './invite-dialog.component.html',
-})
+
 export class InviteDialogComponent {
   emailInput = '';
   errorMessage = '';
   isLoading = false;
+  invitationService: any;
   
   constructor(
-    private invitationService: InvitationService,
     public dialogRef: MatDialogRef<InviteDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: { boardId: string }
   ) {}
