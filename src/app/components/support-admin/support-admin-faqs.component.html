@@ -1,0 +1,54 @@
+<div class="support-admin">
+  <h3>Support (Admin) - FAQs</h3>
+
+  <div class="toolbar">
+    <button class="btn" (click)="loadFaqs()" [disabled]="loading()">{{ loading() ? 'Loading...' : 'Load FAQs' }}</button>
+  </div>
+
+  <div *ngIf="error()" class="error">{{ error() }}</div>
+
+  <div class="grid">
+    <div class="list">
+      <h4>FAQs</h4>
+      <ul>
+        <li *ngFor="let f of filteredFaqs()" (click)="viewFaq((f?.id ?? '').toString())" [class.active]="(f?.id ?? '') === selectedFaqId()">
+          <div class="title">{{ f?.question || ('FAQ ' + f?.id) }}</div>
+          <div class="meta">Active: {{ !!f?.active }}</div>
+        </li>
+      </ul>
+    </div>
+
+    <div class="detail">
+      <h4>FAQ Detail</h4>
+
+      <div *ngIf="!selectedFaq()" class="empty">Select an FAQ to edit</div>
+
+      <div *ngIf="selectedFaq() as faq">
+        <div class="row"><b>ID:</b> {{ faq?.id }}</div>
+        <div class="row"><b>Current question:</b> {{ faq?.question }}</div>
+
+        <h5>Edit</h5>
+        <div class="field">
+          <label>Question</label>
+          <input type="text" [(ngModel)]="editQuestion" />
+        </div>
+        <div class="field">
+          <label>Answer</label>
+          <textarea rows="4" [(ngModel)]="editAnswer"></textarea>
+        </div>
+        <div class="field">
+          <label>
+            <input type="checkbox" [(ngModel)]="editActive" /> Active
+          </label>
+        </div>
+
+        <div class="row-actions">
+          <button class="btn" (click)="updateFaq()" [disabled]="updating()">{{ updating() ? 'Saving...' : 'Save' }}</button>
+          <button class="btn" (click)="toggleActive()" [disabled]="updating()">Toggle Active</button>
+          <button class="btn danger" (click)="deleteFaq()" [disabled]="updating()">Delete</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+

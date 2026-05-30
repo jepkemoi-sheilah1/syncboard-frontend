@@ -129,6 +129,7 @@ export class BoardDetailComponent implements OnInit {
   openCardModal(card: Card): void { this.selectedCard.set({ ...card }); }
   closeCardModal(): void { this.selectedCard.set(null); }
 
+
   onSaveCard(updatedCard: Card): void {
     this.cardService.updateCard(updatedCard.id, {
       title: updatedCard.title,

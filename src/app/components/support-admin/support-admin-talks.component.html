@@ -1,0 +1,49 @@
+<div class="support-admin">
+  <h3>Support (Admin) - Talks</h3>
+
+  <div class="toolbar">
+    <button class="btn" (click)="loadTalks()" [disabled]="loading()">
+      {{ loading() ? 'Loading...' : 'Load talks' }}
+    </button>
+  </div>
+
+  <div *ngIf="error()" class="error">{{ error() }}</div>
+
+  <div class="grid">
+    <div class="list">
+      <h4>Talks</h4>
+      <ul>
+        <li *ngFor="let t of filteredTalks()" (click)="viewTalk((t?.id ?? '').toString())" [class.active]="(t?.id ?? '') === selectedTalkId()">
+
+
+          <div class="title">{{ t?.fullName || t?.email || ('Talk ' + t?.id) }}</div>
+          <div class="meta">Status: {{ t?.status }}</div>
+        </li>
+      </ul>
+    </div>
+
+    <div class="detail">
+      <h4>Talk Detail</h4>
+
+      <div *ngIf="!selectedTalk()" class="empty">Select a talk</div>
+
+      <div *ngIf="selectedTalk() as talk">
+        <div class="row"><b>ID:</b> {{ talk?.id }}</div>
+        <div class="row"><b>Name:</b> {{ talk?.fullName }}</div>
+        <div class="row"><b>Email:</b> {{ talk?.email }}</div>
+        <div class="row"><b>IssueId:</b> {{ talk?.issueId }}</div>
+
+        <div class="row"><b>Message:</b></div>
+        <div class="message">{{ talk?.message }}</div>
+
+        <div class="row"><b>Update status</b></div>
+        <div class="row">
+          <input type="text" [value]="statusDraft()" (input)="statusDraft.set($any($event.target).value)" />
+          <button class="btn" (click)="updateStatus()" [disabled]="updating()">{{ updating() ? 'Updating...' : 'Update' }}</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+

@@ -1,0 +1,61 @@
+<div class="support-admin">
+  <h3>Support (Admin) - System Config</h3>
+
+  <div class="toolbar">
+    <button class="btn" (click)="loadAll()" [disabled]="loading()">{{ loading() ? 'Loading...' : 'Load Configs' }}</button>
+  </div>
+
+  <div *ngIf="error()" class="error">{{ error() }}</div>
+
+  <div class="grid">
+    <div class="list">
+      <h4>All Config Keys</h4>
+      <ul>
+        <li *ngFor="let c of configs()" (click)="selectKey((c?.configKey ?? '').toString())" [class.active]="(c?.configKey ?? '').toString() === selectedKey()">
+          <div class="title">{{ c?.configKey }}</div>
+          <div class="meta">{{ c?.description }}</div>
+        </li>
+      </ul>
+    </div>
+
+    <div class="detail">
+      <h4>Create Config</h4>
+      <div class="field">
+        <label>configKey</label>
+        <input type="text" [(ngModel)]="createKey" />
+      </div>
+      <div class="field">
+        <label>configValue</label>
+        <input type="text" [(ngModel)]="createValue" />
+      </div>
+      <div class="field">
+        <label>Description (optional)</label>
+        <input type="text" [(ngModel)]="createDescription" />
+      </div>
+      <div class="row-actions">
+        <button class="btn" (click)="create()" [disabled]="upserting()">{{ upserting() ? 'Creating...' : 'Create' }}</button>
+      </div>
+
+      <hr />
+
+      <h4>Update Config</h4>
+      <div *ngIf="!selectedKey()" class="empty">Select a config key from the left.</div>
+
+      <div *ngIf="selectedKey() as key">
+        <div class="row"><b>Selected Key:</b> {{ key }}</div>
+        <div class="field">
+          <label>configValue</label>
+          <input type="text" [(ngModel)]="editValue" />
+        </div>
+        <div class="field">
+          <label>Description (optional)</label>
+          <input type="text" [(ngModel)]="editDescription" />
+        </div>
+        <div class="row-actions">
+          <button class="btn" (click)="update()" [disabled]="upserting()">{{ upserting() ? 'Saving...' : 'Save' }}</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+

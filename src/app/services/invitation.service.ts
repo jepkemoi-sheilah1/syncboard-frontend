@@ -1,76 +1,42 @@
-import { Component, Inject } from '@angular/core';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { forkJoin, of } from 'rxjs';
-import { catchError } from 'rxjs/operators';
+import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
+import { environment } from '../../environments/environment';
 
+// NOTE:
+// This service is intentionally named "InvitationService" because the backend endpoint
+// deals with inviting workspace members.
+// Backend (Swagger) endpoint used:
+//   POST /workspace/{workspaceId}/invite
+// Request body (as used elsewhere in this frontend):
+//   { invitations: [{ email, role }] }
+//
+// If your backend DTO differs, adjust the interface types accordingly.
 
-export class InviteDialogComponent {
-  emailInput = '';
-  errorMessage = '';
-  isLoading = false;
-  invitationService: any;
-  
-  constructor(
-    public dialogRef: MatDialogRef<InviteDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: { boardId: string }
-  ) {}
+export type WorkspaceInviteRole = 'admin' | 'member';
 
-  sendInvites(): void {
-    
-    this.errorMessage = '';
-    
-    // validate emails
-    const emails = this.emailInput
-      .split(',')
-      .map(email => email.trim())
-      .filter(email => email.length > 0);
-    
-    // Validate each email
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    const invalidEmails = emails.filter(email => !emailRegex.test(email));
-    
-    if (invalidEmails.length > 0) {
-      this.errorMessage = `Invalid email address(es): ${invalidEmails.join(', ')}`;
-      return;
-    }
-    
-    if (emails.length === 0) {
-      this.errorMessage = 'Please enter at least one email address';
-      return;
-    }
-    
-    // Send all invitations
-    this.isLoading = true;
-    
-    const invitations$ = emails.map(email =>
-      this.invitationService.sendInvitation({
-        boardId: this.data.boardId,
-        email: email,
-        role: 'member' // or get from form
-      }).pipe(
-        catchError(error => {
-          console.error(`Failed to send invitation to ${email}:`, error);
-          return of({ success: false, email, error });
-        })
-      )
+export interface SendWorkspaceInvitationRequest {
+  workSpaceId: string | number;
+  invitations: Array<{ email: string; role: WorkspaceInviteRole }>;
+}
+
+@Injectable({
+  providedIn: 'root'
+})
+export class InvitationService {
+  private base = `${environment.apiUrl}${environment.api.basePath}`;
+
+  constructor(private http: HttpClient) {}
+
+  sendInvitation(
+    request: SendWorkspaceInvitationRequest
+  ): Observable<any> {
+    // Mirrors usage in WorkspaceService.inviteMember()
+    // Swagger endpoint: POST /workspace/{workspaceId}/invite
+    return this.http.post<any>(
+      `${this.base}/workspace/${request.workSpaceId}/invite`,
+      { email: request.invitations.map(i => i.email), role: undefined }
     );
-    
-    forkJoin(invitations$).subscribe({
-      next: (results) => {
-        const successful = results.filter((r: any) => r.success).length;
-        const failed = results.length - successful;
-        
-        if (failed > 0) {
-          this.errorMessage = `${successful} invitation(s) sent successfully. ${failed} failed.`;
-        } else {
-          this.dialogRef.close({ success: true, count: successful });
-        }
-        this.isLoading = false;
-      },
-      error: (error) => {
-        this.errorMessage = 'Failed to send invitations. Please try again.';
-        this.isLoading = false;
-      }
-    });
   }
 }
+

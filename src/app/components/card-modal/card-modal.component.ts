@@ -6,6 +6,7 @@ import { Component, Input, Output, EventEmitter, signal, OnInit } from '@angular
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Card, Label } from '../../models/board.models';
+import { CardService } from '../../services/card.service';
 
 @Component({
   selector: 'app-card-modal',
@@ -15,6 +16,7 @@ import { Card, Label } from '../../models/board.models';
   styleUrls: ['./card-modal.component.css']
 })
 export class CardModalComponent implements OnInit {
+  constructor(private cardService: CardService) { }
   // Input: Card to display/edit
   @Input() card: Card | null = null;
   
@@ -30,8 +32,10 @@ export class CardModalComponent implements OnInit {
   // UI State
   isEditing = signal(false);
   showLabelPicker = signal(false);
-  
+  isTogglingLabel = signal(false);
+
   // Available labels for picker
+
   availableLabels: Label[] = [
     { id: 'l1', name: 'Urgent', color: '#ef4444' },
     { id: 'l2', name: 'Important', color: '#f59e0b' },
@@ -101,17 +105,50 @@ export class CardModalComponent implements OnInit {
    */
   toggleLabel(label: Label): void {
     if (!this.card) return;
-    
-    const exists = this.card.labels.find(l => l.id === label.id);
-    
-    if (exists) {
-      // Remove label
-      this.card.labels = this.card.labels.filter(l => l.id !== label.id);
-    } else {
-      // Add label
-      this.card.labels = [...this.card.labels, label];
-    }
+    if (this.isTogglingLabel()) return;
+
+    this.isTogglingLabel.set(true);
+
+    const exists = this.card.labels.some(l => l.id === label.id);
+
+    // If label exists, remove it; otherwise create it.
+    const request$ = exists
+      ? this.cardService.removeLabel(this.card.id, label.id)
+      : this.cardService.addLabel(this.card.id, label);
+
+    request$.subscribe({
+      next: (updatedCard) => {
+        // Prefer backend-updated labels if the backend actually returned them.
+        if (Array.isArray(updatedCard?.labels)) {
+          this.card!.labels = updatedCard.labels;
+          this.isTogglingLabel.set(false);
+          return;
+        }
+
+
+        // Strict SSOT fallback: re-fetch the card.
+        this.cardService.getCard(this.card!.id).subscribe({
+          next: (freshCard) => {
+            this.card!.labels = freshCard.labels ?? [];
+          },
+          error: () => {
+            // Keep UI unchanged on error.
+          },
+          complete: () => {
+            this.isTogglingLabel.set(false);
+          }
+        });
+      },
+      error: () => {
+        // Keep UI unchanged on error.
+        this.isTogglingLabel.set(false);
+      },
+      complete: () => {
+        if (!this.isTogglingLabel()) return;
+      }
+    });
   }
+
 
   /**
    * Check if label is applied
@@ -124,10 +161,40 @@ export class CardModalComponent implements OnInit {
    * Remove a label from card
    */
   removeLabel(labelId: string): void {
-    if (this.card) {
-      this.card.labels = this.card.labels.filter(l => l.id !== labelId);
-    }
+    if (!this.card) return;
+    if (this.isTogglingLabel()) return;
+
+    this.isTogglingLabel.set(true);
+
+    const request$ = this.cardService.removeLabel(this.card.id, labelId);
+
+    request$.subscribe({
+      next: (updatedCard) => {
+        if (Array.isArray(updatedCard?.labels)) {
+          this.card!.labels = updatedCard.labels;
+          this.isTogglingLabel.set(false);
+          return;
+        }
+
+        this.cardService.getCard(this.card!.id).subscribe({
+          next: (freshCard) => {
+            this.card!.labels = freshCard.labels ?? [];
+          },
+          error: () => {
+            // Keep UI unchanged on error.
+          },
+          complete: () => {
+            this.isTogglingLabel.set(false);
+          }
+        });
+      },
+      error: () => {
+        this.isTogglingLabel.set(false);
+      }
+    });
   }
+
+
 
   /**
    * Start editing

@@ -1,0 +1,30 @@
+<div class="support-admin">
+  <h3>Support (Admin) - Notifications</h3>
+
+  <div class="toolbar">
+    <button class="btn" (click)="loadNotifications()" [disabled]="loading()">{{ loading() ? 'Loading...' : 'Reload' }}</button>
+    <span class="meta">Unread: {{ unreadCount() }}</span>
+  </div>
+
+  <div *ngIf="error()" class="error">{{ error() }}</div>
+
+  <div class="panel">
+    <div *ngIf="loading()" class="empty">Loading…</div>
+
+    <div *ngIf="!loading() && notifications().length === 0" class="empty">No notifications</div>
+
+    <div *ngFor="let n of notifications()" class="row">
+      <div class="col-left">
+        <div class="title">{{ n?.title || 'Notification ' + (n?.id ?? '') }}</div>
+        <div class="body">{{ n?.message || n?.content || '' }}</div>
+      </div>
+      <div class="col-right">
+        <div class="status">{{ n?.read || n?.isRead ? 'Read' : 'Unread' }}</div>
+        <button class="btn" (click)="markRead((n?.id ?? '').toString())" [disabled]="markReadInProgress() || (n?.read || n?.isRead)">
+          {{ markReadInProgress() ? '...' : 'Mark read' }}
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+

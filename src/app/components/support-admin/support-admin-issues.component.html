@@ -1,0 +1,70 @@
+<div class="support-admin">
+  <h3>Support (Admin) - Issues</h3>
+
+  <div class="toolbar">
+    <button class="btn" (click)="loadIssues()" [disabled]="loading()">{{ loading() ? 'Loading...' : 'Load issues' }}</button>
+  </div>
+
+  <div *ngIf="error()" class="error">{{ error() }}</div>
+
+  <div class="grid">
+    <div class="list">
+      <h4>Issues</h4>
+      <ul>
+        <li *ngFor="let i of filteredIssues()" (click)="viewIssue((i?.id ?? '').toString())" [class.active]="(i?.id ?? '') === selectedIssueId()">
+          <div class="title">{{ i?.name || ('Issue ' + i?.id) }}</div>
+          <div class="meta">Active: {{ !!i?.active }}</div>
+        </li>
+      </ul>
+    </div>
+
+    <div class="detail">
+      <h4>Create Issue</h4>
+      <div class="field">
+        <label>Name</label>
+        <input type="text" [(ngModel)]="newName" />
+      </div>
+      <div class="field">
+        <label>Description</label>
+        <textarea rows="3" [(ngModel)]="newDescription"></textarea>
+      </div>
+      <div class="field">
+        <label>
+          <input type="checkbox" [(ngModel)]="newActive" /> Active
+        </label>
+      </div>
+      <div class="row-actions">
+        <button class="btn" (click)="createIssue()" [disabled]="updating()">{{ updating() ? 'Creating...' : 'Create' }}</button>
+      </div>
+
+      <hr />
+
+      <h4>Edit Issue</h4>
+      <div *ngIf="!selectedIssue()" class="empty">Select an issue</div>
+
+      <div *ngIf="selectedIssue() as issue">
+        <div class="row"><b>ID:</b> {{ issue?.id }}</div>
+        <div class="field">
+          <label>Name</label>
+          <input type="text" [(ngModel)]="editName" />
+        </div>
+        <div class="field">
+          <label>Description</label>
+          <textarea rows="3" [(ngModel)]="editDescription"></textarea>
+        </div>
+        <div class="field">
+          <label>
+            <input type="checkbox" [(ngModel)]="editActive" /> Active
+          </label>
+        </div>
+
+        <div class="row-actions">
+          <button class="btn" (click)="updateIssue()" [disabled]="updating()">{{ updating() ? 'Saving...' : 'Save' }}</button>
+          <button class="btn" (click)="toggleActive()" [disabled]="updating()">Toggle Active</button>
+          <button class="btn danger" (click)="deleteIssue()" [disabled]="updating()">Delete</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+

@@ -1,0 +1,2754 @@
+{
+  "info": {
+    "name": "Syncboard API",
+    "description": "Postman collection generated from Syncboard OpenAPI v3 spec",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "https://syncboard-ptvu.onrender.com",
+      "type": "string"
+    },
+    {
+      "key": "accessToken",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "refreshToken",
+      "value": "",
+      "type": "string"
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{accessToken}}",
+        "type": "string"
+      }
+    ]
+  },
+  "item": [
+    {
+      "name": "User Management",
+      "item": [
+        {
+          "name": "Update account profile details",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "url": {
+              "raw": "https://syncboard-ptvu.onrender.com/user/update",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "user",
+                "update"
+              ],
+              "variable": [],
+              "query": []
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"firstName\": \"John\",\n  \"sirName\": \"Doe\",\n  \"email\": \"john@example.com\",\n  \"avatarUrl\": \"https://example.com/avatar.png\",\n  \"password\": \"Password123!\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Log out user and invalidate current session token",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "url": {
+              "raw": "https://syncboard-ptvu.onrender.com/user/logout",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "user",
+                "logout"
+              ],
+              "variable": [],
+              "query": []
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Reset password using token",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "url": {
+              "raw": "https://syncboard-ptvu.onrender.com/user/reset-password?token={{token}}&newPassword={{newPassword}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "user",
+                "reset-password"
+              ],
+              "variable": [],
+              "query": [
+                {
+                  "key": "token",
+                  "value": "",
+                  "disabled": false
+                },
+                {
+                  "key": "newPassword",
+                  "value": "",
+                  "disabled": false
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Request a password reset email",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "url": {
+              "raw": "https://syncboard-ptvu.onrender.com/user/reset-password-request",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "user",
+                "reset-password-request"
+              ],
+              "variable": [],
+              "query": []
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"john@example.com\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Register a new user account",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "url": {
+              "raw": "https://syncboard-ptvu.onrender.com/user/register",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "user",
+                "register"
+              ],
+              "variable": [],
+              "query": []
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"firstName\": \"John\",\n  \"sirName\": \"Doe\",\n  \"email\": \"john@example.com\",\n  \"avatarUrl\": \"https://example.com/avatar.png\",\n  \"password\": \"Password123!\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Authenticate user and log in",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "url": {
+              "raw": "https://syncboard-ptvu.onrender.com/user/login",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "user",
+                "login"
+              ],
+              "variable": [],
+              "query": []
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"john@example.com\",\n  \"password\": \"Password123!\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Confirm user account via token",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "url": {
+              "raw": "https://syncboard-ptvu.onrender.com/user/confirm?token={{token}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "user",
+                "confirm"
+              ],
+              "variable": [],
+              "query": [
+                {
+                  "key": "token",
+                  "value": "",
+                  "disabled": false
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Permanently delete user account",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "url": {
+              "raw": "https://syncboard-ptvu.onrender.com/user/delete",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "user",
+                "delete"
+              ],
+              "variable": [],
+              "query": []
+            }
+          },
+          "response": []
+        }
+      ],
+      "description": "Endpoints for User Management"
+    },
+    {
+      "name": "System Configuration",
+      "item": [
+        {
+          "name": "Get a system configuration parameter by its unique key",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "url": {
+              "raw": "https://syncboard-ptvu.onrender.com/system-config/:configKey",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "system-config",
+                ":configKey"
+              ],
+              "variable": [
+                {
+                  "key": "configKey",
+                  "value": "",
+                  "description": ""
+                }
+              ],
+              "query": []
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update an existing system configuration value by its key",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "url": {
+              "raw": "https://syncboard-ptvu.onrender.com/system-config/:configKey",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "system-config",
+                ":configKey"
+              ],
+              "variable": [
+                {
+                  "key": "configKey",
+                  "value": "",
+                  "description": ""
+                }
+              ],
+              "query": []
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"configKey\": \"SUPPORT_EMAIL\",\n  \"configValue\": \"support@example.com\",\n  \"description\": \"Support email address\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get all global system configurations",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "url": {
+              "raw": "https://syncboard-ptvu.onrender.com/system-config",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "system-config"
+              ],
+              "variable": [],
+              "query": []
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Create a new system configuration parameter",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "url": {
+              "raw": "https://syncboard-ptvu.onrender.com/system-config",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "system-config"
+              ],
+              "variable": [],
+              "query": []
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"configKey\": \"SUPPORT_EMAIL\",\n  \"configValue\": \"support@example.com\",\n  \"description\": \"Support email address\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": []
+        }
+      ],
+      "description": "Endpoints for System Configuration"
+    },
+    {
+      "name": "Issues",
+      "item": [
+        {
+          "name": "Get Issue by ID",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "url": {
+              "raw": "https://syncboard-ptvu.onrender.com/issues/:id",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "issues",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "",
+                  "description": ""
+                }
+              ],
+              "query": []
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update an existing Issue",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "url": {
+              "raw": "https://syncboard-ptvu.onrender.com/issues/:id",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "issues",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "",
+                  "description": ""
+                }
+              ],
+              "query": []
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Login Bug\",\n  \"description\": \"Users cannot log in with Google OAuth\",\n  \"active\": true\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete an Issue",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "url": {
+              "raw": "https://syncboard-ptvu.onrender.com/issues/:id",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "issues",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "",
+                  "description": ""
+                }
+              ],
+              "query": []
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get all Issues",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "url": {
+              "raw": "https://syncboard-ptvu.onrender.com/issues",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "issues"
+              ],
+              "variable": [],
+              "query": []
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Create a new Issue",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "url": {
+              "raw": "https://syncboard-ptvu.onrender.com/issues",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "issues"
+              ],
+              "variable": [],
+              "query": []
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Login Bug\",\n  \"description\": \"Users cannot log in with Google OAuth\",\n  \"active\": true\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Toggle Issue active status",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "url": {
+              "raw": "https://syncboard-ptvu.onrender.com/issues/:id/toggle",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "issues",
+                ":id",
+                "toggle"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "",
+                  "description": ""
+                }
+              ],
+              "query": []
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get all active Issues",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "url": {
+              "raw": "https://syncboard-ptvu.onrender.com/issues/active",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "issues",
+                "active"
+              ],
+              "variable": [],
+              "query": []
+            }
+          },
+          "response": []
+        }
+      ],
+      "description": "Endpoints for Issues"
+    },
+    {
+      "name": "FAQs",
+      "item": [
+        {
+          "name": "Get FAQ by ID",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "url": {
+              "raw": "https://syncboard-ptvu.onrender.com/faqs/:id",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "faqs",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "",
+                  "description": ""
+                }
+              ],
+              "query": []
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update an existing FAQ",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "url": {
+              "raw": "https://syncboard-ptvu.onrender.com/faqs/:id",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "faqs",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "",
+                  "description": ""
+                }
+              ],
+              "query": []
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"question\": \"How do I reset my password?\",\n  \"answer\": \"Click the forgot password link on the login page.\",\n  \"active\": true\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete an FAQ",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "url": {
+              "raw": "https://syncboard-ptvu.onrender.com/faqs/:id",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "faqs",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "",
+                  "description": ""
+                }
+              ],
+              "query": []
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get all FAQs",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "url": {
+              "raw": "https://syncboard-ptvu.onrender.com/faqs",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "faqs"
+              ],
+              "variable": [],
+              "query": []
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Create a new FAQ",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "url": {
+              "raw": "https://syncboard-ptvu.onrender.com/faqs",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "faqs"
+              ],
+              "variable": [],
+              "query": []
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"question\": \"How do I reset my password?\",\n  \"answer\": \"Click the forgot password link on the login page.\",\n  \"active\": true\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Toggle FAQ active status",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "url": {
+              "raw": "https://syncboard-ptvu.onrender.com/faqs/:id/activate-deactivate",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "faqs",
+                ":id",
+                "activate-deactivate"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "",
+                  "description": ""
+                }
+              ],
+              "query": []
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get all active FAQs",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "url": {
+              "raw": "https://syncboard-ptvu.onrender.com/faqs/active",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "faqs",
+                "active"
+              ],
+              "variable": [],
+              "query": []
+            }
+          },
+          "response": []
+        }
+      ],
+      "description": "Endpoints for FAQs"
+    },
+    {
+      "name": "Cards",
+      "item": [
+        {
+          "name": "Get a card by its ID",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "url": {
+              "raw": "https://syncboard-ptvu.onrender.com/cards/:cardId",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "cards",
+                ":cardId"
+              ],
+              "variable": [
+                {
+                  "key": "cardId",
+                  "value": "",
+                  "description": ""
+                }
+              ],
+              "query": []
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update an existing card",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "url": {
+              "raw": "https://syncboard-ptvu.onrender.com/cards/:cardId",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "cards",
+                ":cardId"
+              ],
+              "variable": [
+                {
+                  "key": "cardId",
+                  "value": "",
+                  "description": ""
+                }
+              ],
+              "query": []
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"listId\": 1,\n  \"title\": \"Design homepage\",\n  \"description\": \"Create mockups\",\n  \"priority\": \"HIGH\",\n  \"dueDate\": \"2025-12-31T23:59:59Z\",\n  \"position\": 1\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete a card",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "url": {
+              "raw": "https://syncboard-ptvu.onrender.com/cards/:cardId",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "cards",
+                ":cardId"
+              ],
+              "variable": [
+                {
+                  "key": "cardId",
+                  "value": "",
+                  "description": ""
+                }
+              ],
+              "query": []
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Move a card to a different list or position",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "url": {
+              "raw": "https://syncboard-ptvu.onrender.com/cards/:cardId/move",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "cards",
+                ":cardId",
+                "move"
+              ],
+              "variable": [
+                {
+                  "key": "cardId",
+                  "value": "",
+                  "description": ""
+                }
+              ],
+              "query": []
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"cardId\": 1,\n  \"targetListId\": 2,\n  \"newIndex\": 0\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Create a new card",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "url": {
+              "raw": "https://syncboard-ptvu.onrender.com/cards",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "cards"
+              ],
+              "variable": [],
+              "query": []
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"listId\": 1,\n  \"title\": \"Design homepage\",\n  \"description\": \"Create mockups\",\n  \"priority\": \"HIGH\",\n  \"dueDate\": \"2025-12-31T23:59:59Z\",\n  \"position\": 1\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get all cards in a list",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "url": {
+              "raw": "https://syncboard-ptvu.onrender.com/cards/lists/:listId/cards",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "cards",
+                "lists",
+                ":listId",
+                "cards"
+              ],
+              "variable": [
+                {
+                  "key": "listId",
+                  "value": "",
+                  "description": ""
+                }
+              ],
+              "query": []
+            }
+          },
+          "response": []
+        }
+      ],
+      "description": "Endpoints for Cards"
+    },
+    {
+      "name": "Card Assignees",
+      "item": [
+        {
+          "name": "Reassign a card to a different user",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "url": {
+              "raw": "https://syncboard-ptvu.onrender.com/cards/:cardId/assignees/reassign",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "cards",
+                ":cardId",
+                "assignees",
+                "reassign"
+              ],
+              "variable": [
+                {
+                  "key": "cardId",
+                  "value": "",
+                  "description": ""
+                }
+              ],
+              "query": []
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"userId\": 1\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Remove an assignee from a card",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "url": {
+              "raw": "https://syncboard-ptvu.onrender.com/cards/:cardId/assignees/:userId",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "cards",
+                ":cardId",
+                "assignees",
+                ":userId"
+              ],
+              "variable": [
+                {
+                  "key": "cardId",
+                  "value": "",
+                  "description": ""
+                },
+                {
+                  "key": "userId",
+                  "value": "",
+                  "description": ""
+                }
+              ],
+              "query": []
+            }
+          },
+          "response": []
+        }
+      ],
+      "description": "Endpoints for Card Assignees"
+    },
+    {
+      "name": "Boards",
+      "item": [
+        {
+          "name": "Get Board by ID",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "url": {
+              "raw": "https://syncboard-ptvu.onrender.com/boards/:boardId",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "boards",
+                ":boardId"
+              ],
+              "variable": [
+                {
+                  "key": "boardId",
+                  "value": "",
+                  "description": ""
+                }
+              ],
+              "query": []
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update an existing Board",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "url": {
+              "raw": "https://syncboard-ptvu.onrender.com/boards/:boardId",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "boards",
+                ":boardId"
+              ],
+              "variable": [
+                {
+                  "key": "boardId",
+                  "value": "",
+                  "description": ""
+                }
+              ],
+              "query": []
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"boardName\": \"Product Roadmap\",\n  \"boardDescription\": \"Q4 product planning board\",\n  \"isStarred\": false\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete a Board",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "url": {
+              "raw": "https://syncboard-ptvu.onrender.com/boards/:boardId",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "boards",
+                ":boardId"
+              ],
+              "variable": [
+                {
+                  "key": "boardId",
+                  "value": "",
+                  "description": ""
+                }
+              ],
+              "query": []
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Create a new Board",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "url": {
+              "raw": "https://syncboard-ptvu.onrender.com/boards/:workspaceId",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "boards",
+                ":workspaceId"
+              ],
+              "variable": [
+                {
+                  "key": "workspaceId",
+                  "value": "",
+                  "description": ""
+                }
+              ],
+              "query": []
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"boardName\": \"Product Roadmap\",\n  \"boardDescription\": \"Q4 product planning board\",\n  \"isStarred\": false\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get all Boards",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "url": {
+              "raw": "https://syncboard-ptvu.onrender.com/boards",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "boards"
+              ],
+              "variable": [],
+              "query": []
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get all Boards by Workspace",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "url": {
+              "raw": "https://syncboard-ptvu.onrender.com/boards/workspace/:workspaceId",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "boards",
+                "workspace",
+                ":workspaceId"
+              ],
+              "variable": [
+                {
+                  "key": "workspaceId",
+                  "value": "",
+                  "description": ""
+                }
+              ],
+              "query": []
+            }
+          },
+          "response": []
+        }
+      ],
+      "description": "Endpoints for Boards"
+    },
+    {
+      "name": "Lists",
+      "item": [
+        {
+          "name": "Reorder lists within a board",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "url": {
+              "raw": "https://syncboard-ptvu.onrender.com/boards/:boardId/lists/reorder",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "boards",
+                ":boardId",
+                "lists",
+                "reorder"
+              ],
+              "variable": [
+                {
+                  "key": "boardId",
+                  "value": "",
+                  "description": ""
+                }
+              ],
+              "query": []
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"listIds\": [\n    3,\n    1,\n    2\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update an existing list",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "url": {
+              "raw": "https://syncboard-ptvu.onrender.com/boards/lists/:listId",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "boards",
+                "lists",
+                ":listId"
+              ],
+              "variable": [
+                {
+                  "key": "listId",
+                  "value": "",
+                  "description": ""
+                }
+              ],
+              "query": []
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"In Progress\",\n  \"position\": 1,\n  \"boardId\": 1\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete a list",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "url": {
+              "raw": "https://syncboard-ptvu.onrender.com/boards/lists/:listId",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "boards",
+                "lists",
+                ":listId"
+              ],
+              "variable": [
+                {
+                  "key": "listId",
+                  "value": "",
+                  "description": ""
+                }
+              ],
+              "query": []
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Create a new list",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "url": {
+              "raw": "https://syncboard-ptvu.onrender.com/boards/lists",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "boards",
+                "lists"
+              ],
+              "variable": [],
+              "query": []
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"In Progress\",\n  \"position\": 1,\n  \"boardId\": 1\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get all lists in a board",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "url": {
+              "raw": "https://syncboard-ptvu.onrender.com/boards/:boardId/lists",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "boards",
+                ":boardId",
+                "lists"
+              ],
+              "variable": [
+                {
+                  "key": "boardId",
+                  "value": "",
+                  "description": ""
+                }
+              ],
+              "query": []
+            }
+          },
+          "response": []
+        }
+      ],
+      "description": "Endpoints for Lists"
+    },
+    {
+      "name": "Workspaces",
+      "item": [
+        {
+          "name": "Invite workmates to a workspace",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "url": {
+              "raw": "https://syncboard-ptvu.onrender.com/workspace/:workspaceId/invite",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "workspace",
+                ":workspaceId",
+                "invite"
+              ],
+              "variable": [
+                {
+                  "key": "workspaceId",
+                  "value": "",
+                  "description": ""
+                }
+              ],
+              "query": []
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": [\n    \"alice@example.com\",\n    \"bob@example.com\"\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Decline a pending workspace invitation",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "url": {
+              "raw": "https://syncboard-ptvu.onrender.com/workspace/reject-invite?token={{token}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "workspace",
+                "reject-invite"
+              ],
+              "variable": [],
+              "query": [
+                {
+                  "key": "token",
+                  "value": "",
+                  "disabled": false
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Create a new workspace",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "url": {
+              "raw": "https://syncboard-ptvu.onrender.com/workspace/create",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "workspace",
+                "create"
+              ],
+              "variable": [],
+              "query": []
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"workSpaceName\": \"Engineering Team\",\n  \"workSpaceDescription\": \"Main engineering workspace\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Accept a pending workspace invitation",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "url": {
+              "raw": "https://syncboard-ptvu.onrender.com/workspace/accept-invite?token={{token}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "workspace",
+                "accept-invite"
+              ],
+              "variable": [],
+              "query": [
+                {
+                  "key": "token",
+                  "value": "",
+                  "disabled": false
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get all outstanding invitations from a workspace",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "url": {
+              "raw": "https://syncboard-ptvu.onrender.com/workspace/:workspaceId/invitations",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "workspace",
+                ":workspaceId",
+                "invitations"
+              ],
+              "variable": [
+                {
+                  "key": "workspaceId",
+                  "value": "",
+                  "description": ""
+                }
+              ],
+              "query": []
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get all workspaces of the authenticated user",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "url": {
+              "raw": "https://syncboard-ptvu.onrender.com/workspace/my-workspaces",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "workspace",
+                "my-workspaces"
+              ],
+              "variable": [],
+              "query": []
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete a workspace by ID",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "url": {
+              "raw": "https://syncboard-ptvu.onrender.com/workspace/:id",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "workspace",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "",
+                  "description": ""
+                }
+              ],
+              "query": []
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Cancel a sent invitation",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "url": {
+              "raw": "https://syncboard-ptvu.onrender.com/workspace/invitations/:invitationId",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "workspace",
+                "invitations",
+                ":invitationId"
+              ],
+              "variable": [
+                {
+                  "key": "invitationId",
+                  "value": "",
+                  "description": ""
+                }
+              ],
+              "query": []
+            }
+          },
+          "response": []
+        }
+      ],
+      "description": "Endpoints for Workspaces"
+    },
+    {
+      "name": "Talks",
+      "item": [
+        {
+          "name": "Get all talk records",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "url": {
+              "raw": "https://syncboard-ptvu.onrender.com/talks",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "talks"
+              ],
+              "variable": [],
+              "query": []
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Submit a new contact or support message",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "url": {
+              "raw": "https://syncboard-ptvu.onrender.com/talks",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "talks"
+              ],
+              "variable": [],
+              "query": []
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"fullName\": \"Jane Smith\",\n  \"email\": \"jane@example.com\",\n  \"message\": \"I need help with my account.\",\n  \"issueId\": 1\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update the processing status of a talk",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "url": {
+              "raw": "https://syncboard-ptvu.onrender.com/talks/:id/status",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "talks",
+                ":id",
+                "status"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "",
+                  "description": ""
+                }
+              ],
+              "query": []
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"status\": \"IN_REVIEW\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get a talk record by ID",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "url": {
+              "raw": "https://syncboard-ptvu.onrender.com/talks/:id",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "talks",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "",
+                  "description": ""
+                }
+              ],
+              "query": []
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete a talk record",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "url": {
+              "raw": "https://syncboard-ptvu.onrender.com/talks/:id",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "talks",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "",
+                  "description": ""
+                }
+              ],
+              "query": []
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get talks filtered by status",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "url": {
+              "raw": "https://syncboard-ptvu.onrender.com/talks/status/:status",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "talks",
+                "status",
+                ":status"
+              ],
+              "variable": [
+                {
+                  "key": "status",
+                  "value": "",
+                  "description": ""
+                }
+              ],
+              "query": []
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get talks filtered by issue ID",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "url": {
+              "raw": "https://syncboard-ptvu.onrender.com/talks/issue/:issueId",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "talks",
+                "issue",
+                ":issueId"
+              ],
+              "variable": [
+                {
+                  "key": "issueId",
+                  "value": "",
+                  "description": ""
+                }
+              ],
+              "query": []
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get talks filtered by submitter email",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "url": {
+              "raw": "https://syncboard-ptvu.onrender.com/talks/email/:email",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "talks",
+                "email",
+                ":email"
+              ],
+              "variable": [
+                {
+                  "key": "email",
+                  "value": "",
+                  "description": ""
+                }
+              ],
+              "query": []
+            }
+          },
+          "response": []
+        }
+      ],
+      "description": "Endpoints for Talks"
+    },
+    {
+      "name": "Comments",
+      "item": [
+        {
+          "name": "Get all comments for a card",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "url": {
+              "raw": "https://syncboard-ptvu.onrender.com/cards/:cardId/comments",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "cards",
+                ":cardId",
+                "comments"
+              ],
+              "variable": [
+                {
+                  "key": "cardId",
+                  "value": "",
+                  "description": ""
+                }
+              ],
+              "query": []
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Add a comment to a card",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "url": {
+              "raw": "https://syncboard-ptvu.onrender.com/cards/:cardId/comments",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "cards",
+                ":cardId",
+                "comments"
+              ],
+              "variable": [
+                {
+                  "key": "cardId",
+                  "value": "",
+                  "description": ""
+                }
+              ],
+              "query": []
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"content\": \"This looks good, approved!\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": []
+        }
+      ],
+      "description": "Endpoints for Comments"
+    },
+    {
+      "name": "Board Members",
+      "item": [
+        {
+          "name": "Add members to a board",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "url": {
+              "raw": "https://syncboard-ptvu.onrender.com/board/:boardId/members",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "board",
+                ":boardId",
+                "members"
+              ],
+              "variable": [
+                {
+                  "key": "boardId",
+                  "value": "",
+                  "description": ""
+                }
+              ],
+              "query": []
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"userIds\": [\n    2,\n    3,\n    4\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Change a board member role",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "url": {
+              "raw": "https://syncboard-ptvu.onrender.com/board/:boardId/members/:userId/role?role={{role}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "board",
+                ":boardId",
+                "members",
+                ":userId",
+                "role"
+              ],
+              "variable": [
+                {
+                  "key": "boardId",
+                  "value": "",
+                  "description": ""
+                },
+                {
+                  "key": "userId",
+                  "value": "",
+                  "description": ""
+                }
+              ],
+              "query": [
+                {
+                  "key": "role",
+                  "value": "",
+                  "disabled": false
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Remove a member from a board",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "url": {
+              "raw": "https://syncboard-ptvu.onrender.com/board/:boardId/members/:userId",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "board",
+                ":boardId",
+                "members",
+                ":userId"
+              ],
+              "variable": [
+                {
+                  "key": "boardId",
+                  "value": "",
+                  "description": ""
+                },
+                {
+                  "key": "userId",
+                  "value": "",
+                  "description": ""
+                }
+              ],
+              "query": []
+            }
+          },
+          "response": []
+        }
+      ],
+      "description": "Endpoints for Board Members"
+    },
+    {
+      "name": "Authentication",
+      "item": [
+        {
+          "name": "Renew expired access token using a valid refresh token",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "url": {
+              "raw": "https://syncboard-ptvu.onrender.com/auth/refresh-token",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "auth",
+                "refresh-token"
+              ],
+              "variable": [],
+              "query": []
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"refreshToken\": \"{{refreshToken}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": []
+        }
+      ],
+      "description": "Endpoints for Authentication"
+    },
+    {
+      "name": "Notifications",
+      "item": [
+        {
+          "name": "Mark a specific notification as read",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "url": {
+              "raw": "https://syncboard-ptvu.onrender.com/notifications/:id/read",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "notifications",
+                ":id",
+                "read"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "",
+                  "description": ""
+                }
+              ],
+              "query": []
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get unread notifications for authenticated user",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "url": {
+              "raw": "https://syncboard-ptvu.onrender.com/notifications",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "notifications"
+              ],
+              "variable": [],
+              "query": []
+            }
+          },
+          "response": []
+        }
+      ],
+      "description": "Endpoints for Notifications"
+    },
+    {
+      "name": "System Monitoring",
+      "item": [
+        {
+          "name": "Check application service status",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "url": {
+              "raw": "https://syncboard-ptvu.onrender.com/public/health",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "public",
+                "health"
+              ],
+              "variable": [],
+              "query": []
+            }
+          },
+          "response": []
+        }
+      ],
+      "description": "Endpoints for System Monitoring"
+    },
+    {
+      "name": "Board Activity Logs",
+      "item": [
+        {
+          "name": "Get activity logs for a board",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "url": {
+              "raw": "https://syncboard-ptvu.onrender.com/boards/:boardId/activity-logs",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "boards",
+                ":boardId",
+                "activity-logs"
+              ],
+              "variable": [
+                {
+                  "key": "boardId",
+                  "value": "",
+                  "description": ""
+                }
+              ],
+              "query": []
+            }
+          },
+          "response": []
+        }
+      ],
+      "description": "Endpoints for Board Activity Logs"
+    }
+  ]
+}
