@@ -23,6 +23,9 @@ export class SupportAdminTalksComponent {
 
   statusDraft = signal('IN_REVIEW');
 
+  // Template-friendly editable value (avoids complex signal write expressions causing NG0900)
+  statusDraftValue = 'IN_REVIEW';
+
   filteredTalks = computed(() => this.talks());
 
   loadTalks(): void {
@@ -49,7 +52,10 @@ export class SupportAdminTalksComponent {
       next: (talk) => {
         this.selectedTalk.set(talk);
         const s = talk?.status;
-        if (typeof s === 'string' && s) this.statusDraft.set(s);
+        if (typeof s === 'string' && s) {
+          this.statusDraft.set(s);
+          this.statusDraftValue = s;
+        }
       },
       error: () => {
         this.error.set('Failed to load talk');
@@ -58,10 +64,14 @@ export class SupportAdminTalksComponent {
   }
 
   updateStatus(): void {
+    // Ensure latest input is reflected
+    this.statusDraft.set(this.statusDraftValue);
     const id = this.selectedTalkId();
     if (!id) return;
 
-    const status = this.statusDraft().trim();
+    // Keep signal and template value in sync
+    this.statusDraft.set(this.statusDraftValue);
+    const status = this.statusDraftValue.trim();
     if (!status) return;
 
     this.updating.set(true);

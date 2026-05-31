@@ -38,7 +38,7 @@
 
         <div class="row"><b>Update status</b></div>
         <div class="row">
-          <input type="text" [value]="statusDraft()" (input)="statusDraft.set($any($event.target).value)" />
+          <input type="text" [value]="statusDraftValue" (input)="statusDraftValue = $any($event.target).value" />
           <button class="btn" (click)="updateStatus()" [disabled]="updating()">{{ updating() ? 'Updating...' : 'Update' }}</button>
         </div>
       </div>
