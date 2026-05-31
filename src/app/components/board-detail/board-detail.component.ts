@@ -189,12 +189,19 @@ export class BoardDetailComponent implements OnInit {
   createList(): void {
     if (this.newListName.trim()) {
       const boardId = this.board()?.id || '';
-      this.listService.createList({ name: this.newListName.trim(), boardId }).subscribe((newList) => {
-        this.newListName = '';
-        this.showNewListInput.set(false);
-        if (newList && newList.id) {
-          this.activeCardListId.set(newList.id);
-          this.newCardTitle = '';
+      if (!boardId) return;
+
+      this.listService.createList({ name: this.newListName.trim(), boardId }).subscribe({
+        next: (newList) => {
+          this.newListName = '';
+          this.showNewListInput.set(false);
+          if (newList?.id) {
+            this.activeCardListId.set(newList.id);
+            this.newCardTitle = '';
+          }
+        },
+        error: () => {
+          // keep input open so user can retry
         }
       });
     }

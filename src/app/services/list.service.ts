@@ -2,6 +2,7 @@
 import { Injectable, signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, of, delay, BehaviorSubject } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { environment } from '../../environments/environment';
 import { BoardList, CreateListRequest, UpdateListRequest } from '../models/board.models';
 
@@ -51,17 +52,24 @@ getLists(boardId: string): Observable<BoardList[]> {
         order: request.order ?? currentLists.length,
         cards: []
       };
-      
+
       // Update the lists
       const updatedLists = [...currentLists, newList];
       this.listsSubject.next(updatedLists);
-      
+
       return of(newList).pipe(delay(200));
     }
 
     return this.http.post<BoardList>(
       `${environment.apiUrl}${environment.api.basePath}/lists`,
       request
+    ).pipe(
+      // Keep UI in sync even in non-mock mode
+      map(created => {
+        const current = this.listsSubject.value;
+        this.listsSubject.next([...current, created]);
+        return created;
+      })
     );
   }
 
