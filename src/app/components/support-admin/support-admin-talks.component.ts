@@ -23,10 +23,13 @@ export class SupportAdminTalksComponent {
 
   statusDraft = signal('IN_REVIEW');
 
-  // Template-friendly editable value (avoids complex signal write expressions causing NG0900)
+  // Template-friendly editable 
   statusDraftValue = 'IN_REVIEW';
 
-  filteredTalks = computed(() => this.talks());
+filteredTalks = computed(() => {
+    const v = this.talks();
+    return Array.isArray(v) ? v : [];
+  });
 
   loadTalks(): void {
     this.loading.set(true);
