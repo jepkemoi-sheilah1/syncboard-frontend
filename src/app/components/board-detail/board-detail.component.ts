@@ -41,8 +41,11 @@ export class BoardDetailComponent implements OnInit {
 
   ngOnInit(): void {
     const boardId = this.route.snapshot.paramMap.get('id');
-    if (boardId) { this.loadBoard(boardId); }
-    this.listService.lists$.subscribe(lists => this.lists.set(lists));
+    if (boardId) {
+      this.loadBoard(boardId);
+    }
+
+    this.listService.lists$.subscribe(lists => this.lists.set(this.normalizeColumns(lists)));
   }
 
   loadBoard(boardId: string): void {
@@ -50,8 +53,87 @@ export class BoardDetailComponent implements OnInit {
       next: (board) => this.board.set(board),
       error: () => {}
     });
-    this.listService.getLists(boardId).subscribe(lists => this.lists.set(lists));
+
+    this.listService.getLists(boardId).subscribe(lists => this.lists.set(this.normalizeColumns(lists)));
   }
+
+  private normalizeColumns(lists: BoardList[]): BoardList[] {
+    const canonical = [
+      { key: 'todo', names: ['to do', 'todo'] },
+      { key: 'inprogress', names: ['in progress', 'in-progress', 'doing', 'inprogress'] },
+      { key: 'done', names: ['done', 'completed', 'complete'] },
+    ] as const;
+
+    const normalize = (s: string) => (s || '').toLowerCase().replace(/_/g, ' ').replace(/\s+/g, ' ').trim();
+
+    const byNameMatches: Record<'todo' | 'inprogress' | 'done', BoardList[]> = {
+      todo: [],
+      inprogress: [],
+      done: [],
+    };
+
+
+    for (const list of lists || []) {
+      const name = normalize(list?.name || '');
+      if (!name) continue;
+
+      const todoNames = canonical[0].names.map(normalize);
+      const ipNames = canonical[1].names.map(normalize);
+      const doneNames = canonical[2].names.map(normalize);
+
+      if (todoNames.includes(name)) byNameMatches.todo.push(list);
+      else if (ipNames.includes(name)) byNameMatches.inprogress.push(list);
+      else if (doneNames.includes(name)) byNameMatches.done.push(list);
+    }
+
+    const pickBest = (items: BoardList[]): BoardList | undefined =>
+      items
+        .slice()
+        .sort((a, b) => (a.order ?? 0) - (b.order ?? 0))
+        [0];
+
+    const picked: Record<'todo' | 'inprogress' | 'done', BoardList | undefined> = {
+      todo: pickBest(byNameMatches.todo),
+      inprogress: pickBest(byNameMatches.inprogress),
+      done: pickBest(byNameMatches.done),
+    };
+
+
+    // Remove already picked from fallback pool
+    const pickedIds = new Set(Object.values(picked).filter(Boolean).map(l => (l as BoardList).id));
+    const fallbackPool = (lists || [])
+      .filter(l => !pickedIds.has(l.id))
+      .slice()
+      .sort((a, b) => (a.order ?? 0) - (b.order ?? 0));
+
+    const assignFallback = (key: 'todo' | 'inprogress' | 'done') => {
+      if (picked[key]) return;
+      const next = fallbackPool.shift();
+      if (next) picked[key] = next;
+    };
+
+    assignFallback('todo');
+    assignFallback('inprogress');
+    assignFallback('done');
+
+    const ordered: BoardList[] = [];
+    const pushIf = (l?: BoardList) => {
+      if (l && !ordered.some(x => x.id === l.id)) ordered.push(l);
+    };
+
+    pushIf(picked.todo);
+    pushIf(picked.inprogress);
+    pushIf(picked.done);
+
+    // Append remaining lists after Done (in backend order)
+    const remaining = (lists || [])
+      .filter(l => !ordered.some(x => x.id === l.id))
+      .slice()
+      .sort((a, b) => (a.order ?? 0) - (b.order ?? 0));
+
+    return [...ordered, ...remaining];
+  }
+
 
   getInitials(name: string): string {
     if (!name) return '?';
@@ -124,7 +206,7 @@ export class BoardDetailComponent implements OnInit {
     });
   }
 
-  // ─── Card Modal ───────────────────────────────────────────────────────────
+  //  Card Modal 
 
   openCardModal(card: Card): void { this.selectedCard.set({ ...card }); }
   closeCardModal(): void { this.selectedCard.set(null); }
@@ -142,7 +224,7 @@ export class BoardDetailComponent implements OnInit {
     this.cardService.deleteCard(cardId).subscribe(() => this.closeCardModal());
   }
 
-  // ─── Drag and Drop ────────────────────────────────────────────────────────
+  //  Drag and Drop 
 
   drop(event: CdkDragDrop<Card[]>, targetListId: string): void {
     const cards = event.container.data || [];
