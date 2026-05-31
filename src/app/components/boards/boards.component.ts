@@ -181,7 +181,8 @@ export class BoardsComponent implements OnInit {
       'linear-gradient(135deg, #c377e0 0%, #a855c7 100%)',
       'linear-gradient(135deg, #51e898 0%, #3dcc7a 100%)',
     ];
-    const index = board.id.charCodeAt(board.id.length - 1) % colors.length;
+    const idStr = String(board.id);
+    const index = idStr.charCodeAt(idStr.length - 1) % colors.length;
     return colors[index];
   }
 

@@ -45,24 +45,44 @@ export class BoardDetailComponent implements OnInit {
       this.loadBoard(boardId);
     }
 
-    this.listService.lists$.subscribe(lists => this.lists.set(this.normalizeColumns(lists)));
+    this.listService.lists$.subscribe(lists => {
+      // lists$ should be an array, but backend/socket errors can still push unexpected values.
+      this.lists.set(Array.isArray(lists) ? this.normalizeColumns(lists) : []);
+    });
   }
 
   loadBoard(boardId: string): void {
     this.boardService.getBoard(boardId).subscribe({
       next: (board) => this.board.set(board),
-      error: () => {}
+      error: (err) => {
+        // Keep board empty on error.
+        console.error('Failed to load board', err);
+        this.board.set(null);
+      }
     });
 
-    this.listService.getLists(boardId).subscribe(lists => this.lists.set(this.normalizeColumns(lists)));
+    this.listService.getLists(boardId).subscribe({
+      next: (lists) => {
+        this.lists.set(Array.isArray(lists) ? this.normalizeColumns(lists) : []);
+      },
+      error: (err) => {
+        console.error('Failed to load lists', err);
+        this.lists.set([]);
+      }
+    });
   }
 
-  private normalizeColumns(lists: BoardList[]): BoardList[] {
+  private normalizeColumns(lists: BoardList[] | unknown): BoardList[] {
+    if (!Array.isArray(lists)) return [];
+
     const canonical = [
       { key: 'todo', names: ['to do', 'todo'] },
       { key: 'inprogress', names: ['in progress', 'in-progress', 'doing', 'inprogress'] },
       { key: 'done', names: ['done', 'completed', 'complete'] },
     ] as const;
+
+    const safeLists = lists as BoardList[];
+
 
     const normalize = (s: string) => (s || '').toLowerCase().replace(/_/g, ' ').replace(/\s+/g, ' ').trim();
 
@@ -73,7 +93,7 @@ export class BoardDetailComponent implements OnInit {
     };
 
 
-    for (const list of lists || []) {
+    for (const list of safeLists || []) {
       const name = normalize(list?.name || '');
       if (!name) continue;
 
@@ -101,7 +121,7 @@ export class BoardDetailComponent implements OnInit {
 
     // Remove already picked from fallback pool
     const pickedIds = new Set(Object.values(picked).filter(Boolean).map(l => (l as BoardList).id));
-    const fallbackPool = (lists || [])
+    const fallbackPool = (safeLists || [])
       .filter(l => !pickedIds.has(l.id))
       .slice()
       .sort((a, b) => (a.order ?? 0) - (b.order ?? 0));
@@ -126,7 +146,7 @@ export class BoardDetailComponent implements OnInit {
     pushIf(picked.done);
 
     // Append remaining lists after Done (in backend order)
-    const remaining = (lists || [])
+    const remaining = (safeLists || [])
       .filter(l => !ordered.some(x => x.id === l.id))
       .slice()
       .sort((a, b) => (a.order ?? 0) - (b.order ?? 0));
