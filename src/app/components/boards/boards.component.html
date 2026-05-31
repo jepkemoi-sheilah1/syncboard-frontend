@@ -55,14 +55,14 @@
           </div>
         </div>
 
-        <div class="board-card" *ngFor="let board of filteredBoards()" (click)="board.id && openBoard(board.id)">
+        <div class="board-card" *ngFor="let board of filteredBoards(); trackBy: trackByBoardId" (click)="board.id && openBoard(board.id)">
           <div class="board-cover" [style.background]="getBoardColor(board)"></div>
 
           <div class="board-info">
             <h3>{{ board.boardName }}</h3>
             <div class="board-meta">
               <div class="member-avatars">
-                <span class="member-avatar" *ngFor="let member of (board.members || []).slice(0, 3)" [title]="member.name">
+                <span class="member-avatar" *ngFor="let member of (board.members || []).slice(0, 3); trackBy: trackByMemberEmail" [title]="member.name">
                   {{ getInitials(member.name) }}
                 </span>
                 <span class="more-members" *ngIf="(board.members || []).length > 3">

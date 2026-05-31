@@ -16,6 +16,14 @@ import { Board, CreateBoardRequest } from '../../models/board.models';
   styleUrls: ['./boards.component.css']
 })
 export class BoardsComponent implements OnInit {
+  trackByBoardId(_index: number, board: Board): string {
+    return board.id;
+  }
+
+  trackByMemberEmail(_index: number, member: any): string {
+    return member?.email || member?.userId || member?.name;
+  }
+
   private authService = inject(AuthService);
   private boardService = inject(BoardService);
   private workspaceService = inject(WorkspaceService);
