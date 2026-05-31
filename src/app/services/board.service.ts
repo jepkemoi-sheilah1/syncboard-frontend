@@ -20,10 +20,12 @@ export class BoardService {
   }
 
   getBoardsByWorkspace(workspaceId: string): Observable<Board[]> {
-    return this.http.get<any>(`${this.base}/boards`).pipe(
+    // Swagger/route mapping: GET /boards/workspace/{workspaceId}
+    return this.http.get<any>(`${this.base}/boards/workspace/${workspaceId}`).pipe(
       map(response => response.data ?? response)
     );
   }
+
 
   createBoard(request: CreateBoardRequest): Observable<Board> {
     return this.http.post<any>(
@@ -31,10 +33,13 @@ export class BoardService {
       {
         boardName: request.boardName,
         boardDescription: request.boardDescription,
+        // If backend supports board color, send it; otherwise ignored.
+        boardColor: request.boardColor,
         isStarred: request.isStarred ?? false
       }
     ).pipe(map(response => response.data ?? response));
   }
+
 
   updateBoard(boardId: string, request: UpdateBoardRequest): Observable<Board> {
     return this.http.put<any>(`${this.base}/boards/${boardId}`, request).pipe(

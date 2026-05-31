@@ -56,7 +56,8 @@
         </div>
 
         <div class="board-card" *ngFor="let board of filteredBoards()" (click)="board.id && openBoard(board.id)">
-          <div class="board-cover" [style.background]="getBoardColor(board.id)"></div>
+          <div class="board-cover" [style.background]="getBoardColor(board)"></div>
+
           <div class="board-info">
             <h3>{{ board.boardName }}</h3>
             <div class="board-meta">

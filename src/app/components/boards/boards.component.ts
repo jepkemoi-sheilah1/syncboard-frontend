@@ -78,6 +78,7 @@ export class BoardsComponent implements OnInit {
     this.router.navigate(['/board', boardId]);
   }
 
+
   goBack(): void {
     this.router.navigate(['/workspaces']);
   }
@@ -88,8 +89,10 @@ export class BoardsComponent implements OnInit {
 
     const request: CreateBoardRequest = {
       boardName: this.newBoardName.trim(),
-      workSpaceId: this.workspaceId()
+      workSpaceId: this.workspaceId(),
+      boardColor: this.selectedColor
     };
+
 
     this.boardService.createBoard(request).subscribe({
       next: () => {
@@ -151,8 +154,16 @@ export class BoardsComponent implements OnInit {
     });
   }
 
-  getBoardColor(boardId: string): string {
-    if (!boardId) return 'linear-gradient(135deg, #0079bf 0%, #026aa7 100%)';
+  // If backend returns boardColor as a hex (e.g. #0079bf), use it; otherwise fall back to hashing.
+  getBoardColor(board: Board): string {
+    if (!board?.id) return 'linear-gradient(135deg, #0079bf 0%, #026aa7 100%)';
+
+    // Preferred: value returned from API
+    if (board.boardColor) {
+      return `linear-gradient(135deg, ${board.boardColor} 0%, rgba(2,106,167,1) 100%)`;
+    }
+
+    // Fallback: deterministic gradient by id
     const colors = [
       'linear-gradient(135deg, #0079bf 0%, #026aa7 100%)',
       'linear-gradient(135deg, #61bd4f 0%, #519839 100%)',
@@ -162,9 +173,10 @@ export class BoardsComponent implements OnInit {
       'linear-gradient(135deg, #c377e0 0%, #a855c7 100%)',
       'linear-gradient(135deg, #51e898 0%, #3dcc7a 100%)',
     ];
-    const index = boardId.charCodeAt(boardId.length - 1) % colors.length;
+    const index = board.id.charCodeAt(board.id.length - 1) % colors.length;
     return colors[index];
   }
+
 
   getInitials(name: string): string {
     if (!name) return '?';

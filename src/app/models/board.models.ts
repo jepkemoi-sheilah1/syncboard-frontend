@@ -112,8 +112,11 @@ export interface Board {
   boardDescription?: string;
   workSpaceId: string | number;
   isStarred?: boolean;
+  // Optional board color; if present UI will use it.
+  boardColor?: string;
   members: BoardMember[];
 }
+
 
 //  Board Invitation 
 
@@ -134,7 +137,10 @@ export interface CreateBoardRequest {
   boardDescription?: string;
   workSpaceId: string | number;
   isStarred?: boolean;
+  // Optional board color; backend may store/return it.
+  boardColor?: string;
 }
+
 
 export interface UpdateBoardRequest {
   boardName?: string;
