@@ -22,7 +22,7 @@ export class SupportAdminTalksComponent {
   updating = signal(false);
 
   statusDraft = signal('IN_REVIEW');
-
+  
   // Template-friendly editable 
   statusDraftValue = 'IN_REVIEW';
 

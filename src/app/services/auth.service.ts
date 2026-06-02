@@ -14,6 +14,47 @@ export class AuthService {
     isLoggedIn = computed(() => !!this.tokenSignal());
     isLoading = computed(() => this.loadingSignal());
 
+    /**
+     * Role-based auth (JWT claims)
+     * Expected JWT claim examples:
+     * - role: 'admin'
+     * - roles: ['admin']
+     */
+    isAdmin(): boolean {
+        const token = this.tokenSignal();
+        if (!token) return false;
+
+        try {
+            const payload = this.decodeJwtPayload(token);
+            const role = payload?.role;
+            const roles = payload?.roles;
+
+            if (typeof role === 'string' && role.toLowerCase() === 'admin') return true;
+
+            if (Array.isArray(roles) && roles.some(r => String(r).toLowerCase() === 'admin')) return true;
+
+            return false;
+        } catch {
+            return false;
+        }
+    }
+
+    private decodeJwtPayload(token: string): any {
+        const parts = token.split('.');
+        if (parts.length < 2) return null;
+
+        const base64Url = parts[1];
+        const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+        const jsonPayload = decodeURIComponent(
+            atob(base64)
+                .split('')
+                .map(c => '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2))
+                .join('')
+        );
+
+        return JSON.parse(jsonPayload);
+    }
+
     constructor(private router: Router, private http: HttpClient) {
         this.loadStoredAuth();
     }

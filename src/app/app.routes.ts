@@ -10,6 +10,8 @@ import { ResetPasswordComponent } from './components/auth/reset-password/reset-p
 import { DeleteAccountComponent } from './components/auth/delete-account/delete-account.component';
 import { WorkspacesComponent } from './components/workspaces/workspaces.component';
 import { authGuard } from './guards/auth.guard';
+import { adminGuard } from './guards/admin.guard';
+import { SupportAdminComponent } from './components/support-admin/support-admin.component';
 
 export const routes: Routes = [
   // ── Public ─────────────────────────────────────────────────────────────
@@ -35,6 +37,9 @@ export const routes: Routes = [
 
   // 3. Board detail (collaborative Kanban view)
   { path: 'board/:id', component: BoardDetailComponent, canActivate: [authGuard] },
+
+  // 4. Support Admin (role protected)
+  { path: 'support-admin', component: SupportAdminComponent, canActivate: [authGuard, adminGuard] },
 
   // ── Fallbacks ───────────────────────────────────────────────────────────
   { path: 'boards', redirectTo: 'workspaces' },
