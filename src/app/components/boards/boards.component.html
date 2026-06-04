@@ -29,26 +29,27 @@
     </div>
   </nav>
 
-  <main class="boards-main">
+  <div class="boards-workspace-layout">
     <app-workspace-sidebar
       class="workspace-sidebar"
       [boards]="filteredBoards()"
       (onCreateBoardRequested)="showCreateModal.set(true)"
     ></app-workspace-sidebar>
 
-    <div class="workspace-header">
-      <div class="workspace-info">
-        <div class="workspace-avatar">{{ userName().charAt(0).toUpperCase() }}</div>
-        <div class="workspace-details">
-          <h1>{{ userName() }}'s Workspace</h1>
-          <p class="workspace-subtitle">Private workspace</p>
+    <main class="boards-main">
+      <div class="workspace-header">
+        <div class="workspace-info">
+          <div class="workspace-avatar">{{ userName().charAt(0).toUpperCase() }}</div>
+          <div class="workspace-details">
+            <h1>{{ userName() }}'s Workspace</h1>
+            <p class="workspace-subtitle">Private workspace</p>
+          </div>
         </div>
       </div>
-    </div>
 
+      <section class="boards-section">
 
-    <section class="boards-section">
-      <div class="section-header">
+        <div class="section-header">
         <h2>
           <span class="section-icon">📊</span>
           Your Boards
