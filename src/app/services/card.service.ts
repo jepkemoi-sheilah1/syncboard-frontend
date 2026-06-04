@@ -36,7 +36,7 @@ export class CardService {
     }
 
     return this.http.get<Card[]>(
-      `${environment.apiUrl}${environment.api.basePath}/lists/${listId}/cards`
+      `${environment.apiUrl}${environment.api.basePath}/cards/lists/${listId}/cards`
     );
   }
 

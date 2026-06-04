@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { CdkDragDrop, DragDropModule, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
+import { forkJoin } from 'rxjs';
 import { BoardService } from '../../services/board.service';
 import { ListService } from '../../services/list.service';
 import { CardService } from '../../services/card.service';
@@ -63,7 +64,26 @@ export class BoardDetailComponent implements OnInit {
 
     this.listService.getLists(boardId).subscribe({
       next: (lists) => {
-        this.lists.set(Array.isArray(lists) ? this.normalizeColumns(lists) : []);
+        const normalized = Array.isArray(lists) ? this.normalizeColumns(lists) : [];
+        if (!normalized.length) {
+          this.lists.set([]);
+          return;
+        }
+
+        // Load cards for each list in parallel and merge by listId.
+        forkJoin(normalized.map(list => this.cardService.getCards(list.id))).subscribe({
+          next: (cardsByIndex) => {
+            const merged = normalized.map((list, idx) => ({
+              ...list,
+              cards: cardsByIndex[idx] || []
+            }));
+            this.lists.set(merged);
+          },
+          error: (err) => {
+            console.error('Failed to load cards', err);
+            this.lists.set(normalized.map(l => ({ ...l, cards: [] })));
+          }
+        });
       },
       error: (err) => {
         console.error('Failed to load lists', err);

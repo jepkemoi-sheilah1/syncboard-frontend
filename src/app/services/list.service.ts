@@ -60,9 +60,15 @@ getLists(boardId: string): Observable<BoardList[]> {
       return of(newList).pipe(delay(200));
     }
 
+    const body = {
+      title: request.name,
+      position: request.order ?? this.listsSubject.value.length,
+      boardId: request.boardId,
+    };
+
     return this.http.post<BoardList>(
-      `${environment.apiUrl}${environment.api.basePath}/lists`,
-      request
+      `${environment.apiUrl}${environment.api.basePath}/boards/lists`,
+      body
     ).pipe(
       // Keep UI in sync even in non-mock mode
       map(created => {
