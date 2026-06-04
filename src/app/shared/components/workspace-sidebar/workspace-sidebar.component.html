@@ -1,86 +1,52 @@
-<div class="ws-shell" [class.collapsed]="collapsed()">
-  <!-- Desktop sidebar -->
-  <aside class="ws-sidebar" aria-label="Workspace navigation">
-    <div class="ws-top">
-      <div class="ws-header">
-        <div class="ws-ws-avatar" [style.background]="workspaceAvatarColor()">
-          {{ workspaceName() | slice:0:1 | uppercase }}
-        </div>
-        <div class="ws-ws-meta">
-          <div class="ws-ws-name">{{ workspaceName() }}</div>
-        </div>
-      </div>
-    </div>
+<div class="sidebar">
+  <!-- Workspace avatar circle + workspace name -->
+  <div class="sidebar-header">
+    <div class="sidebar-avatar">{{ workspaceName() | slice:0:1 | uppercase }}</div>
+    <div class="sidebar-name">{{ workspaceName() }}</div>
+  </div>
 
-    <nav class="ws-nav">
-      <a
-        class="ws-nav-link"
-        [routerLink]="['/workspaces', workspaceId(), 'boards']"
-        routerLinkActive="active"
-      >
-        <mat-icon class="ws-nav-icon">view_list</mat-icon>
-        <span class="ws-nav-label">Boards</span>
-      </a>
+  <!-- Nav links -->
+  <nav class="sidebar-nav">
+    <a
+      class="sidebar-nav-item"
+      [routerLink]="['/workspaces', workspaceId(), 'boards']"
+      routerLinkActive="active"
+    >
+      <mat-icon>view_list</mat-icon>
+      <span>Boards</span>
+    </a>
 
-      <a
-        class="ws-nav-link"
-        [routerLink]="['/workspaces', workspaceId(), 'members']"
-        routerLinkActive="active"
-      >
-        <mat-icon class="ws-nav-icon">people</mat-icon>
-        <span class="ws-nav-label">Members</span>
-      </a>
-    </nav>
+    <a
+      class="sidebar-nav-item"
+      [routerLink]="['/workspaces', workspaceId(), 'members']"
+      routerLinkActive="active"
+    >
+      <mat-icon>people</mat-icon>
+      <span>Members</span>
+    </a>
+  </nav>
 
-    <div class="ws-divider"></div>
+  <!-- Your Boards section -->
+  <section class="sidebar-boards">
+    <div class="sidebar-boards-title">Your Boards</div>
 
-    <section class="ws-your-boards">
-      <div class="ws-your-boards-header">
-        <span class="ws-section-label">Your Boards</span>
-      </div>
+    <a
+      class="sidebar-board-item"
+      *ngFor="let b of boards; trackBy: trackByBoardId"
+      [routerLink]="['/board', b.id]"
+    >
+      <span class="sidebar-board-swatch" [style.background]="boardSwatchColor(b)"></span>
+      <span class="sidebar-board-name">{{ b.boardName }}</span>
+    </a>
+  </section>
 
-      <div class="ws-board-list" *ngIf="boards?.length; else emptyBoards">
-        <button
-          type="button"
-          class="ws-board-item"
-          *ngFor="let b of boards; trackBy: trackByBoardId"
-          (click)="openBoard(b.id)"
-          [class.active]="isActiveBoardRoute(b.id)"
-        >
-          <span class="ws-board-swatch" [style.background]="boardSwatchColor(b)"></span>
-          <span class="ws-board-name">{{ b.boardName }}</span>
-        </button>
-      </div>
-
-      <ng-template #emptyBoards>
-        <div class="ws-empty-boards" *ngIf="boards?.length === 0">
-          No boards
-        </div>
-      </ng-template>
-    </section>
-
-    <div class="ws-spacer"></div>
-
-    <div class="ws-footer">
-      <button mat-icon-button class="ws-logout" (click)="logout()" aria-label="Logout">
-        <mat-icon>logout</mat-icon>
-        <span class="ws-logout-label">Logout</span>
-      </button>
-    </div>
-  </aside>
-
-  <!-- Mobile overlay / drawer -->
-  <ng-container *ngIf="isMobile()">
-    <div class="ws-overlay" *ngIf="mobileOpen()" (click)="closeMobile()"></div>
-    <aside class="ws-mobile-drawer" [class.open]="mobileOpen()">
-      <!-- reuse desktop markup -->
-      <ng-container *ngTemplateOutlet="desktopTemplate"></ng-container>
-    </aside>
-  </ng-container>
-
-  <!-- Reusable desktop markup for mobile drawer -->
-  <ng-template #desktopTemplate>
-    <!-- empty because desktop markup is already rendered above -->
-  </ng-template>
+  <!-- Logout button -->
+  <div class="sidebar-footer">
+    <button class="sidebar-logout" mat-icon-button (click)="logout()" aria-label="Logout">
+      <mat-icon>logout</mat-icon>
+      <span class="sidebar-logout-label">Logout</span>
+    </button>
+  </div>
 </div>
+
 
