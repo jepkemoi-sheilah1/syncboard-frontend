@@ -9,12 +9,11 @@ import { ListService } from '../../services/list.service';
 import { CardService } from '../../services/card.service';
 import { Board, BoardList, Card } from '../../models/board.models';
 import { CardModalComponent } from '../card-modal/card-modal.component';
-import { WorkspaceSidebarComponent } from '../../shared/components/workspace-sidebar/workspace-sidebar.component';
 
 @Component({
   selector: 'app-board-detail',
   standalone: true,
-imports: [CommonModule, RouterModule, FormsModule, DragDropModule, CardModalComponent, WorkspaceSidebarComponent],
+  imports: [CommonModule, RouterModule, FormsModule, DragDropModule, CardModalComponent],
   templateUrl: './board-detail.component.html',
   styleUrls: ['./board-detail.component.css']
 })
