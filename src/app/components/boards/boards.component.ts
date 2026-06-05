@@ -7,14 +7,11 @@ import { BoardService } from '../../services/board.service';
 import { WorkspaceService } from '../../services/workspace.service';
 import { UserMenuComponent } from '../auth/user-menu/user-menu.component';
 import { Board, CreateBoardRequest } from '../../models/board.models';
-import { WorkspaceSidebarComponent } from '../../shared/components/workspace-sidebar/workspace-sidebar.component';
-
 
 @Component({
   selector: 'app-boards',
   standalone: true,
-  imports: [CommonModule, FormsModule, UserMenuComponent, WorkspaceSidebarComponent],
-
+  imports: [CommonModule, FormsModule, UserMenuComponent],
   templateUrl: './boards.component.html',
   styleUrls: ['./boards.component.css']
 })
