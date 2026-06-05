@@ -1,5 +1,8 @@
-<div class="board-detail-container">
-  <header class="board-header">
+<div class="board-detail-shell">
+  <app-workspace-sidebar class="board-detail-sidebar" [boards]="[]" />
+
+  <div class="board-detail-container">
+    <header class="board-header">
     <div class="board-title-section">
       <button class="btn-back" (click)="goBack()">← Back</button>
 

@@ -1,3 +1,15 @@
+.board-detail-shell {
+  display: flex;
+  flex-direction: row;
+  height: 100vh;
+  overflow: hidden;
+  background: #f8fafc;
+}
+
+.board-detail-sidebar {
+  flex: 0 0 auto;
+}
+
 .board-detail-container {
   height: 100vh;
   display: flex;
